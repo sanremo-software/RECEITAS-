@@ -13,7 +13,7 @@ header{background:#102f29;color:white;padding:18px 30px;border-bottom:3px solid 
 .brand{display:flex;align-items:center;justify-content:space-between;gap:16px;max-width:1600px;margin:auto}
 .brand h1{font-size:25px;margin:0}.brand h1 span{color:#e4c492;font-weight:450}
 .brand p{margin:3px 0 0;color:#bcd4ca;font-size:12px}
-.tag{border:1px solid #729384;color:#d7e8df;border-radius:30px;padding:7px 12px;font-size:11px;background:#146b54}
+.tag{border:1px solid #729384;color:#d7e8df;border-radius:30px;padding:7px 12px;font-size:11px}
 .layout{max-width:1600px;display:grid;grid-template-columns:245px minmax(0,1fr);gap:22px;padding:24px;margin:auto}
 .nav{background:#123b33;padding:15px;border-radius:16px;align-self:start;position:sticky;top:12px;min-height:670px}
 .nav small{display:block;margin:13px 10px;color:#9fbdb0;letter-spacing:1.3px;font-size:10px;font-weight:800}
@@ -86,7 +86,7 @@ td.num,th.num{text-align:right;white-space:nowrap}
 </style>
 </head>
 <body>
-<header><div class="brand"><div><h1>◈ SANREMO <span>GELATO LAB V9.2</span></h1><p>Formulação profissional · Rastreabilidade · Auditoria local</p></div><span class="tag">V9.2 · Otimizador Forçado</span></div></header>
+<header><div class="brand"><div><h1>◈ SANREMO <span>GELATO LAB V9.2</span></h1><p>Formulação profissional · Rastreabilidade · Auditoria local</p></div><span class="tag">V9.2 · Dados locais</span></div></header>
 <div class="layout">
 <aside class="nav">
 <small>LABORATÓRIO</small>
@@ -124,8 +124,8 @@ td.num,th.num{text-align:right;white-space:nowrap}
 <div id="genChoices" class="chipList"></div>
 <div class="buttons"><button class="btn" data-jump="products">+ Novo produto</button><button class="btn" id="genSelectAll">Selecionar todos os visíveis</button><button class="btn" id="genSelectNone">Limpar seleção</button></div>
 <h3>2. Objetivos técnicos</h3>
-<label class="check"><input type="checkbox" id="genRequireComplete" checked> Exigir PAC, POD e água conhecidos em TODOS os ingredientes</label>
-<div class="note warn">ATENÇÃO: estes objetivos não são universais. Para sorbet, escolhe «Sorbet de fruta» no topo.</div>
+<label class="check"><input type="checkbox" id="genRequireComplete"> Exigir PAC, POD e água conhecidos em TODOS os ingredientes (bloqueia se houver estimativas)</label>
+<div class="note warn">ATENÇÃO: estes objetivos são atualizados pela temperatura, mas podem ser editados manualmente.</div>
 <div class="fields four">
 <div class="field"><label>Sólidos (%)</label><input type="number" id="genSolids" step="0.1" value="38"></div>
 <div class="field"><label>Gordura (%)</label><input type="number" id="genFat" step="0.1" value="8"></div>
@@ -134,7 +134,7 @@ td.num,th.num{text-align:right;white-space:nowrap}
 <div class="field"><label>POD por 1.000 g</label><input id="genPod" type="number" step="1" value="175"></div>
 </div>
 <p class="hint">Os objetivos são referências editáveis, não garantias de textura.</p>
-<div class="buttons"><button class="btn primary" id="btnBalance">✓ Equilibrar automaticamente</button><button class="btn" id="btnGenDefaults">Repor objetivos iniciais</button></div>
+<div class="buttons"><button class="btn primary" id="btnBalance">✓ Equilibrar com os objetivos definidos</button><button class="btn" id="btnGenDefaults">Repor objetivos iniciais</button></div>
 <div class="note warn"><b>Proteção da produção:</b> o programa apresenta propostas de ensaio e não certifica alimentos.</div>
 <div id="genDataPreview" class="note">Seleciona ingredientes para consultar a disponibilidade de dados técnicos.</div>
 <div id="genOutput"></div>
@@ -260,7 +260,7 @@ const num = v => { if (v === null || v === undefined || String(v).trim() === '')
 const v = id => num($(id).value);
 const valid = (n, a, b) => n !== null && n >= a && n <= b;
 
-const SCHEMA_VERSION = 9.2;
+const SCHEMA_VERSION = 9;
 const KEY = 'sanremo_v9';
 const LEGACY_KEYS = ['sanremo_gelato_formulator_v8', 'sanremo_gelato_formulator_v7_pacpod', 'sanremo_gelato_formulator_v6_pacpod'];
 
@@ -560,7 +560,7 @@ function ingredientsAudit(lines, expected) {
     }
     const c = priceKg(p);
     if (c === null) costComplete = false; else cost += item.g / 1000 * c;
-    if (!p.verified) warnings.push(p.name + ': dados não verificados.');
+    if (!p.verified || /estimativa|presumid|não certificado/i.test(p.pacMethod || '')) warnings.push(p.name + ': dados não verificados.');
   }
   for (const key of ['fat', 'protein', 'carb', 'sugar', 'water']) if (missing[key].length) met[key] = null;
   met.solids = met.water === null ? null : 100 - met.water;
@@ -581,18 +581,14 @@ function formulate(ids, target, type, goals, requireComplete, adaptive) {
   for (const k of ['fat', 'sugar', 'water', 'pac', 'pod']) {
     known[k] = ps.every(p => p[k] !== null && p[k] !== undefined && Number.isFinite(Number(p[k])));
   }
-  if (requireComplete && (['pac', 'pod', 'water'].some(k => !known[k]) || ps.some(p => !p.verified))) {
-    throw Error('Modo rigoroso: faltam PAC/POD/água confirmados ou existem dados não verificados. Desmarca o modo rigoroso para proposta preliminar.');
+  if (requireComplete && (['pac', 'pod', 'water'].some(k => !known[k]) || ps.some(p => /ESTIMATIVA|estimativa/i.test(p.pacMethod || '')))) {
+    throw Error('Modo rigoroso: faltam PAC/POD/água confirmados ou existem valores estimados. Desmarca o modo rigoroso para proposta preliminar.');
   }
   const goalsUsed = Object.entries(goals).filter(([k, g]) => g !== null && known[k === 'solids' ? 'water' : k]);
   const ignored = Object.entries(goals).filter(([k, g]) => g !== null && !known[k === 'solids' ? 'water' : k]).map(([k]) => k);
 
   const lower = ps.map(p => inferCategory(p) === 'water' ? 0 : (normRole(p) === 'liquid' && type === 'milk' ? target * 0.15 : 0));
   const upper = ps.map(() => target);
-  
-  // Forçar o uso de Magermilchpulver se estiver selecionado
-  const hasPowder = ps.some(p => /MAGERMILCHPULVER|MILCHPULVER|LEITE EM P[ÓO]/i.test(p.name || ''));
-  
   ps.forEach((p, i) => {
     const name = String(p.name || '').toUpperCase(), role = normRole(p);
     let cap = 1;
@@ -603,11 +599,6 @@ function formulate(ids, target, type, goals, requireComplete, adaptive) {
     else if (role === 'stabilizer') cap = 0.006;
     else if (role === 'flavor' && type === 'milk') cap = 0.50;
     upper[i] = Math.min(upper[i], target * cap);
-    
-    // Se temos leite em pó, damos-lhe um mínimo para ele ser usado
-    if (hasPowder && /MAGERMILCHPULVER|MILCHPULVER|LEITE EM P[ÓO]/i.test(name)) {
-       lower[i] = Math.max(lower[i], target * 0.02); // Mínimo 2% (20g por kg)
-    }
   });
   if (type === 'milk' && !ps.some(p => normRole(p) === 'liquid' && inferCategory(p) === 'milk')) throw Error('Gelado de leite: seleciona leite líquido.');
   if (type === 'sorbet') {
@@ -731,6 +722,16 @@ function temperature(id) {
   if (!valid(n, -40, 0)) throw Error('Temperatura entre −40 e 0 °C.');
   return n;
 }
+function targets(prefix) {
+  const o = {};
+  for (const k of ['Solids', 'Fat', 'Sugar', 'Pac', 'Pod']) {
+    const x = v(prefix + k);
+    if (x !== null && x < 0) throw Error('Objetivo inválido: ' + k);
+    if (['Solids', 'Fat', 'Sugar'].includes(k) && x !== null && x > 100) throw Error('Objetivo percentual inválido: ' + k);
+    o[k.toLowerCase()] = x;
+  }
+  return o;
+}
 
 function renderGenChoices() {
   const q = $('genSearch').value.toLowerCase();
@@ -750,8 +751,8 @@ function renderGenDataPreview() {
   const chosen = [...genSelected].map(byId).filter(Boolean);
   if (!chosen.length) { el.textContent = 'Seleciona ingredientes para consultar a disponibilidade de dados técnicos.'; return; }
   const missing = chosen.filter(p => ['fat', 'sugar', 'water', 'pac', 'pod'].some(k => p[k] === null || p[k] === undefined));
-  const estimates = chosen.filter(p => !p.verified);
-  let msg = '<b>Seleção:</b> ' + chosen.length + ' ingredientes, ' + missing.length + ' com dados incompletos, ' + estimates.length + ' não verificados.';
+  const estimates = chosen.filter(p => /estimativa|presumid|referência/i.test(p.pacMethod || ''));
+  let msg = '<b>Seleção:</b> ' + chosen.length + ' ingredientes, ' + missing.length + ' com dados incompletos, ' + estimates.length + ' com PAC/POD estimado.';
   if (missing.length) msg += ' <b>Incompletos:</b> ' + esc(missing.map(p => p.name).join(', ')) + '.';
   el.innerHTML = msg;
 }
@@ -782,16 +783,15 @@ function balanceGenerated() {
     const temp = temperature('genTemp');
     if (kind === 'milk' && selected.some(p => inferCategory(p) === 'fruit') && !selected.some(p => ['milk', 'cream'].includes(inferCategory(p)))) throw Error('Selecionaste fruta e água: escolhe «Sorbet de fruta».');
     if (kind === 'sorbet' && !selected.some(p => inferCategory(p) === 'fruit')) throw Error('Para sorbet, seleciona fruta.');
-    const ranges = balancingIntervals(kind, temp);
     
-    // LÊ OS VALORES EXATOS DO ECRÃ
-    const goalsUser = targets('gen'); 
+    const ranges = balancingIntervals(kind, temp);
+    const goalsUser = targets('gen'); // USA OS OBJETIVOS DO ECRÃ
     const attempts = [ goalsUser ];
 
     let best = null;
     for (const goal of attempts) {
       let result;
-      try { result = formulate([...genSelected], total, kind, goal, $('genRequireComplete').checked, true); }
+      try { result = formulate([...genSelected], total, kind, goal, $('genRequireComplete').checked, false); }
       catch (e) { if (!best) best = { error: e }; continue; }
       const audit = ingredientsAudit(result.lines, total);
       const actual = audit.met;
@@ -803,6 +803,7 @@ function balanceGenerated() {
       if (!misses.length && audit.errors.length === 0) break;
     }
     if (!best || best.error) throw Error(best?.error?.message || 'Não foi possível formular.');
+    
     const { result, audit, misses } = best;
     generatedRecipe = { name, temp, type: kind, lines: result.lines, status: 'draft', createdAt: new Date().toISOString() };
     const inRange = misses.length === 0;
@@ -1002,6 +1003,7 @@ function canExport(recipe) {
     const p = byId(line.id);
     if (!p) return { ok: false, reason: 'Ingrediente não encontrado: ' + line.id };
     if (!p.verified) return { ok: false, reason: 'Ingrediente não verificado: ' + p.name };
+    if (/estimativa|presumid|não certificado/i.test(p.pacMethod || '')) return { ok: false, reason: 'PAC/POD estimado em: ' + p.name };
     if (p.water === null || p.water === undefined) return { ok: false, reason: 'Água desconhecida em: ' + p.name };
   }
   return { ok: true };
@@ -1110,8 +1112,10 @@ renderGenDataPreview();
 renderTempStatus();
 renderManualProductSelect();
 renderAudit();
+
+// O evento que faz a mágica automática:
+$('genTemp').onchange = () => { fillDefaults($('genType').value); renderTempStatus(); };
 $('genType').onchange = () => fillDefaults($('genType').value);
-$('genTemp').onchange = renderTempStatus;
 $('genSearch').oninput = renderGenChoices;
 $('genSelectAll').onclick = () => { document.querySelectorAll('[data-pick]').forEach(x => { x.checked = true; genSelected.add(x.dataset.pick); }); renderGenDataPreview(); };
 $('genSelectNone').onclick = () => { genSelected.clear(); renderGenChoices(); };
