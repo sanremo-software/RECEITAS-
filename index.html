@@ -1,9 +1,10 @@
+
 <!doctype html>
 <html lang="pt-PT">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sanremo Gelato Lab V9</title>
+<title>Sanremo Gelato Lab V9.1</title>
 <style>
 :root{--ink:#183b32;--green:#146b54;--gold:#cfaa72;--bg:#f3f5f1;--muted:#6c8277;--edge:#e0e8df;--danger:#a64238}
 *{box-sizing:border-box}
@@ -85,7 +86,7 @@ td.num,th.num{text-align:right;white-space:nowrap}
 </style>
 </head>
 <body>
-<header><div class="brand"><div><h1>◈ SANREMO <span>GELATO LAB V9</span></h1><p>Formulação profissional · Rastreabilidade · Auditoria local</p></div><span class="tag">V9 · Dados locais</span></div></header>
+<header><div class="brand"><div><h1>◈ SANREMO <span>GELATO LAB V9.1</span></h1><p>Formulação profissional · Rastreabilidade · Auditoria local</p></div><span class="tag">V9.1 · Dados locais</span></div></header>
 <div class="layout">
 <aside class="nav">
 <small>LABORATÓRIO</small>
@@ -102,7 +103,7 @@ td.num,th.num{text-align:right;white-space:nowrap}
 <main class="main">
 
 <section id="home" class="page active">
-<div class="hero"><div class="labelStrong" style="color:#e3c491">LABORATÓRIO SANREMO V9</div><h2>Escolhe os produtos.<br>Recebe as gramas.</h2><p>Seleciona os ingredientes, o peso e a temperatura. O formulador calcula uma proposta e identifica o que ainda precisa de validação. Receitas com dados estimados ficam bloqueadas para aprovação.</p><div class="buttons"><button class="btn gold" data-jump="generator">✦ Gerar receita</button><button class="btn" data-jump="products">+ Adicionar produto</button></div></div>
+<div class="hero"><div class="labelStrong" style="color:#e3c491">LABORATÓRIO SANREMO V9.1</div><h2>Escolhe os produtos.<br>Recebe as gramas.</h2><p>Seleciona os ingredientes, o peso e a temperatura. O formulador calcula uma proposta e identifica o que ainda precisa de validação. Receitas com dados estimados ficam bloqueadas para aprovação.</p><div class="buttons"><button class="btn gold" data-jump="generator">✦ Gerar receita</button><button class="btn" data-jump="products">+ Adicionar produto</button></div></div>
 <div class="cards"><div class="stat"><small>PRODUTOS</small><strong id="dashProducts">0</strong><span class="hint">Na biblioteca</span></div><div class="stat"><small>RECEITAS</small><strong id="dashRecipes">0</strong><span class="hint">Guardadas</span></div><div class="stat"><small>APROVADAS</small><strong id="dashApproved">0</strong><span class="hint">Prontas para produção</span></div><div class="stat"><small>AUDITORIA</small><strong id="dashAudit">0</strong><span class="hint">Eventos registados</span></div></div>
 <div class="split"><div class="panel"><h3>Fluxo de trabalho</h3><div class="entry">1. Registar produtos com dados da embalagem</div><div class="entry">2. Escolher ingredientes e clicar em <b>Gerar</b></div><div class="entry">3. Ver gramas, limites, PAC/POD e custos</div><div class="entry">4. Guardar como <b>rascunho</b> → testar → <b>aprovar</b></div></div><div class="panel"><h3>O que o programa não inventa</h3><p>Produtos sem PAC/POD/água conhecidos são utilizáveis para propostas preliminares, mas as métricas aparecem como <b>incompletas</b>.</p><div class="note warn">A temperatura não prevê a textura. Receitas com dados estimados ficam bloqueadas para aprovação. O programa não certifica alimentos para venda.</div></div></div>
 </section>
@@ -133,7 +134,7 @@ td.num,th.num{text-align:right;white-space:nowrap}
 <div class="field"><label>POD por 1.000 g</label><input id="genPod" type="number" step="1" value="175"></div>
 </div>
 <p class="hint">Os objetivos são referências editáveis, não garantias de textura.</p>
-<div class="buttons"><button class="btn primary" id="btnBalance">✓ Equilibrar automaticamente</button><button class="btn" id="btnGenDefaults">Repor objetivos iniciais</button></div>
+<div class="buttons"><button class="btn primary" id="btnBalance">✓ Equilibrar com os objetivos definidos</button><button class="btn" id="btnGenDefaults">Repor objetivos iniciais</button></div>
 <div class="note warn"><b>Proteção da produção:</b> o programa apresenta propostas de ensaio e não certifica alimentos.</div>
 <div id="genDataPreview" class="note">Seleciona ingredientes para consultar a disponibilidade de dados técnicos.</div>
 <div id="genOutput"></div>
@@ -243,7 +244,7 @@ td.num,th.num{text-align:right;white-space:nowrap}
 </div>
 </section>
 
-<div class="foot">SANREMO GELATO LAB V9 · Motor revisto · Auditoria local · Versão de ensaio técnico. Cálculos e objetivos não certificam textura, segurança alimentar, rotulagem ou fichas técnicas.</div>
+<div class="foot">SANREMO GELATO LAB V9.1 · Motor revisto · Auditoria local · Versão de ensaio técnico. Cálculos e objetivos não certificam textura, segurança alimentar, rotulagem ou fichas técnicas.</div>
 </main></div>
 <div id="toasts" aria-live="polite"></div>
 
@@ -259,7 +260,7 @@ const num = v => { if (v === null || v === undefined || String(v).trim() === '')
 const v = id => num($(id).value);
 const valid = (n, a, b) => n !== null && n >= a && n <= b;
 
-const SCHEMA_VERSION = 9;
+const SCHEMA_VERSION = 9.1;
 const KEY = 'sanremo_v9';
 const LEGACY_KEYS = ['sanremo_gelato_formulator_v8', 'sanremo_gelato_formulator_v7_pacpod', 'sanremo_gelato_formulator_v6_pacpod'];
 
@@ -721,6 +722,16 @@ function temperature(id) {
   if (!valid(n, -40, 0)) throw Error('Temperatura entre −40 e 0 °C.');
   return n;
 }
+function targets(prefix) {
+  const o = {};
+  for (const k of ['Solids', 'Fat', 'Sugar', 'Pac', 'Pod']) {
+    const x = v(prefix + k);
+    if (x !== null && x < 0) throw Error('Objetivo inválido: ' + k);
+    if (['Solids', 'Fat', 'Sugar'].includes(k) && x !== null && x > 100) throw Error('Objetivo percentual inválido: ' + k);
+    o[k.toLowerCase()] = x;
+  }
+  return o;
+}
 
 function renderGenChoices() {
   const q = $('genSearch').value.toLowerCase();
@@ -772,16 +783,19 @@ function balanceGenerated() {
     const temp = temperature('genTemp');
     if (kind === 'milk' && selected.some(p => inferCategory(p) === 'fruit') && !selected.some(p => ['milk', 'cream'].includes(inferCategory(p)))) throw Error('Selecionaste fruta e água: escolhe «Sorbet de fruta».');
     if (kind === 'sorbet' && !selected.some(p => inferCategory(p) === 'fruit')) throw Error('Para sorbet, seleciona fruta.');
+    
     const ranges = balancingIntervals(kind, temp);
-    const profile = tempProfile(kind, temp);
-    const attempts = [
-      { ...profile, note: undefined },
-      { ...profile, pod: null, note: undefined },
-      { ...profile, pac: null, pod: null, note: undefined },
-      { ...profile, sugar: null, pod: null, note: undefined },
-      { ...profile, solids: null, pod: null, note: undefined }
-    ];
+    const goalsUser = targets('gen'); // LÊ AS SUAS METAS EXATAS DO ECRÃ
+
     let best = null;
+    // Tenta usar as metas exatas. Se for impossível, remove a meta mais difícil e tenta de novo.
+    const attempts = [
+      goalsUser, 
+      { ...goalsUser, pod: null }, 
+      { ...goalsUser, pod: null, pac: null },
+      { ...goalsUser, pod: null, sugar: null }
+    ];
+
     for (const goal of attempts) {
       let result;
       try { result = formulate([...genSelected], total, kind, goal, $('genRequireComplete').checked, true); }
@@ -995,7 +1009,8 @@ function canExport(recipe) {
     const p = byId(line.id);
     if (!p) return { ok: false, reason: 'Ingrediente não encontrado: ' + line.id };
     if (!p.verified) return { ok: false, reason: 'Ingrediente não verificado: ' + p.name };
-    if (/estimativa|presumid|não certificado/i.test(p.pacMethod || '')) return { ok: false, reason: 'PAC/POD estimado em: ' + p.name };
+    // Correção do falso alarme: Só bloqueia se NÃO for manual e contiver "estimativa".
+    if (p.sugarModel !== 'manual' && /estimativa|presumid|não certificado/i.test(p.pacMethod || '')) return { ok: false, reason: 'PAC/POD estimado em: ' + p.name };
     if (p.water === null || p.water === undefined) return { ok: false, reason: 'Água desconhecida em: ' + p.name };
   }
   return { ok: true };
