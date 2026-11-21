@@ -1,10 +1,9 @@
-
 <!doctype html>
 <html lang="pt-PT">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sanremo Production Lab V11</title>
+<title>Sanremo Gelato Lab V9</title>
 <style>
 :root{--ink:#183b32;--green:#146b54;--gold:#cfaa72;--bg:#f3f5f1;--muted:#6c8277;--edge:#e0e8df;--danger:#a64238}
 *{box-sizing:border-box}
@@ -15,7 +14,7 @@ header{background:#102f29;color:white;padding:18px 30px;border-bottom:3px solid 
 .brand p{margin:3px 0 0;color:#bcd4ca;font-size:12px}
 .tag{border:1px solid #729384;color:#d7e8df;border-radius:30px;padding:7px 12px;font-size:11px}
 .layout{max-width:1600px;display:grid;grid-template-columns:245px minmax(0,1fr);gap:22px;padding:24px;margin:auto}
-.nav{background:#123b33;padding:15px;border-radius:16px;align-self:start;position:sticky;top:12px;min-height:500px}
+.nav{background:#123b33;padding:15px;border-radius:16px;align-self:start;position:sticky;top:12px;min-height:670px}
 .nav small{display:block;margin:13px 10px;color:#9fbdb0;letter-spacing:1.3px;font-size:10px;font-weight:800}
 .nav button{display:flex;gap:10px;align-items:center;text-align:left;width:100%;margin:3px 0;background:transparent;color:#d4e0d8;border:0;border-radius:10px;padding:12px;font:inherit;cursor:pointer}
 .nav button.current{color:#183b31;background:#e3c28d;font-weight:800}
@@ -32,17 +31,21 @@ h4{margin:12px 0 6px}p{margin:8px 0 13px}
 .hint{color:var(--muted);font-size:12px}
 .fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .fields.two{grid-template-columns:repeat(2,minmax(0,1fr))}
-.fields.four{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.fields.four{grid-template-columns:repeat(4,minmax(0,1fr))}
 label{display:block;font-size:12px;font-weight:730;color:#3c584a;margin-bottom:6px}
 .field{min-width:0}
 input,select,textarea{width:100%;min-width:0;border:1px solid #cbdacf;border-radius:9px;background:#fcfdfb;padding:11px 12px;color:#244735;font:inherit}
+textarea{min-height:74px;resize:vertical}
+input:focus,select:focus{outline:2px solid #8bc6a5;outline-offset:1px}
 input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);vertical-align:middle}
 .check{display:flex;align-items:center;gap:7px;font-weight:500;margin:8px 0}
 .check input{flex:none}
 .btn,button.action{background:#e9f1e9;color:#216348;border:1px solid #cde1d2;border-radius:9px;padding:10px 14px;font-weight:740;cursor:pointer}
+.btn:hover{filter:brightness(.96)}
 .btn.primary{background:var(--green);border-color:var(--green);color:white}
 .btn.gold{background:#e3c187;border-color:#e3c187;color:#284135}
 .btn.danger{color:#973d36;background:#fff0ed;border-color:#f0d8d3}
+.btn:disabled{opacity:.5;cursor:not-allowed}
 .buttons{display:flex;flex-wrap:wrap;gap:9px;margin:15px 0}
 .note{padding:13px 15px;border-radius:10px;background:#ebf4ee;color:#315b45;border:1px solid #d6e8dc;margin:12px 0}
 .note.warn{background:#fff7e7;color:#805b23;border-color:#f1dfb7}
@@ -61,56 +64,67 @@ td.num,th.num{text-align:right;white-space:nowrap}
 .chipList{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0}
 .chip{display:inline-flex;align-items:center;gap:7px;padding:9px 10px;border:1px solid #dce8dd;border-radius:9px;background:#f8faf7;font-size:12px;cursor:pointer}
 .chip input{width:17px;height:17px}
-.layer{border:2px solid #e0e8df;border-radius:13px;padding:17px;margin:13px 0;background:#fff}
-.layerHeader{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.entry{border:1px solid var(--edge);border-radius:11px;background:white;padding:13px;margin:9px 0}
+.entryHead{display:flex;gap:10px;align-items:center;justify-content:space-between}
+.entryHead strong{font-size:14px}
+.entry small{font-size:12px;color:var(--muted)}
 .result{border-top:2px solid #dec394;margin-top:20px;padding-top:18px}
 .hide{display:none!important}
 .pill{font-size:11px;padding:3px 7px;border-radius:20px;background:#eef3ec;color:#577561}
 .pill.ok{background:#d4ecd9;color:#1e6a45}
+.pill.warn{background:#f6e7c4;color:#805b23}
+.pill.bad{background:#f4d6d0;color:#934139}
 #toasts{position:fixed;right:20px;bottom:18px;z-index:20;max-width:420px}
 #toasts div{background:#183f34;color:white;padding:13px 17px;margin:7px;border-radius:9px;box-shadow:0 8px 22px #0004}
+.layer{border:1px solid #dce8de;border-radius:13px;padding:17px;margin:13px 0;background:#fbfdfa}
+.labelStrong{font-size:11px;font-weight:800;letter-spacing:1px;color:#ac8450;text-transform:uppercase}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:13px}
 .foot{color:#789085;font-size:12px;text-align:center;padding:16px}
-@media(max-width:740px){.layout{display:block}.nav{display:grid;grid-template-columns:repeat(2,1fr);margin-bottom:12px}.fields,.fields.two,.fields.four{grid-template-columns:1fr}.cards{grid-template-columns:1fr 1fr}}
+@media(max-width:1040px){.layout{grid-template-columns:190px 1fr;gap:13px;padding:13px}.fields.four,.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.nav{padding:8px}}
+@media(max-width:740px){header{padding:12px 16px}.tag{display:none}.layout{display:block;padding:9px}.nav{position:static;min-height:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-bottom:12px}.nav small{display:none}.nav button{font-size:11px;padding:9px 6px;justify-content:center;margin:0;text-align:center}.panel{padding:16px}.fields,.fields.four,.fields.two,.split{grid-template-columns:1fr}.hero{padding:23px}.hero h2{font-size:25px}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 </head>
 <body>
-<header><div class="brand"><div><h1>◈ SANREMO <span>PRODUCTION LAB</span></h1><p>Gelados · Creminos · Semifrios · Cake Lab</p></div><span class="tag">V11</span></div></header>
+<header><div class="brand"><div><h1>◈ SANREMO <span>GELATO LAB V9</span></h1><p>Formulação profissional · Rastreabilidade · Auditoria local</p></div><span class="tag">V9 · Dados locais</span></div></header>
 <div class="layout">
 <aside class="nav">
-<small>GELADOS</small>
+<small>LABORATÓRIO</small>
 <button data-view="home" class="current">⌂ &nbsp; Painel</button>
-<button data-view="generator">✦ &nbsp; Gelados Base</button>
-<button data-view="cremino">🍰 &nbsp; Cremino / Semifrio</button>
-<small>PASTELARIA</small>
-<button data-view="cake">🎂 &nbsp; Bolos de Creme</button>
-<small>GESTÃO</small>
-<button data-view="products">▦ &nbsp; Biblioteca</button>
+<button data-view="generator">✦ &nbsp; Gerar receita</button>
+<button data-view="manual">▤ &nbsp; Analisar / corrigir</button>
+<small>BIBLIOTECA</small>
+<button data-view="products">▦ &nbsp; Produtos</button>
 <button data-view="recipes">▧ &nbsp; Receitas</button>
+<button data-view="audit">◎ &nbsp; Auditoria</button>
 <button data-view="backup">⇩ &nbsp; Backups</button>
+<button data-view="tests">✓ &nbsp; Autotestes</button>
 </aside>
 <main class="main">
 
 <section id="home" class="page active">
-<div class="hero"><div class="labelStrong" style="color:#e3c491">SANREMO V11</div><h2>Do ingrediente ao gelado perfeito.</h2><p>O motor matemático calcula as gramas exatas para gelados, creminos, semifrios e agora também para bolos de creme e pastelaria.</p><div class="buttons"><button class="btn gold" data-jump="generator">✦ Gerar Gelado</button><button class="btn" data-jump="cake">🎂 Fazer Bolo</button></div></div>
-<div class="cards"><div class="stat"><small>INGREDIENTES</small><strong id="dashProducts">0</strong><span class="hint">Na biblioteca</span></div><div class="stat"><small>RECEITAS</small><strong id="dashRecipes">0</strong><span class="hint">Guardadas</span></div></div>
+<div class="hero"><div class="labelStrong" style="color:#e3c491">LABORATÓRIO SANREMO V9</div><h2>Escolhe os produtos.<br>Recebe as gramas.</h2><p>Seleciona os ingredientes, o peso e a temperatura. O formulador calcula uma proposta e identifica o que ainda precisa de validação. Receitas com dados estimados ficam bloqueadas para aprovação.</p><div class="buttons"><button class="btn gold" data-jump="generator">✦ Gerar receita</button><button class="btn" data-jump="products">+ Adicionar produto</button></div></div>
+<div class="cards"><div class="stat"><small>PRODUTOS</small><strong id="dashProducts">0</strong><span class="hint">Na biblioteca</span></div><div class="stat"><small>RECEITAS</small><strong id="dashRecipes">0</strong><span class="hint">Guardadas</span></div><div class="stat"><small>APROVADAS</small><strong id="dashApproved">0</strong><span class="hint">Prontas para produção</span></div><div class="stat"><small>AUDITORIA</small><strong id="dashAudit">0</strong><span class="hint">Eventos registados</span></div></div>
+<div class="split"><div class="panel"><h3>Fluxo de trabalho</h3><div class="entry">1. Registar produtos com dados da embalagem</div><div class="entry">2. Escolher ingredientes e clicar em <b>Gerar</b></div><div class="entry">3. Ver gramas, limites, PAC/POD e custos</div><div class="entry">4. Guardar como <b>rascunho</b> → testar → <b>aprovar</b></div></div><div class="panel"><h3>O que o programa não inventa</h3><p>Produtos sem PAC/POD/água conhecidos são utilizáveis para propostas preliminares, mas as métricas aparecem como <b>incompletas</b>.</p><div class="note warn">A temperatura não prevê a textura. Receitas com dados estimados ficam bloqueadas para aprovação. O programa não certifica alimentos para venda.</div></div></div>
 </section>
 
 <section id="generator" class="page">
-<div class="panel"><div class="labelStrong">FORMULAÇÃO AUTOMÁTICA</div><h2>Gerar Gelado Base</h2>
-<div class="note warn"><b>Aviso Técnico:</b> A temperatura altera automaticamente os objetivos de formulação. Use a temperatura de serviço.</div>
+<div class="panel"><div class="labelStrong">FORMULAÇÃO AUTOMÁTICA</div><h2>Gerar uma receita</h2>
+<div class="note warn"><b>Formulação experimental:</b> temperatura não garante textura. PAC/POD de glucose e maltodextrina podem ser estimados usando DE confirmado; estimativas nunca equivalem a resultados certificados.</div>
 <div class="fields four">
-<div class="field"><label>Nome da receita</label><input id="genName" value="Gelado Base"></div>
+<div class="field"><label>Nome da receita</label><input id="genName" value="Gelado Sanremo"></div>
 <div class="field"><label>Tipo</label><select id="genType"><option value="milk">Gelado de leite</option><option value="sorbet">Sorbet de fruta</option></select></div>
 <div class="field"><label>Quantidade (kg)</label><input id="genKg" type="number" min="0.1" max="100" step="0.1" value="6"></div>
 <div class="field"><label>Temperatura (°C)</label><input id="genTemp" type="number" min="-40" max="0" step="0.5" value="-13"></div>
 </div>
-<div class="note warn" id="tempStatus">A calcular perfis...</div>
-<h3 style="margin-top:20px">1. Ingredientes</h3>
-<input id="genSearch" placeholder="Pesquisar ingredientes..." oninput="renderGenChoices()">
+<div class="note warn" id="tempStatus">Seleciona a temperatura para carregar objetivos técnicos experimentais.</div>
+<h3 style="margin-top:20px">1. Produtos autorizados</h3>
+<p class="hint">Ingredientes assinalados são permitidos, mas podem ficar a 0 g se não forem necessários.</p>
+<input id="genSearch" placeholder="Pesquisar ingredientes na biblioteca">
 <div id="genChoices" class="chipList"></div>
-<div class="buttons"><button class="btn" id="genSelectAll">Selecionar todos</button></div>
-<h3>2. Objetivos Técnicos</h3>
-<label class="check"><input type="checkbox" id="genRequireComplete" checked> Exigir dados 100% verificados</label>
+<div class="buttons"><button class="btn" data-jump="products">+ Novo produto</button><button class="btn" id="genSelectAll">Selecionar todos os visíveis</button><button class="btn" id="genSelectNone">Limpar seleção</button></div>
+<h3>2. Objetivos técnicos</h3>
+<label class="check"><input type="checkbox" id="genRequireComplete" checked> Exigir PAC, POD e água conhecidos em TODOS os ingredientes</label>
+<div class="note warn">ATENÇÃO: estes objetivos não são universais. Para sorbet, escolhe «Sorbet de fruta» no topo.</div>
 <div class="fields four">
 <div class="field"><label>Sólidos (%)</label><input type="number" id="genSolids" step="0.1" value="38"></div>
 <div class="field"><label>Gordura (%)</label><input type="number" id="genFat" step="0.1" value="8"></div>
@@ -118,541 +132,1076 @@ td.num,th.num{text-align:right;white-space:nowrap}
 <div class="field"><label>PAC por 1.000 g</label><input id="genPac" type="number" step="1" value="260"></div>
 <div class="field"><label>POD por 1.000 g</label><input id="genPod" type="number" step="1" value="175"></div>
 </div>
-<div class="buttons"><button class="btn primary" id="btnBalance">✓ Equilibrar Gelado Base</button></div>
+<p class="hint">Os objetivos são referências editáveis, não garantias de textura.</p>
+<div class="buttons"><button class="btn primary" id="btnBalance">✓ Equilibrar automaticamente</button><button class="btn" id="btnGenDefaults">Repor objetivos iniciais</button></div>
+<div class="note warn"><b>Proteção da produção:</b> o programa apresenta propostas de ensaio e não certifica alimentos.</div>
+<div id="genDataPreview" class="note">Seleciona ingredientes para consultar a disponibilidade de dados técnicos.</div>
 <div id="genOutput"></div>
 </div>
 </section>
 
-<section id="cremino" class="page">
-<div class="panel">
-<div class="labelStrong">MULTI-CAMADAS</div><h2>Cremino / Semifrio Italiano</h2>
-<p class="hint">Crie camadas de gelado. O software calcula cada camada separadamente.</p>
-<div class="fields">
-<div class="field"><label>Nome do Bolo</label><input id="crmName" value="Cremino Sanremo"></div>
-<div class="field"><label>Peso Total (g)</label><input id="crmKg" type="number" value="6000" min="500" step="100" onchange="renderCremino()"></div>
-<div class="field"><label>Temperatura Serviço (°C)</label><input id="crmTemp" type="number" value="-13" min="-30" max="0"></div>
-</div>
-<div class="buttons"><button class="btn gold" id="btnAddLayer">+ Adicionar Nova Camada</button></div>
-<div id="layersContainer"></div>
-<div class="buttons"><button class="btn primary" id="btnCalcCremino">🍰 Calcular Bolo Completo</button></div>
-<div id="creminoOutput"></div>
-</div>
-</section>
-
-<!-- NOVO MÓDULO CAKE LAB -->
-<section id="cake" class="page">
-<div class="panel">
-<div class="labelStrong">PASTELARIA</div><h2>Cake Lab - Bolos de Creme</h2>
-<p class="hint">Crie bolos de creme (ex: Rocher, Giotto, Cheesecake). O cálculo ajusta as gramas automaticamente consoante o diâmetro e a altura do bolo.</p>
-<div class="fields four">
-<div class="field"><label>Nome do Bolo</label><input id="cakeName" value="Bolo Sanremo"></div>
-<div class="field"><label>Diâmetro Origem (cm)</label><input id="cakeOrig" type="number" value="18" min="1" step="0.5"></div>
-<div class="field"><label>Diâmetro Novo (cm)</label><input id="cakeDest" type="number" value="24" min="1" step="0.5"></div>
-<div class="field"><label>Altura Relativa (ex: 1.2)</label><input id="cakeHeight" type="number" value="1" min="0.1" step="0.1"></div>
-</div>
-<div class="note warn">A matemática do Cake Lab calcula a área das formas para ajustar as gramas do bolo original para o novo. Não se aplicam os cálculos de PAC/POD do gelado.</div>
-<div class="fields two">
-<div class="field"><label>Ingredientes da Receita Base:</label><input id="cakeSearch" placeholder="Pesquisar..." oninput="renderCakeChoices()"></div>
-<div class="field" style="align-self:end;"><button class="btn" id="btnCakeAddLayer">+ Adicionar Camada Base</button></div>
-</div>
-<div id="cakeLayersContainer"></div>
-<div class="buttons"><button class="btn primary" id="btnCalcCake">🎂 Calcular Bolo de Creme</button></div>
-<div id="cakeOutput"></div>
+<section id="manual" class="page">
+<div class="panel"><div class="labelStrong">ANÁLISE DE RECEITAS</div><h2>Verificar e corrigir uma receita</h2>
+<div class="fields"><div class="field"><label>Nome</label><input id="manName" value="Receita para análise"></div><div class="field"><label>Peso desejado (kg)</label><input id="manKg" type="number" min="0.1" step="0.1" value="6"></div><div class="field"><label>Temperatura (°C)</label><input id="manTemp" type="number" min="-40" max="0" value="-13"></div></div>
+<p class="hint">Podes abrir aqui uma receita gerada ou introduzir gramas manualmente.</p>
+<div id="manRows"></div>
+<div class="fields two"><div class="field"><label>Adicionar produto</label><select id="manAddProduct"></select></div><div class="field" style="align-self:end"><button class="btn" id="manAdd">+ Adicionar ingrediente</button></div></div>
+<div class="buttons"><button class="btn" id="manAnalyze">Analisar</button><button class="btn primary" id="manSave">Guardar receita atual</button></div>
+<div id="manOutput"></div>
 </div>
 </section>
 
 <section id="products" class="page">
-<div class="panel"><div class="labelStrong">BIBLIOTECA</div><h2>Ingredientes</h2>
-<div class="buttons"><button class="btn primary" id="newProduct">+ Adicionar Ingrediente</button></div>
-<input id="productSearch" placeholder="Procurar produto..." oninput="renderProducts()">
+<div class="panel"><div class="labelStrong">BIBLIOTECA</div><h2>Produtos e fichas técnicas</h2>
+<div class="note warn"><b>Regra técnica:</b> Nährwerte não identificam a composição completa de glucose DE ou maltodextrina. Um PAC/POD desconhecido nunca é convertido em zero.</div>
+<div class="buttons"><button class="btn" id="auditLibrary">✓ Diagnosticar biblioteca</button><button class="btn primary" id="newProduct">+ Adicionar produto</button></div>
+<input id="productSearch" placeholder="Procurar produtos">
+<div id="libraryAudit"></div>
 <div id="productList"></div>
 <div id="productEditor" class="hide result">
-<h3 id="editorTitle">Ficha do Ingrediente</h3>
+<h3 id="editorTitle">Ficha do produto</h3>
 <input id="prodId" type="hidden">
 <div class="fields">
-<div class="field"><label>Nome</label><input id="prodName" placeholder="Ex: Leite Inteiro"></div>
-<div class="field"><label>Categoria</label><select id="prodCategory"><option value="milk">Leite / Iogurte</option><option value="cream">Natas / Gorduras</option><option value="water">Água</option><option value="sugar">Açúcar / Adoçante</option><option value="fruit">Fruta</option><option value="paste">Pasta / Fruto Seco</option><option value="base">Base / Pó</option><option value="additive">Estabilizante</option><option value="other">Outro</option></select></div>
-<div class="field"><label>Papel</label><select id="prodRole"><option value="auto">Detetar</option><option value="liquid">Líquido</option><option value="sweetener">Açúcar</option><option value="fat">Gordura</option><option value="flavor">Sabor</option><option value="compound">Composto</option><option value="stabilizer">Estabilizante</option></select></div>
+<div class="field"><label>Nome</label><input id="prodName" placeholder="Ex.: Base Dolomiti PreGel"></div>
+<div class="field"><label>Categoria</label><select id="prodCategory"><option value="milk">Leite / iogurte</option><option value="cream">Natas / gorduras</option><option value="water">Água</option><option value="sugar">Açúcar / adoçante</option><option value="fruit">Fruta</option><option value="paste">Pasta / fruto seco / sabor</option><option value="base">Base composta / pó</option><option value="additive">Estabilizante / emulsificante</option><option value="other">Outro</option></select></div>
+<div class="field"><label>Papel na receita</label><select id="prodRole"><option value="auto">Detetar pela categoria</option><option value="liquid">Líquido / base</option><option value="sweetener">Açúcar / adoçante</option><option value="fat">Gordura / natas</option><option value="flavor">Sabor principal</option><option value="compound">Preparado composto</option><option value="stabilizer">Estabilizante</option><option value="other">Outro</option></select></div>
 </div>
-<h3>Composição por 100g</h3>
+<h3 style="margin-top:21px">Composição por 100 g</h3>
 <div class="fields four">
 <div class="field"><label>Gordura %</label><input type="number" step="any" id="prodFat"></div>
 <div class="field"><label>Proteínas %</label><input type="number" step="any" id="prodProtein"></div>
 <div class="field"><label>Hidratos %</label><input type="number" step="any" id="prodCarb"></div>
 <div class="field"><label>Açúcares %</label><input type="number" step="any" id="prodSugar"></div>
-<div class="field"><label>Água %</label><input type="number" step="any" id="prodWater"></div>
-<div class="field"><label>PAC / 100g</label><input type="number" step="any" id="prodPac"></div>
-<div class="field"><label>POD / 100g</label><input type="number" step="any" id="prodPod"></div>
-<div class="field"><label>Sal g / 100g</label><input type="number" step="any" id="prodSalt"></div>
+<div class="field"><label>Água % (opcional)</label><input type="number" step="any" id="prodWater" placeholder="Vazio se desconhecida"></div>
+<div class="field"><label>kcal / 100 g</label><input type="number" step="any" id="prodKcal"></div>
+<div class="field"><label>kJ / 100 g</label><input type="number" step="any" id="prodKj"></div>
+<div class="field"><label>Sal g / 100 g</label><input type="number" step="any" id="prodSalt"></div>
+<div class="field"><label>PAC por 100 g</label><input type="number" step="any" id="prodPac" placeholder="Desconhecido = vazio"></div>
+<div class="field"><label>POD por 100 g</label><input type="number" step="any" id="prodPod" placeholder="Desconhecido = vazio"></div>
 </div>
+<div class="note">PAC/POD por 100 g, sacarose = 100. Ex.: açúcar puro 100/100; leite 4,8% lactose ≈ 4,8/0,77.</div>
 <div class="layer">
-<h3>PAC / POD Automático</h3>
+<h3>PAC / POD automático</h3>
 <div class="fields two">
-<div class="field"><label>Modelo de Cálculo</label><select id="prodSugarModel"><option value="auto">Automático</option><option value="manual">Manual</option><option value="sucrose">Sacarose Pura</option><option value="dextrose">Dextrose Anidra</option><option value="dextrose_mono">Dextrose Monohidratada</option><option value="fructose">Frutose Pura</option><option value="lactose">Lactose Pura</option><option value="water">Água Pura</option><option value="dairy">Leite/Natas sem açúcar</option></select></div>
-<div class="field"><label>DE (se pó)</label><input type="number" id="prodDE" placeholder="Ex: 18"></div>
+<div class="field"><label>Modelo</label><select id="prodSugarModel"><option value="auto">Automático</option><option value="manual">Manual certificado</option><option value="sucrose">Sacarose pura</option><option value="dextrose">Dextrose anidra</option><option value="dextrose_mono">Dextrose monohidratada</option><option value="fructose">Frutose pura</option><option value="lactose">Lactose pura</option><option value="water">Água pura</option><option value="dairy">Leite/natas sem açúcar adicionado</option><option value="breakdown">Mistura documentada</option></select></div>
+<div class="field"><label>Origem</label><select id="prodSugarEvidence"><option value="unconfirmed">Não verificada</option><option value="manufacturer">Ficha do fabricante</option><option value="standard">Referência conhecida</option></select></div>
 </div>
-<div class="buttons"><button class="btn gold" id="btnAutoPacPod" type="button">Calcular PAC/POD</button></div>
-<div id="autoPacStatus" class="note warn">Preencha os dados e clique em calcular.</div>
+<div class="fields two" style="margin:12px 0"><div class="field"><label>DE do produto</label><input type="number" id="prodDE" min="1" max="100" step="0.1" placeholder="Ex.: 18 ou 31"></div><div class="field"><label>Info</label><div class="note warn" style="margin:0">O <b>DE não pode ser deduzido só dos Nährwerte</b>.</div></div></div>
+<div class="fields four" id="breakdownFields"><div class="field"><label>Sacarose g/100g</label><input type="number" step="any" id="prodSucrose"></div><div class="field"><label>Dextrose g/100g</label><input type="number" step="any" id="prodGlucose"></div><div class="field"><label>Frutose g/100g</label><input type="number" step="any" id="prodFructose"></div><div class="field"><label>Lactose g/100g</label><input type="number" step="any" id="prodLactose"></div><div class="field"><label>Maltose g/100g</label><input type="number" step="any" id="prodMaltose"></div></div>
+<div class="buttons"><button class="btn gold" id="btnAutoPacPod" type="button">Calcular PAC / POD</button></div>
+<div id="autoPacStatus" class="note warn">Modo automático: introduz o nome e os Nährwerte.</div>
 </div>
-<div class="fields four">
-<div class="field"><label>Preço Embalagem (€)</label><input id="prodPackPrice" type="number" step="any"></div>
-<div class="field"><label>Quantidade</label><input id="prodPackSize" type="number" step="any"></div>
-<div class="field"><label>Unidade</label><select id="prodPackUnit"><option value="kg">kg</option><option value="g">g</option><option value="L">L</option></select></div>
-<div class="field"><label>Densidade (kg/L)</label><input id="prodDensity" type="number" step="any"></div>
-</div>
-<div id="priceView" class="note">Custo por kg: ---</div>
-<label class="check"><input id="prodVerified" type="checkbox"> Dados 100% verificados (Pronto para produção)</label>
-<div class="buttons"><button class="btn primary" id="saveProduct">Guardar Ingrediente</button><button class="btn" id="cancelProduct">Cancelar</button></div>
+<h3>Dosagem do fabricante</h3>
+<div class="fields"><div class="field"><label>Mínimo (g/kg)</label><input id="prodMin" type="number" step="any"></div><div class="field"><label>Dose de referência (g/kg)</label><input id="prodRecommended" type="number" step="any"></div><div class="field"><label>Máximo (g/kg)</label><input id="prodMax" type="number" step="any"></div><div class="field"><label>Referência</label><select id="prodDoseBasis"><option value="final">Por kg de mistura final</option><option value="base">Por kg de base</option></select></div></div>
+<h3>Compra e embalagem</h3>
+<div class="fields four"><div class="field"><label>Preço embalagem (€)</label><input id="prodPackPrice" type="number" step="any"></div><div class="field"><label>Quantidade</label><input id="prodPackSize" type="number" step="any"></div><div class="field"><label>Unidade</label><select id="prodPackUnit"><option value="kg">kg</option><option value="g">g</option><option value="L">Litros</option><option value="ml">ml</option></select></div><div class="field"><label>Densidade kg/L</label><input id="prodDensity" type="number" step="any"></div></div>
+<div id="priceView" class="note">Custo por kg: não definido</div>
+<div class="fields two"><div class="field"><label>Alergénios</label><input id="prodAllergens" placeholder="Ex.: MILCH"></div><div class="field"><label>Vestígios</label><input id="prodTraces" placeholder="Ex.: SOJA"></div></div>
+<div class="field"><label>Notas / fabricante</label><textarea id="prodNotes"></textarea></div>
+<label class="check"><input id="prodVerified" type="checkbox"> Dados completos e confirmados (incluindo PAC/POD e água)</label>
+<div class="buttons"><button class="btn primary" id="saveProduct">Guardar produto</button><button class="btn" id="cancelProduct">Cancelar</button></div>
 </div>
 </div>
 </section>
 
 <section id="recipes" class="page">
-<div class="panel"><h2>Receitas Guardadas</h2><div id="savedRecipes"></div><div id="recipeDetail"></div></div>
-</section>
-
-<section id="backup" class="page">
-<div class="panel"><h2>Backups de Segurança</h2>
-<p>Exporte os seus dados para não perder a biblioteca de ingredientes.</p>
-<div class="buttons"><button class="btn primary" id="exportBackup">Exportar Backup (.json)</button><label class="btn">Importar Backup<input type="file" id="importBackup" accept=".json" hidden></label></div>
+<div class="panel"><h2>Receitas guardadas</h2>
+<p class="hint">Fluxo: rascunho → ensaio → aprovada. Receitas com dados estimados não podem ser aprovadas.</p>
+<div id="savedRecipes"></div>
 </div>
 </section>
 
-<div class="foot">SANREMO PRODUCTION LAB V11</div>
+<section id="audit" class="page">
+<div class="panel"><h2>Auditoria de alterações</h2>
+<p class="hint">Todas as operações ficam registadas localmente. Exporta o backup para preservar o histórico.</p>
+<div id="auditLog"></div>
+<div class="buttons"><button class="btn" id="exportAudit">Exportar auditoria (.csv)</button></div>
+</div>
+</section>
+
+<section id="backup" class="page">
+<div class="panel"><h2>Backups e dados</h2>
+<div class="note">A biblioteca usa a chave local <code>sanremo_v9</code>. Um HTML aberto noutro endereço ou navegador pode precisar de importar o backup.</div>
+<div class="note warn">Este HTML é público. As tuas receitas e preços ficam no navegador e não são enviados para o GitHub.</div>
+<div class="buttons">
+<button class="btn primary" id="exportBackup">Exportar backup completo (.json)</button>
+<label class="btn" style="cursor:pointer">Importar backup (.json)<input type="file" id="importBackup" accept="application/json,.json" hidden></label>
+<button class="btn" id="importV8">Importar dados do V8/V6 neste navegador</button>
+</div>
+<div id="backupMessage"></div>
+<h3>Repor os dados</h3>
+<p>Exporta sempre um backup JSON antes de trocar de ficheiro ou endereço.</p>
+<button class="btn danger" id="eraseAll">Apagar dados desta versão</button>
+</div>
+</section>
+
+<section id="tests" class="page">
+<div class="panel"><h2>Autotestes de cálculo</h2>
+<p class="hint">20 testes com valores esperados calculados manualmente. Não substituem validação física.</p>
+<div class="buttons"><button class="btn primary" id="runTests">Executar autotestes</button></div>
+<div id="testResults"></div>
+</div>
+</section>
+
+<div class="foot">SANREMO GELATO LAB V9 · Motor revisto · Auditoria local · Versão de ensaio técnico. Cálculos e objetivos não certificam textura, segurança alimentar, rotulagem ou fichas técnicas.</div>
 </main></div>
-<div id="toasts"></div>
+<div id="toasts" aria-live="polite"></div>
 
 <script>
 'use strict';
 const $ = id => document.getElementById(id);
 const fmt = (v, n = 1) => Number(v).toLocaleString('pt-PT', { minimumFractionDigits: n, maximumFractionDigits: n });
-const eur = v => v === null ? '---' : Number(v).toLocaleString('pt-PT', { style: 'currency', currency: 'EUR' });
+const eur = v => v === null || !Number.isFinite(v) ? 'Incompleto' : Number(v).toLocaleString('pt-PT', { style: 'currency', currency: 'EUR' });
 const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const clone = v => JSON.parse(JSON.stringify(v));
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2);
 const num = v => { if (v === null || v === undefined || String(v).trim() === '') return null; const n = Number(String(v).replace(',', '.')); return Number.isFinite(n) ? n : null; };
 const v = id => num($(id).value);
+const valid = (n, a, b) => n !== null && n >= a && n <= b;
 
-const KEY = 'sanremo_v11_production';
-let store = { products: [], recipes: [] };
-try { const saved = JSON.parse(localStorage.getItem(KEY)); if(saved) store = saved; } catch(e){}
+const SCHEMA_VERSION = 9;
+const KEY = 'sanremo_v9';
+const LEGACY_KEYS = ['sanremo_gelato_formulator_v8', 'sanremo_gelato_formulator_v7_pacpod', 'sanremo_gelato_formulator_v6_pacpod'];
+
+let store = null;
+try { store = JSON.parse(localStorage.getItem(KEY)); } catch {}
+if (!store || typeof store !== 'object') {
+  store = { products: [], recipes: [], audit: [], schemaVersion: SCHEMA_VERSION };
+  for (const lk of LEGACY_KEYS) {
+    try {
+      const legacy = JSON.parse(localStorage.getItem(lk));
+      if (legacy && Array.isArray(legacy.products) && legacy.products.length) {
+        store.products = legacy.products.map(p => ({ ...p, _migratedFrom: lk }));
+        store.recipes = Array.isArray(legacy.recipes) ? legacy.recipes : [];
+        break;
+      }
+    } catch {}
+  }
+}
+if (!Array.isArray(store.products)) store.products = [];
+if (!Array.isArray(store.recipes)) store.recipes = [];
+if (!Array.isArray(store.audit)) store.audit = [];
+store.schemaVersion = SCHEMA_VERSION;
 
 let products = store.products;
 let recipes = store.recipes;
+let auditLog = store.audit;
 let genSelected = new Set();
-let cakeLayers = [{ id: uid(), name: 'Massa/Creme Base', weight: 100, selected: new Set() }]; // Para o Cake Lab
+let draft = [];
+let generatedRecipe = null;
 
-function persist() { localStorage.setItem(KEY, JSON.stringify({ products, recipes })); refreshDash(); }
-function toast(msg) { const x = document.createElement('div'); x.textContent = msg; $('toasts').append(x); setTimeout(() => x.remove(), 3500); }
+function audit(action, entity, entityId, details = null) {
+  auditLog.unshift({ ts: new Date().toISOString(), action, entity, entityId, details });
+  if (auditLog.length > 2000) auditLog.length = 2000;
+  persist();
+}
+
+function persist() {
+  try {
+    localStorage.setItem(KEY, JSON.stringify({ schemaVersion: SCHEMA_VERSION, products, recipes, audit: auditLog, savedAt: new Date().toISOString() }));
+  } catch (e) { alert('Armazenamento indisponível: exporta backup. (' + e.message + ')'); }
+  refreshDashboard();
+}
+
+function toast(msg) {
+  const x = document.createElement('div');
+  x.textContent = msg;
+  $('toasts').append(x);
+  setTimeout(() => x.remove(), 4200);
+}
 
 function inferCategory(p) {
   const n = String(p.name || '').toUpperCase();
-  if (/LEITE|MILCH/.test(n)) return 'milk';
-  if (/NATAS|SAHNE/.test(n)) return 'cream';
-  if (/AÇÚCAR|ZUCKER/.test(n)) return 'sugar';
-  return p.category || 'other';
+  const c = String(p.category || '').toLowerCase();
+  const map = { 'leite': 'milk', 'natas': 'cream', 'açúcar': 'sugar', 'fruta': 'fruit', 'água': 'water', 'pulver': 'base', 'milchprodukt': 'milk', 'frucht': 'fruit' };
+  if (map[c]) return map[c];
+  if (['milk', 'water', 'cream', 'sugar', 'fruit', 'paste', 'base', 'additive'].includes(c)) return c;
+  if (/^(WASSER|ÁGUA|AGUA)$/.test(n)) return 'water';
+  if (/ERDBEER|HIMBEER|MORANGO|FRAMBOESA|MANGO|BANAN|ZITRONE|FRUCHT|FRUTA/.test(n)) return 'fruit';
+  if (/SAHNE|NATAS|RAHM/.test(n)) return 'cream';
+  if (/JOGHURT|YOGHURT|MILCH|LEITE/.test(n)) return 'milk';
+  if (/DEXTROSE|GLUKOSE|GLUCOSE|ZUCKER|AÇÚCAR|ACUCAR|SACAROSE/.test(n)) return 'sugar';
+  if (/BASE BELLA|BASE SOAVE|BASE DOLOMITI/.test(n)) return 'base';
+  return 'other';
 }
 function normRole(p) {
-  if (p.role && p.role !== 'auto') return p.role;
+  if (/MAGERMILCHPULVER|MILCHPULVER|LEITE EM P[ÓO]|SKIMMED MILK POWDER/i.test(p.name || '')) return 'compound';
+  if (p.role && p.role !== 'auto' && p.role !== 'other') return p.role;
   return ({ milk: 'liquid', water: 'liquid', cream: 'fat', sugar: 'sweetener', fruit: 'flavor', paste: 'flavor', base: 'compound', additive: 'stabilizer' }[inferCategory(p)] || 'other');
 }
+function packageKg(p) {
+  const sz = num(p.packSize);
+  if (sz === null || sz <= 0) return null;
+  switch (p.packUnit) {
+    case 'g': return sz / 1000;
+    case 'kg': return sz;
+    case 'L': return num(p.density) > 0 ? sz * num(p.density) : null;
+    case 'ml': return num(p.density) > 0 ? sz * num(p.density) / 1000 : null;
+    default: return null;
+  }
+}
 function priceKg(p) {
-  const sz = num(p.packSize), price = num(p.packPrice);
-  if (sz === null || sz <= 0 || price === null) return null;
-  let kg = p.packUnit === 'g' ? sz/1000 : (p.packUnit === 'L' ? sz*(num(p.density)||1) : sz);
-  return price / kg;
+  if (!p) return null;
+  const kg = packageKg(p);
+  const price = num(p.packPrice);
+  return kg !== null && price !== null && price >= 0 ? price / kg : null;
 }
 function byId(id) { return products.find(p => p.id === id); }
-function refreshDash() { $('dashProducts').textContent = products.length; $('dashRecipes').textContent = recipes.length; }
+
+function refreshDashboard() {
+  $('dashProducts').textContent = products.length;
+  $('dashRecipes').textContent = recipes.length;
+  $('dashApproved').textContent = recipes.filter(r => r.status === 'approved').length;
+  $('dashAudit').textContent = auditLog.length;
+}
 
 function view(id) {
   document.querySelectorAll('.page').forEach(e => e.classList.toggle('active', e.id === id));
   document.querySelectorAll('[data-view]').forEach(e => e.classList.toggle('current', e.dataset.view === id));
   if (id === 'products') renderProducts();
   if (id === 'generator') renderGenChoices();
+  if (id === 'manual') renderManual();
   if (id === 'recipes') renderRecipes();
-  if (id === 'cremino') renderCremino();
-  if (id === 'cake') renderCakeLayers();
+  if (id === 'audit') renderAudit();
   window.scrollTo(0, 0);
 }
 document.querySelectorAll('[data-view]').forEach(b => b.onclick = () => view(b.dataset.view));
 document.querySelectorAll('[data-jump]').forEach(b => b.onclick = () => view(b.dataset.jump));
 
-// MATEMÁTICA (GELADOS)
 const SUGAR_FACTORS = { sucrose: [1, 1], glucose: [1.9, 0.7], fructose: [1.9, 1.7], lactose: [1, 0.16], maltose: [1, 0.33] };
-const DE_POINTS_MALT = [[18, 35, 15], [20, 37, 16]];
-const DE_POINTS_GLUCOSE = [[18, 35, 15], [20, 37, 16], [30, 56, 24], [40, 78, 34]];
 
 function calculatePacPod(model, data) {
   const sugar = data.sugar, carb = data.carb;
+  const good = x => Number.isFinite(x) && x >= 0;
+  let components = {}, method = '';
   if (model === 'manual') return null;
-  if (model === 'water') return { pac: 0, pod: 0, method: 'Água pura' };
-  if (sugar === null || carb === null) throw Error('Preencha hidratos e açúcares.');
-  let comp = {};
-  if (['sucrose','dextrose','dextrose_mono','fructose','lactose'].includes(model)) {
+  if (model === 'water') {
+    if ((sugar ?? 0) > 0 || (carb ?? 0) > 0) throw Error('Água pura não pode ter hidratos ou açúcares.');
+    return { pac: 0, pod: 0, method: 'Água pura — 0/0' };
+  }
+  if (!good(sugar) || !good(carb)) throw Error('Preenche hidratos e açúcares.');
+  if (['sucrose', 'dextrose', 'dextrose_mono', 'fructose', 'lactose'].includes(model)) {
     const m = { sucrose: 'sucrose', dextrose: 'glucose', dextrose_mono: 'glucose', fructose: 'fructose', lactose: 'lactose' };
-    comp[m[model]] = sugar;
-  } else if (model === 'dairy') { comp.lactose = sugar; } else throw Error('Modelo inválido.');
-  const pac = Object.entries(comp).reduce((a,[k,g]) => a + g * SUGAR_FACTORS[k][0], 0);
-  const pod = Object.entries(comp).reduce((a,[k,g]) => a + g * SUGAR_FACTORS[k][1], 0);
-  return { pac: Math.round(pac*1000)/1000, pod: Math.round(pod*1000)/1000, method: 'Calculado' };
+    if (model === 'dextrose_mono') {
+      if (Math.abs(sugar - 90.9) > 3) throw Error('Dextrose monohidratada: açúcar ~90,9%.');
+      components.glucose = sugar;
+    } else {
+      if (sugar < 95) throw Error('Modelo exige açúcares ≥ 95 g/100g.');
+      components[m[model]] = sugar;
+    }
+    method = 'Composição identificada: ' + model;
+  } else if (model === 'dairy') {
+    if (data.category !== 'milk' && data.category !== 'cream') throw Error('Modelo lactose: leite/natas sem açúcar adicionado.');
+    components.lactose = sugar;
+    method = 'Estimativa: açúcares = lactose';
+  } else if (model === 'breakdown') {
+    components = { sucrose: data.sucrose, glucose: data.glucose, fructose: data.fructose, lactose: data.lactose, maltose: data.maltose };
+    const sum = Object.values(components).reduce((a, b) => a + (b || 0), 0);
+    if (!Object.values(components).every(x => x === null || good(x))) throw Error('Distribuição inválida.');
+    if (!sum) throw Error('Introduz a composição de açúcares.');
+    if (sum > carb + 0.2 || sum > sugar + 0.2) throw Error('Açúcares discriminados excedem Nährwerte.');
+    if (Math.abs(sum - sugar) > 0.5) throw Error('Faltam ' + (sugar - sum).toFixed(2) + ' g/100g de açúcares identificados.');
+    if (carb - sugar > 1) throw Error('Existem ' + (carb - sugar).toFixed(2) + ' g/100g de hidratos não caracterizados.');
+    method = 'Composição discriminada';
+  } else throw Error('Modelo não suportado.');
+  const pac = Object.entries(components).reduce((a, [k, g]) => a + (g || 0) * SUGAR_FACTORS[k][0], 0);
+  const pod = Object.entries(components).reduce((a, [k, g]) => a + (g || 0) * SUGAR_FACTORS[k][1], 0);
+  return { pac: Math.round(pac * 1000) / 1000, pod: Math.round(pod * 1000) / 1000, method };
 }
 
+const DE_POINTS_MALT = [[18, 35, 15], [20, 37, 16]];
+const DE_POINTS_GLUCOSE = [[18, 35, 15], [20, 37, 16], [30, 56, 24], [40, 78, 34]];
+
 function deEstimate(data) {
+  const name = String(data.name || '').toUpperCase();
+  const hydro = /MALTODEXTRIN|MALTODEXTRINA|MALDEX|GLUKOSE|GLUCOSE|GLUCIDEX/.test(name) && !/DEXTROSE|TRAUBENZUCKER/.test(name);
+  if (!hydro) return null;
   let de = Number.isFinite(data.de) ? data.de : null;
-  if (de === null) return { pac: null, pod: null, method: 'Indique o DE.' };
-  const malt = /MALTODEXTRIN/i.test(data.name);
-  if (malt && de > 20) return { pac: null, pod: null, method: 'DE fora do perfil de maltodextrina.' };
+  const m = name.match(/\bDE\s*([0-9]+(?:[.,][0-9]+)?)(?:\s*[-–]\s*([0-9]+(?:[.,][0-9]+)?))?/);
+  if (de === null && m) { const lo = Number(m[1].replace(',', '.')), hi = m[2] ? Number(m[2].replace(',', '.')) : lo; de = (lo + hi) / 2; }
+  if (de === null) return { pac: null, pod: null, method: 'Indica o DE da ficha técnica.' };
+  if (!Number.isFinite(de) || de < 15 || de > 40) return { pac: null, pod: null, method: 'DE ' + de + ' fora do intervalo 18–40.' };
+  const malt = /MALTODEXTRIN|MALTODEXTRINA|MALDEX|GLUCIDEX/.test(name);
+  if (malt && de > 20) return { pac: null, pod: null, method: 'Maltodextrina com DE fora do perfil 18–20.' };
   const points = malt ? DE_POINTS_MALT : DE_POINTS_GLUCOSE;
-  let i = 0; while (i < points.length - 2 && de > points[i + 1][0]) i++;
+  let i = 0;
+  while (i < points.length - 2 && de > points[i + 1][0]) i++;
   const a = points[i], b = points[i + 1], t = (de - a[0]) / (b[0] - a[0]);
   const solids = data.carb;
-  return { pac: Math.round((a[1] + t*(b[1]-a[1]))*solids/95*1000)/1000, pod: Math.round((a[2] + t*(b[2]-a[2]))*solids/95*1000)/1000, method: 'Estimado por DE' };
+  if (!Number.isFinite(solids) || solids < 50 || solids > 100) return { pac: null, pod: null, method: 'Hidratos incompatíveis com modelo DE.' };
+  const pac = (a[1] + t * (b[1] - a[1])) * solids / 95;
+  const pod = (a[2] + t * (b[2] - a[2])) * solids / 95;
+  return { pac: Math.round(pac * 1000) / 1000, pod: Math.round(pod * 1000) / 1000,
+    method: 'ESTIMATIVA DE REFERÊNCIA DE' + de.toFixed(1) + '; tabela Sosa 2024. Não certificado.',
+    estimated: true, de };
+}
+
+function automaticPacPodModel(data) {
+  const n = String(data.name || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().trim();
+  const c = data.category, sugar = data.sugar, carb = data.carb;
+  if (sugar === null || carb === null) return { model: null, why: 'Preenche hidratos e açúcares.' };
+  if (/MALTODEXTRIN|MALTODEXTRINA|MALDEX|GLUKOSE|GLUCOSE|GLUCIDEX/.test(n) && !/DEXTROSE|TRAUBENZUCKER/.test(n)) return { model: 'de_reference' };
+  if ((c === 'water' || /^(WASSER|AGUA|WATER)$/.test(n)) && carb === 0 && sugar === 0) return { model: 'water' };
+  if (/^(KRISTALLZUCKER|ZUCKER|SACAROSE|SUCROSE|ACUCAR)(\s|$)/.test(n) && sugar >= 99 && carb >= 99) return { model: 'sucrose' };
+  if (/^(DEXTROSE|TRAUBENZUCKER)(\s|$)/.test(n)) {
+    if (sugar >= 95 && carb >= 95) return { model: 'dextrose' };
+    if (sugar >= 88 && sugar <= 94 && carb >= sugar) return { model: 'dextrose_mono' };
+    return { model: null, why: 'Dextrose: Nährwerte não confirmam forma química.' };
+  }
+  if (/^(FRUCTOSE|FRUTOSE)(\s|$)/.test(n) && sugar >= 95) return { model: 'fructose' };
+  if (/^(LACTOSE|LAKTOSE)(\s|$)/.test(n) && sugar >= 95) return { model: 'lactose' };
+  if ((/^(MILCH|H.MILCH|VOLL MILCH|VOLLMILCH|LEITE|SAHNE|NATAS|RAHM|MAGERMILCHPULVER|MILCHPULVER|LEITE EM PO)(\s|$)/.test(n)) && c !== 'base' || /^(MAGERMILCHPULVER|MILCHPULVER)(\s|$)/.test(n)) {
+    if (carb >= sugar && sugar >= 0 && sugar <= 65) return { model: 'dairy', powder: /MILCHPULVER|LEITE EM PO/.test(n) };
+  }
+  return { model: null, why: 'Nährwerte não identificam os sacarídeos.' };
 }
 
 function calculateAuto(data) {
-  const n = String(data.name || '').toUpperCase();
-  if (/MALTODEXTRIN|GLUKOSE/.test(n)) return deEstimate(data);
-  if (/^(ZUCKER|KRISTALLZUCKER)/.test(n)) return calculatePacPod('sucrose', data);
-  if (/DEXTROSE/.test(n)) return calculatePacPod(data.sugar > 95 ? 'dextrose' : 'dextrose_mono', data);
-  if (/LEITE|MILCH|NATAS|SAHNE/.test(n)) return calculatePacPod('dairy', data);
-  return { pac: null, pod: null, method: 'Não calculável automaticamente.' };
+  const choice = automaticPacPodModel(data);
+  if (!choice.model) return { pac: null, pod: null, method: 'Não calculável: ' + choice.why };
+  if (choice.model === 'de_reference') return deEstimate(data);
+  const d = { ...data, category: choice.powder ? 'milk' : data.category };
+  const result = calculatePacPod(choice.model, d);
+  result.method = (choice.model === 'dairy' ? 'Estimativa de lactose. ' : 'Identidade presumida. ') + result.method;
+  return result;
 }
+
+const HYPOTHESIS_NOTE = 'HIPÓTESE DE ENSAIO: sem fonte publicada.';
 
 function tempProfile(type, t) {
-  const cold = t <= -18;
-  if (type === 'sorbet') return cold ? { solids: 35, fat: 0, sugar: 24, pac: 345, pod: 215 } : { solids: 32, fat: 0, sugar: 23, pac: 280, pod: 210 };
-  return cold ? { solids: 40, fat: 8, sugar: 18, pac: 325, pod: 175 } : { solids: 38, fat: 8, sugar: 18, pac: 260, pod: 175 };
+  const cold = t <= -18, intermediate = t <= -16;
+  if (type === 'sorbet') return cold
+    ? { solids: 35, fat: 0, sugar: 24, pac: 345, pod: 215, note: HYPOTHESIS_NOTE }
+    : intermediate ? { solids: 34, fat: 0, sugar: 24, pac: 315, pod: 215, note: HYPOTHESIS_NOTE }
+    : { solids: 32, fat: 0, sugar: 23, pac: 280, pod: 210, note: HYPOTHESIS_NOTE };
+  if (type === 'milk') return cold
+    ? { solids: 40, fat: 8, sugar: 18, pac: 325, pod: 175, note: HYPOTHESIS_NOTE }
+    : intermediate ? { solids: 39, fat: 8, sugar: 18, pac: 295, pod: 175, note: HYPOTHESIS_NOTE }
+    : { solids: 38, fat: 8, sugar: 18, pac: 260, pod: 175, note: HYPOTHESIS_NOTE };
+  return { solids: null, fat: null, sugar: null, pac: null, pod: null, note: 'Sem perfil.' };
 }
 
-function formulate(ids, target, type, goals, requireComplete) {
-  const unique = [...new Set(ids)].filter(id => byId(id));
-  if (unique.length < 2) throw Error('Selecione pelo menos 2 ingredientes.');
-  const ps = unique.map(byId);
-  const known = {}; for (const k of ['fat','sugar','water','pac','pod']) known[k] = ps.every(p => p[k] !== null && p[k] !== undefined);
-  if (requireComplete && (['pac','pod','water'].some(k => !known[k]) || ps.some(p => /ESTIMATIVA/i.test(p.pacMethod || '')))) throw Error('Modo rigoroso: faltam dados exatos.');
+function balancingIntervals(kind, temp) {
+  const cold = temp <= -18, medium = temp <= -16;
+  if (kind === 'sorbet') return cold
+    ? { solids: [32, 40], fat: [0, 0.8], sugar: [19, 29], pac: [310, 385], pod: [175, 265], note: HYPOTHESIS_NOTE }
+    : medium ? { solids: [30, 39], fat: [0, 0.8], sugar: [18, 28], pac: [285, 360], pod: [175, 265], note: HYPOTHESIS_NOTE }
+    : { solids: [28, 38], fat: [0, 0.8], sugar: [18, 28], pac: [240, 340], pod: [175, 260], note: HYPOTHESIS_NOTE };
+  if (kind === 'milk') return cold
+    ? { solids: [35, 45], fat: [3, 12], sugar: [12, 23], pac: [290, 375], pod: [120, 230], note: HYPOTHESIS_NOTE }
+    : medium ? { solids: [34, 44], fat: [3, 12], sugar: [12, 23], pac: [265, 350], pod: [120, 230], note: HYPOTHESIS_NOTE }
+    : { solids: [34, 44], fat: [3, 12], sugar: [12, 23], pac: [210, 340], pod: [120, 230], note: HYPOTHESIS_NOTE };
+  return { note: 'Sem intervalos.' };
+}
 
-  let lower = ps.map(() => 0), upper = ps.map(() => target);
+function dryMatterProfile(p) {
+  const has = k => p[k] !== null && p[k] !== undefined && Number.isFinite(Number(p[k]));
+  const fat = has('fat') ? Number(p.fat) : null;
+  const protein = has('protein') ? Number(p.protein) : null;
+  const carb = has('carb') ? Number(p.carb) : null;
+  const salt = has('salt') ? Math.max(0, Number(p.salt)) : 0;
+  if (has('water')) {
+    const dry = Math.max(0, Math.min(100, 100 - Number(p.water)));
+    return { certainMin: dry, certainMax: dry, mid: dry, source: 'Água introduzida', exact: true };
+  }
+  const knownSum = [fat, protein, carb].every(Number.isFinite) ? Math.min(100, Math.max(0, fat + protein + carb + salt)) : null;
+  return { certainMin: knownSum, certainMax: 100, mid: null,
+    source: 'Água não declarada; sólidos não calculáveis sem hipótese.', exact: false };
+}
+
+function lactoseEstimate(p) {
+  const name = String(p.name || '').toUpperCase();
+  const cat = inferCategory(p);
+  if (/SEM LACTOSE|LAKTOSEFREI|LACTOSE FREE/.test(name)) return null;
+  if (/ERDBEER|HIMBEER|MORANGO|FRAMBOESA|MANGO|BANAN|ZITRONE|FRUCHT|FRUTA|AROMA|ZUCKERZUSATZ|GEZUCKERT|SWEETENED|AÇUCARADO|ADOÇADO|CHOCOLATE|SCHOKO|VANILLE|BAUNILHA/.test(name)) return null;
+  if (/MAGERMILCHPULVER|MILCHPULVER|SKIMMED MILK POWDER|LEITE EM P[ÓO]/.test(name)) return num(p.sugar);
+  if (cat === 'milk' || cat === 'cream') return num(p.sugar);
+  return null;
+}
+
+function ingredientQuality(lines) {
+  const total = lines.reduce((a, x) => a + x.g, 0);
+  let lactose = 0, missing = [], powder = 0, cream = 0, glucLow = 0;
+  const notes = [];
+  for (const { id, g } of lines) {
+    const p = byId(id); if (!p || g <= 0) continue;
+    const nm = String(p.name || '').toUpperCase();
+    const lac = lactoseEstimate(p);
+    if (lac !== null) lactose += g / total * lac;
+    else if (['milk', 'cream'].includes(inferCategory(p))) missing.push(p.name);
+    if (/MAGERMILCHPULVER|MILCHPULVER|SKIMMED MILK POWDER|LEITE EM P[ÓO]/.test(nm)) powder += 100 * g / total;
+    if (normRole(p) === 'fat') cream += 100 * g / total;
+    if (/(GLUKOSE|GLUCOSE)/.test(nm) && /DE\s*29[\s-]*33|DE\s*3[012]/.test(nm)) glucLow += 100 * g / total;
+  }
+  if (lactose > 6.5) notes.push('Lactose elevada (' + fmt(lactose, 2) + '%). ' + HYPOTHESIS_NOTE);
+  else if (lactose > 5.5) notes.push('Lactose ' + fmt(lactose, 2) + '%; verificar cristalização. ' + HYPOTHESIS_NOTE);
+  if (powder > 8.01) notes.push('Leite em pó > 8%. ' + HYPOTHESIS_NOTE);
+  if (cream > 32.01) notes.push('Natas > 32%. ' + HYPOTHESIS_NOTE);
+  if (glucLow > 12.01) notes.push('Glucose DE baixo > 12%. ' + HYPOTHESIS_NOTE);
+  return { lactose, missing, powder, cream, glucLow, notes };
+}
+
+function ingredientsAudit(lines, expected) {
+  const total = lines.reduce((s, x) => s + x.g, 0);
+  const warnings = [], errors = [];
+  const met = { fat: 0, protein: 0, carb: 0, sugar: 0, water: 0, solids: 0, pac: 0, pod: 0 };
+  const missing = Object.fromEntries(Object.keys(met).map(k => [k, []]));
+  let cost = 0, costComplete = true;
+  if (!total || total <= 0) errors.push('Receita vazia.');
+  if (expected !== null && Math.round(total) !== expected) errors.push('Peso ' + fmt(total, 0) + ' g ≠ ' + fmt(expected, 0) + ' g.');
+  for (const item of lines) {
+    const p = byId(item.id); if (!p) { errors.push('Produto não encontrado.'); continue; }
+    if (!Number.isFinite(item.g) || item.g < 0) { errors.push('Gramas inválidas em ' + p.name); continue; }
+    const ratio = item.g / Math.max(1, total);
+    for (const key of ['fat', 'protein', 'carb', 'sugar', 'water', 'pac', 'pod']) {
+      if (p[key] === null || p[key] === undefined || !Number.isFinite(Number(p[key]))) missing[key].push(p.name);
+      else met[key] += ratio * Number(p[key]);
+    }
+    const c = priceKg(p);
+    if (c === null) costComplete = false; else cost += item.g / 1000 * c;
+    if (!p.verified || /estimativa|presumid|não certificado/i.test(p.pacMethod || '')) warnings.push(p.name + ': dados não verificados.');
+  }
+  for (const key of ['fat', 'protein', 'carb', 'sugar', 'water']) if (missing[key].length) met[key] = null;
+  met.solids = met.water === null ? null : 100 - met.water;
+  missing.solids = missing.water;
+  for (const key of ['pac', 'pod']) met[key] = missing[key].length ? null : met[key] * 10;
+  if (!costComplete) warnings.push('Faltam preços; custo incompleto.');
+  const quality = ingredientQuality(lines);
+  warnings.push(...quality.notes);
+  return { total, met, missing, quality, errors: [...new Set(errors)], warnings: [...new Set(warnings)], cost: costComplete ? cost : null };
+}
+
+function formulate(ids, target, type, goals, requireComplete, adaptive) {
+  const unique = [...new Set(ids)].filter(id => byId(id));
+  if (unique.length < 2) throw Error('Seleciona pelo menos dois produtos.');
+  const ps = unique.map(byId);
+  const n = ps.length;
+  const known = {};
+  for (const k of ['fat', 'sugar', 'water', 'pac', 'pod']) {
+    known[k] = ps.every(p => p[k] !== null && p[k] !== undefined && Number.isFinite(Number(p[k])));
+  }
+  if (requireComplete && (['pac', 'pod', 'water'].some(k => !known[k]) || ps.some(p => /ESTIMATIVA|estimativa/i.test(p.pacMethod || '')))) {
+    throw Error('Modo rigoroso: faltam PAC/POD/água confirmados ou existem valores estimados. Desmarca o modo rigoroso para proposta preliminar.');
+  }
+  const goalsUsed = Object.entries(goals).filter(([k, g]) => g !== null && known[k === 'solids' ? 'water' : k]);
+  const ignored = Object.entries(goals).filter(([k, g]) => g !== null && !known[k === 'solids' ? 'water' : k]).map(([k]) => k);
+
+  const lower = ps.map(p => inferCategory(p) === 'water' ? 0 : (normRole(p) === 'liquid' && type === 'milk' ? target * 0.15 : 0));
+  const upper = ps.map(() => target);
   ps.forEach((p, i) => {
-    const name = String(p.name).toUpperCase(), role = normRole(p);
+    const name = String(p.name || '').toUpperCase(), role = normRole(p);
     let cap = 1;
-    if (/MAGERMILCHPULVER/.test(name)) cap = 0.08;
-    else if (role === 'fat') cap = 0.32;
-    else if (role === 'sweetener') cap = 0.22;
-    else if (role === 'stabilizer') cap = 0.006;
+    if (/MAGERMILCHPULVER|MILCHPULVER|LEITE EM P[ÓO]|SKIMMED MILK POWDER/.test(name)) cap = 0.08;
+    else if (role === 'fat') cap = type === 'milk' ? 0.32 : 0.40;
+    else if (role === 'sweetener') cap = /MALTODEXTRIN|MALTODEXTRINA/.test(name) ? 0.08 : /GLUKOSE|GLUCOSE|DEXTROSE/.test(name) ? 0.12 : 0.22;
     else if (role === 'compound') cap = 0.12;
+    else if (role === 'stabilizer') cap = 0.006;
+    else if (role === 'flavor' && type === 'milk') cap = 0.50;
     upper[i] = Math.min(upper[i], target * cap);
   });
-  if (type === 'milk' && !ps.some(p => normRole(p) === 'liquid')) throw Error('Falta base líquida (leite).');
+  if (type === 'milk' && !ps.some(p => normRole(p) === 'liquid' && inferCategory(p) === 'milk')) throw Error('Gelado de leite: seleciona leite líquido.');
+  if (type === 'sorbet') {
+    const fruitI = ps.map((p, i) => inferCategory(p) === 'fruit' ? i : -1).filter(i => i >= 0);
+    if (!fruitI.length) throw Error('Sorbet: seleciona fruta.');
+    const minFruit = target * (adaptive ? 0.45 : 0.40);
+    if (fruitI.length === 1) lower[fruitI[0]] = Math.max(lower[fruitI[0]], minFruit);
+    else { const existing = fruitI.reduce((s, i) => s + lower[i], 0); const rem = Math.max(0, minFruit - existing) / fruitI.length; fruitI.forEach(i => lower[i] += rem); }
+    if (adaptive && fruitI.length === 1) upper[fruitI[0]] = Math.min(upper[fruitI[0]], target * 0.7);
+    ps.forEach((p, i) => { if (/(GLUKOSE|GLUCOSE)/i.test(p.name) && /DE\s*29[\s-]*33|DE\s*3[012]/i.test(p.name)) upper[i] = Math.min(upper[i], target * 0.15); });
+  }
+  ps.forEach((p, i) => {
+    if (normRole(p) === 'stabilizer') {
+      if (!(p.max > 0) && !(p.recommended > 0)) throw Error('Estabilizante ' + p.name + ': dose de referência ou máximo obrigatórios.');
+      if (p.recommended > 0 && !(p.max > 0)) { const dose = target * p.recommended / 1000; lower[i] = dose; upper[i] = dose; }
+    }
+    if (p.max !== null && p.max !== undefined && p.doseBasis === 'final') upper[i] = Math.min(upper[i], target * p.max / 1000);
+    if (p.min !== null && p.min !== undefined && p.min > 0) lower[i] = Math.max(lower[i], target * p.min / 1000);
+  });
+  if (lower.some((v, i) => v > upper[i] + 1e-6)) throw Error('Dosagem incompatível com limites.');
+  if (lower.reduce((s, x) => s + x, 0) > target + 1e-6) throw Error('Limites inferiores excedem o peso.');
+  if (upper.reduce((s, x) => s + x, 0) < target - 1e-6) throw Error('Limites superiores não atingem o peso.');
 
-  let x = ps.map(() => target / ps.length);
+  const seedWeights = ps.map(p => {
+    const role = normRole(p);
+    let w = { liquid: 52, sweetener: 15, fat: 8, flavor: 18, compound: 4, stabilizer: 0.4, other: 3 }[role] || 3;
+    if (type === 'sorbet') w = { liquid: 48, sweetener: 26, fat: 0.3, flavor: 24, compound: 1, stabilizer: 0.3, other: 1 }[role] || 1;
+    if (role === 'stabilizer') w = Math.min(w, 0.5);
+    if (p.recommended !== null && p.recommended > 0) w = Math.min(w, Math.max(0.05, p.recommended / 10));
+    if (p.max !== null) w = Math.min(w, Math.max(0.05, p.max / 10));
+    return Math.max(0.01, w);
+  });
+  const sumW = seedWeights.reduce((s, x) => s + x, 0);
+  let x = seedWeights.map(w => target * w / sumW);
+
   const project = a => {
     let x = a.map((v, i) => Math.max(lower[i], Math.min(upper[i], v)));
-    for(let r=0; r<50; r++){
-      let diff = target - x.reduce((s,q)=>s+q,0); if(Math.abs(diff)<1e-6) break;
-      let elig = x.map((v,i)=>({i, cap: diff>0? upper[i]-v : v-lower[i]})).filter(z=>z.cap>1e-8);
-      let cap = elig.reduce((s,z)=>s+z.cap,0); if(!cap) break;
-      for(let z of elig) x[z.i] += Math.sign(diff) * Math.min(z.cap, Math.abs(diff)*z.cap/cap);
+    for (let round = 0; round < 100; round++) {
+      const diff = target - x.reduce((s, q) => s + q, 0);
+      if (Math.abs(diff) < 1e-6) break;
+      const eligible = x.map((v, i) => ({ i, cap: diff > 0 ? upper[i] - v : v - lower[i] })).filter(z => z.cap > 1e-8);
+      const cap = eligible.reduce((s, z) => s + z.cap, 0);
+      if (!cap) break;
+      for (const z of eligible) x[z.i] += Math.sign(diff) * Math.min(z.cap, Math.abs(diff) * z.cap / cap);
     }
     return x;
   };
   x = project(x);
 
   const mix = xx => {
-    let m = {};
-    for (const k of ['fat','sugar','solids','pac','pod']) {
-      if (!known[k==='solids'?'water':k]) { m[k]=null; continue; }
-      let raw = xx.reduce((s,g,i)=>s+g*Number(ps[i][k==='solids'?'water':k]),0)/target;
-      m[k] = k==='solids' ? 100-raw : ['pac','pod'].includes(k) ? raw*10 : raw;
+    const m = {};
+    for (const k of ['fat', 'sugar', 'solids', 'pac', 'pod']) {
+      if (!known[k === 'solids' ? 'water' : k]) { m[k] = null; continue; }
+      const raw = xx.reduce((s, g, i) => s + g * Number(ps[i][k === 'solids' ? 'water' : k]), 0) / target;
+      m[k] = k === 'solids' ? 100 - raw : ['pac', 'pod'].includes(k) ? raw * 10 : raw;
     }
     return m;
   };
-
+  const weights = { fat: 2.5, sugar: 2.2, solids: 1.8, pac: 1.4, pod: 1.4 };
   const score = xx => {
-    let met = mix(xx), s = 0;
-    for (let [k,g] of Object.entries(goals)) {
-      if(g!==null && met[k]!==null) s += Math.pow((met[k]-g)/(['pac','pod'].includes(k)?10:1.4), 2);
+    const met = mix(xx);
+    let s = 0;
+    for (const [k, g] of goalsUsed) {
+      const scale = ['pac', 'pod'].includes(k) ? 10 : 1.4;
+      s += weights[k] * Math.pow((met[k] - g) / scale, 2);
+    }
+    for (let i = 0; i < n; i++) {
+      const p = ps[i], r = normRole(p), pct = xx[i] / target * 100;
+      if (r === 'compound') s += Math.pow(Math.max(0, pct - 5), 2) * 0.45;
+      if (r === 'fat') s += Math.pow(Math.max(0, pct - 20), 2) * 0.2;
     }
     return s;
   };
-
   let best = score(x);
-  for (let step of [target*0.02, target*0.008, target*0.003, target*0.001, 1]) {
+  for (const step of [target * 0.02, target * 0.008, target * 0.003, target * 0.001, target * 0.0003, 1]) {
     let runs = 0;
-    while(runs++ < 100) {
+    while (runs++ < 200) {
       let pair = null, low = best;
-      for(let i=0; i<ps.length; i++) for(let j=0; j<ps.length; j++) {
-        if(i===j || x[i]+step>upper[i] || x[j]-step<lower[j]) continue;
-        x[i]+=step; x[j]-=step; let s = score(x); x[i]-=step; x[j]+=step;
-        if(s < low) { low = s; pair = [i,j]; }
+      for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) {
+        if (i === j || x[i] + step > upper[i] + 1e-8 || x[j] - step < lower[j] - 1e-8) continue;
+        x[i] += step; x[j] -= step;
+        const s = score(x);
+        x[i] -= step; x[j] += step;
+        if (s < low - 1e-9) { low = s; pair = [i, j]; }
       }
-      if(!pair) break; x[pair[0]]+=step; x[pair[1]]-=step; best = low;
+      if (!pair) break;
+      x[pair[0]] += step; x[pair[1]] -= step; best = low;
     }
   }
-  let ints = x.map(q => Math.floor(q)), rem = target - ints.reduce((s,q)=>s+q,0);
-  let order = x.map((q,i)=>({i, f: q-Math.floor(q)})).sort((a,b)=>b.f-a.f);
-  for(let z of order) { if(rem<=0) break; ints[z.i]++; rem--; }
+  let ints = x.map(q => Math.floor(q));
+  let remainder = target - ints.reduce((s, q) => s + q, 0);
+  const order = x.map((q, i) => ({ i, f: q - Math.floor(q) })).sort((a, b) => b.f - a.f);
+  for (const z of order) { if (remainder <= 0) break; ints[z.i]++; remainder--; }
 
-  let lines = ints.map((g,i)=>({id:ps[i].id, g})).filter(r=>r.g>0);
-  let met = mix(ints), errors = [];
-  if (Math.round(ints.reduce((s,q)=>s+q,0)) !== target) errors.push('Peso incorreto.');
-  return { lines, met, errors };
+  const baseIndices = ps.map((p, i) => p.doseBasis === 'base' && ['compound', 'stabilizer'].includes(normRole(p)) ? i : -1).filter(i => i >= 0);
+  const safeInts = () => {
+    const base = target - baseIndices.reduce((s, i) => s + ints[i], 0);
+    if (base <= 0) return false;
+    for (let i = 0; i < n; i++) {
+      const p = ps[i], den = p.doseBasis === 'base' ? base : target, dose = ints[i] / den * 1000;
+      if (ints[i] > Math.ceil(upper[i] - 1e-8) || ints[i] < Math.floor(lower[i] + 1e-8)) return false;
+      if (p.max !== null && dose > p.max + 1e-8) return false;
+      if (p.min !== null && ints[i] > 0 && dose < p.min - 1e-8) return false;
+    }
+    return true;
+  };
+  if (!safeInts()) throw Error('Não foi possível encontrar distribuição viável após arredondamento. Nenhuma receita foi gerada.');
+  const lines = ints.map((g, i) => ({ id: ps[i].id, g })).filter(r => r.g > 0);
+  const checked = ingredientsAudit(lines, target);
+  if (checked.errors.length) throw Error('Proposta viola limites: ' + checked.errors.join(' | '));
+  return { lines, ignored, used: goalsUsed.map(([k]) => k) };
 }
 
-function ingredientsAudit(lines, expected) {
-  const total = lines.reduce((s,x)=>s+x.g,0); let cost = 0, met = {fat:0, protein:0, carb:0, sugar:0, water:0, pac:0, pod:0};
-  for (let item of lines) {
-    let p = byId(item.id); if(!p) continue;
-    let r = item.g / total;
-    for (let k of ['fat','protein','carb','sugar','water','pac','pod']) met[k] += r * (Number(p[k])||0);
-    if(priceKg(p)) cost += (item.g/1000)*priceKg(p);
-  }
-  met.solids = 100 - met.water;
-  for(let k of ['pac','pod']) met[k] *= 10;
-  return { total, met, cost };
+function kgValue(id) {
+  const x = v(id);
+  if (!valid(x, 0.1, 100)) throw Error('Peso deve estar entre 0,1 e 100 kg.');
+  return Math.round(x * 1000);
+}
+function temperature(id) {
+  const n = v(id);
+  if (!valid(n, -40, 0)) throw Error('Temperatura entre −40 e 0 °C.');
+  return n;
 }
 
-// UI GELADOS
 function renderGenChoices() {
-  const q = ($('genSearch').value || '').toLowerCase();
-  $('genChoices').innerHTML = products.filter(p=>p.name.toLowerCase().includes(q)).map(p => `<label class="chip"><input type="checkbox" data-pick="${p.id}" ${genSelected.has(p.id)?'checked':''}> ${esc(p.name)}</label>`).join('');
-  document.querySelectorAll('[data-pick]').forEach(x => x.onchange = () => x.checked ? genSelected.add(x.dataset.pick) : genSelected.delete(x.dataset.pick));
+  const q = $('genSearch').value.toLowerCase();
+  const arr = products.filter(p => (p.name + ' ' + p.category).toLowerCase().includes(q));
+  $('genChoices').innerHTML = arr.length
+    ? arr.map(p => `<label class="chip"><input type="checkbox" data-pick="${esc(p.id)}" ${genSelected.has(p.id) ? 'checked' : ''}> ${esc(p.name)} <span class="hint">${esc(normRole(p))}</span></label>`).join('')
+    : '<div class="note warn">Nenhum produto. Adiciona produtos à biblioteca.</div>';
+  document.querySelectorAll('[data-pick]').forEach(x => x.onchange = () => {
+    x.checked ? genSelected.add(x.dataset.pick) : genSelected.delete(x.dataset.pick);
+    renderGenDataPreview();
+  });
+  renderGenDataPreview();
 }
+
+function renderGenDataPreview() {
+  const el = $('genDataPreview'); if (!el) return;
+  const chosen = [...genSelected].map(byId).filter(Boolean);
+  if (!chosen.length) { el.textContent = 'Seleciona ingredientes para consultar a disponibilidade de dados técnicos.'; return; }
+  const missing = chosen.filter(p => ['fat', 'sugar', 'water', 'pac', 'pod'].some(k => p[k] === null || p[k] === undefined));
+  const estimates = chosen.filter(p => /estimativa|presumid|referência/i.test(p.pacMethod || ''));
+  let msg = '<b>Seleção:</b> ' + chosen.length + ' ingredientes, ' + missing.length + ' com dados incompletos, ' + estimates.length + ' com PAC/POD estimado.';
+  if (missing.length) msg += ' <b>Incompletos:</b> ' + esc(missing.map(p => p.name).join(', ')) + '.';
+  el.innerHTML = msg;
+}
+
 function fillDefaults(type) {
-  let t = v('genTemp') || -13, x = tempProfile(type, t);
-  for(let [k,n] of Object.entries(x)) $('gen' + k[0].toUpperCase() + k.slice(1)).value = n ?? '';
+  const t = v('genTemp');
+  const x = tempProfile(type, t ?? -13);
+  for (const [k, n] of Object.entries(x)) {
+    if (k === 'note') continue;
+    $('gen' + k[0].toUpperCase() + k.slice(1)).value = n ?? '';
+  }
+  renderTempStatus();
 }
-$('genTemp').onchange = () => { fillDefaults($('genType').value); $('tempStatus').innerHTML = `Perfil para ${v('genTemp')}°C carregado.`; };
-$('genType').onchange = () => fillDefaults($('genType').value);
-$('genSelectAll').onclick = () => { document.querySelectorAll('[data-pick]').forEach(x => { x.checked=true; genSelected.add(x.dataset.pick); }); };
+function renderTempStatus() {
+  const t = v('genTemp'), type = $('genType').value, el = $('tempStatus');
+  if (!el) return;
+  const ref = tempProfile(type, t ?? -13);
+  const mode = t <= -18 ? 'conservação −20 °C (perfil experimental)' : t <= -16 ? 'frio intermédio' : 'vitrine';
+  el.innerHTML = '<b>Destino: ' + esc(mode) + '</b> · PAC alvo: ' + (ref.pac ?? '—') + '. <span>' + esc(ref.note || '') + '</span>';
+}
 
-$('btnBalance').onclick = () => {
+function balanceGenerated() {
   try {
-    let total = v('genKg') * 1000, type = $('genType').value;
-    let goals = { solids: v('genSolids'), fat: v('genFat'), sugar: v('genSugar'), pac: v('genPac'), pod: v('genPod') };
-    let res = formulate([...genSelected], total, type, goals, $('genRequireComplete').checked);
-    let aud = ingredientsAudit(res.lines, total);
-
-    $('genOutput').innerHTML = `<div class="result"><h3>Receita: ${esc($('genName').value)}</h3>
-      <div class="cards">
-        <div class="stat"><small>PESO</small><strong>${fmt(aud.total,0)}g</strong></div>
-        <div class="stat"><small>GORDURA</small><strong>${fmt(aud.met.fat,2)}%</strong></div>
-        <div class="stat"><small>AÇÚCARES</small><strong>${fmt(aud.met.sugar,2)}%</strong></div>
-        <div class="stat"><small>PAC / POD</small><strong>${fmt(aud.met.pac,0)} / ${fmt(aud.met.pod,0)}</strong></div>
-        <div class="stat"><small>CUSTO</small><strong>${eur(aud.cost)}</strong></div>
-      </div>
-      <div class="tableWrap"><table><tr><th>Ingrediente</th><th class="num">Gramas</th></tr>
-      ${res.lines.map(x => `<tr><td>${esc(byId(x.id).name)}</td><td class="num">${fmt(x.g,0)} g</td></tr>`).join('')}
-      </table></div>
-      <div class="buttons"><button class="btn primary" onclick="saveRecipe('${esc($('genName').value)}', ${JSON.stringify(res.lines).replace(/'/g, "&#39;")}, ${v('genTemp')}, '${type}')">Guardar Receita</button></div>
-    </div>`;
-  } catch(e) { alert(e.message); }
-};
-
-window.saveRecipe = (name, lines, temp, type) => {
-  recipes.push({ id: uid(), name, lines, temp, type, date: new Date().toISOString() });
-  persist(); toast('Receita guardada!'); view('recipes');
-};
-
-// UI CREMINO
-let crmLayers = [{ id: uid(), name: 'Base', weight: 60, selected: new Set() }, { id: uid(), name: 'Creme', weight: 30, selected: new Set() }, { id: uid(), name: 'Cobertura', weight: 10, selected: new Set() }];
-function renderCremino() {
-  $('layersContainer').innerHTML = crmLayers.map((L, i) => `
-    <div class="layer">
-      <div class="layerHeader"><h4>Camada ${i+1}</h4><button class="btn danger" onclick="removeLayer(${i})">Remover</button></div>
-      <div class="fields two">
-        <div class="field"><label>Nome da Camada</label><input value="${esc(L.name)}" onchange="crmLayers[${i}].name = this.value"></div>
-        <div class="field"><label>Peso da Camada (%) do Total</label><input type="number" value="${L.weight}" onchange="crmLayers[${i}].weight = +this.value; renderCremino();"></div>
-      </div>
-      <p class="hint">Selecione os ingredientes para esta camada:</p>
-      <div class="chipList">
-        ${products.map(p => `<label class="chip"><input type="checkbox" ${L.selected.has(p.id)?'checked':''} onchange="toggleLayerIng(${i}, '${p.id}', this.checked)"> ${esc(p.name)}</label>`).join('')}
-      </div>
-    </div>
-  `).join('');
+    const selected = [...genSelected].map(byId).filter(Boolean);
+    const kind = $('genType').value;
+    const name = $('genName').value.trim() || 'Receita Sanremo';
+    const total = kgValue('genKg');
+    const temp = temperature('genTemp');
+    if (kind === 'milk' && selected.some(p => inferCategory(p) === 'fruit') && !selected.some(p => ['milk', 'cream'].includes(inferCategory(p)))) throw Error('Selecionaste fruta e água: escolhe «Sorbet de fruta».');
+    if (kind === 'sorbet' && !selected.some(p => inferCategory(p) === 'fruit')) throw Error('Para sorbet, seleciona fruta.');
+    const ranges = balancingIntervals(kind, temp);
+    const profile = tempProfile(kind, temp);
+    const attempts = [
+      { ...profile, note: undefined },
+      { ...profile, pod: null, note: undefined },
+      { ...profile, pac: null, pod: null, note: undefined },
+      { ...profile, sugar: null, pod: null, note: undefined },
+      { ...profile, solids: null, pod: null, note: undefined }
+    ];
+    let best = null;
+    for (const goal of attempts) {
+      let result;
+      try { result = formulate([...genSelected], total, kind, goal, $('genRequireComplete').checked, true); }
+      catch (e) { if (!best) best = { error: e }; continue; }
+      const audit = ingredientsAudit(result.lines, total);
+      const actual = audit.met;
+      const misses = Object.entries(ranges).filter(([k, [lo, hi]]) => k !== 'note' && (actual[k] === null || actual[k] < lo - 1e-4 || actual[k] > hi + 1e-4)).map(([k, [lo, hi]]) => ({ k, lo, hi, v: actual[k] }));
+      const fruits = result.lines.filter(x => inferCategory(byId(x.id)) === 'fruit').reduce((a, x) => a + x.g, 0) / total * 100;
+      if (kind === 'sorbet' && (fruits < 45 - 0.01 || fruits > 70 + 0.01)) misses.push({ k: 'fruta', lo: 45, hi: 70, v: fruits });
+      const penalty = misses.reduce((a, d) => a + (d.v === null ? 100 : Math.max(d.lo - d.v, 0, d.v - d.hi) / ((d.hi - d.lo) || 1) * 20), 0);
+      if (!best || best.error || penalty < best.penalty) best = { result, audit, misses, penalty, goal, fruits };
+      if (!misses.length && audit.errors.length === 0) break;
+    }
+    if (!best || best.error) throw Error(best?.error?.message || 'Não foi possível formular.');
+    const { result, audit, misses } = best;
+    generatedRecipe = { name, temp, type: kind, lines: result.lines, status: 'draft', createdAt: new Date().toISOString() };
+    const inRange = misses.length === 0;
+    const metricNames = { solids: 'Sólidos', fat: 'Gordura', sugar: 'Açúcares', pac: 'PAC', pod: 'POD', fruta: 'Fruta' };
+    const rows = Object.entries(ranges).filter(([k]) => k !== 'note').map(([k, [lo, hi]]) => `<tr><td>${metricNames[k] || k}</td><td>${fmt(lo, 1)} – ${fmt(hi, 1)}</td><td>${audit.met[k] === null ? 'Dado em falta' : fmt(audit.met[k], 1)}</td><td>${audit.met[k] === null ? 'Incompleto' : audit.met[k] >= lo && audit.met[k] <= hi ? 'Dentro' : 'Fora'}</td></tr>`).join('');
+    const warnings = misses.length ? '<div class="note bad"><b>Fora dos intervalos:</b> ' + esc(misses.map(d => (metricNames[d.k] || d.k) + ': ' + (d.v === null ? 'desconhecido' : fmt(d.v, 1)) + ' (intervalo ' + d.lo + '–' + d.hi + ')').join(' | ')) + '</div>' : '';
+    const verdict = inRange && audit.errors.length === 0
+      ? '<div class="note ok"><b>Indicadores dentro dos intervalos.</b> Proposta para ensaio, não receita validada.</div>'
+      : '<div class="note warn"><b>Proposta de ensaio:</b> objetivos ou dados técnicos ainda não confirmados. Não usar como receita final.</div>';
+    $('genOutput').innerHTML = '<div class="result"><h3>' + (inRange ? '✓' : '⚠') + ' ' + esc(name) + '</h3>' + verdict + warnings
+      + '<div class="cards">'
+      + '<div class="stat"><small>PESO</small><strong>' + fmt(audit.total, 0) + ' g</strong></div>'
+      + '<div class="stat"><small>GORDURA</small><strong>' + (audit.met.fat === null ? '—' : fmt(audit.met.fat, 2) + '%') + '</strong></div>'
+      + '<div class="stat"><small>AÇÚCARES</small><strong>' + (audit.met.sugar === null ? '—' : fmt(audit.met.sugar, 2) + '%') + '</strong></div>'
+      + '<div class="stat"><small>SÓLIDOS</small><strong>' + (audit.met.solids === null ? '—' : fmt(audit.met.solids, 2) + '%') + '</strong></div>'
+      + '<div class="stat"><small>PAC/1000g</small><strong>' + (audit.met.pac === null ? '—' : fmt(audit.met.pac, 1)) + '</strong></div>'
+      + '<div class="stat"><small>POD/1000g</small><strong>' + (audit.met.pod === null ? '—' : fmt(audit.met.pod, 1)) + '</strong></div>'
+      + '<div class="stat"><small>CUSTO</small><strong>' + (audit.cost === null ? '—' : eur(audit.cost)) + '</strong></div>'
+      + '</div>'
+      + '<h4>Objetivos vs. obtido</h4><div class="tableWrap"><table><tr><th>Parâmetro</th><th>Intervalo</th><th>Obtido</th><th>Estado</th></tr>' + rows + '</table></div>'
+      + '<div class="tableWrap"><table><tr><th>Ingrediente</th><th class="num">Gramas</th></tr>' + result.lines.map(x => '<tr><td>' + esc(byId(x.id)?.name || x.id) + '</td><td class="num">' + fmt(x.g, 0) + ' g</td></tr>').join('') + '</table></div>'
+      + (audit.errors.length ? '<div class="note bad"><b>Erros:</b> ' + esc(audit.errors.join(' | ')) + '</div>' : '')
+      + (audit.warnings.length ? '<div class="note warn"><b>Avisos:</b> ' + esc(audit.warnings.join(' | ')) + '</div>' : '')
+      + '<div class="buttons"><button class="btn primary" id="genSave">Guardar como rascunho</button><button class="btn" id="genAnalyze">Abrir no analisador</button></div></div>';
+    $('genSave').onclick = () => saveRecipe(generatedRecipe);
+    $('genAnalyze').onclick = () => { draft = clone(generatedRecipe.lines); $('manName').value = generatedRecipe.name; $('manKg').value = (generatedRecipe.lines.reduce((s, x) => s + x.g, 0) / 1000).toFixed(2); $('manTemp').value = generatedRecipe.temp; renderManual(); view('manual'); };
+  } catch (e) { alert(e.message); }
 }
-window.removeLayer = i => { crmLayers.splice(i,1); renderCremino(); };
-window.toggleLayerIng = (i, id, checked) => { checked ? crmLayers[i].selected.add(id) : crmLayers[i].selected.delete(id); };
-$('btnAddLayer').onclick = () => { crmLayers.push({ id: uid(), name: 'Nova Camada', weight: 10, selected: new Set() }); renderCremino(); };
 
-$('btnCalcCremino').onclick = () => {
-  try {
-    let t = v('crmTemp'), type = 'milk', profile = tempProfile(type, t);
-    let outputHTML = `<h3>Produção do Bolo: ${esc($('crmName').value)}</h3>`;
-    let totalWeight = v('crmKg'), totalCost = 0;
+const mapNum = { sucrose: 'prodSucrose', glucose: 'prodGlucose', fructose: 'prodFructose', lactose: 'prodLactose', maltose: 'prodMaltose', fat: 'prodFat', protein: 'prodProtein', carb: 'prodCarb', sugar: 'prodSugar', water: 'prodWater', kcal: 'prodKcal', kj: 'prodKj', salt: 'prodSalt', pac: 'prodPac', pod: 'prodPod', min: 'prodMin', max: 'prodMax', packPrice: 'prodPackPrice', packSize: 'prodPackSize', density: 'prodDensity', recommended: 'prodRecommended' };
 
-    crmLayers.forEach((L, idx) => {
-      if(!L.weight || L.weight <= 0) return;
-      let targetG = (L.weight / 100) * totalWeight;
-      if(L.selected.size < 2) { outputHTML += `<div class="note warn">Camada ${L.name} ignorada (necessita de pelo menos 2 ingredientes).</div>`; return; }
-
-      let res = formulate([...L.selected], targetG, type, profile, $('genRequireComplete').checked);
-      let aud = ingredientsAudit(res.lines, targetG);
-      totalCost += aud.cost;
-
-      outputHTML += `
-        <div class="layer" style="border-left: 4px solid #cfaa72;">
-          <div class="layerHeader"><h4>Camada ${idx+1}: ${esc(L.name)} (${L.weight}%)</h4><span class="pill">${fmt(aud.total,0)}g</span></div>
-          <table><tr><th>Ingrediente</th><th class="num">Gramas</th></tr>
-          ${res.lines.map(x => `<tr><td>${esc(byId(x.id).name)}</td><td class="num">${fmt(x.g,0)} g</td></tr>`).join('')}
-          </table>
-          <div class="hint">Gordura: ${fmt(aud.met.fat,1)}% | Açúcar: ${fmt(aud.met.sugar,1)}% | PAC: ${fmt(aud.met.pac,0)}</div>
-        </div>
-      `;
-    });
-
-    outputHTML = `<div class="note ok"><b>Bolo Calculado com Sucesso!</b> Custo total estimado: ${eur(totalCost)}</div>` + outputHTML;
-    outputHTML += `<div class="buttons"><button class="btn primary" onclick="toast('Bolo guardado!')">Guardar Bolo</button><button class="btn" onclick="window.print()">Imprimir Receita</button></div>`;
-    $('creminoOutput').innerHTML = outputHTML;
-  } catch(e) { alert('Erro no cálculo: ' + e.message); }
-};
-
-// UI CAKE LAB (BOLOS DE CREME)
-function renderCakeLayers() {
-  $('cakeLayersContainer').innerHTML = cakeLayers.map((L, i) => `
-    <div class="layer">
-      <div class="layerHeader"><h4>Camada ${i+1}</h4><button class="btn danger" onclick="removeCakeLayer(${i})">Remover</button></div>
-      <div class="fields two">
-        <div class="field"><label>Nome da Camada</label><input value="${esc(L.name)}" onchange="cakeLayers[${i}].name = this.value"></div>
-      </div>
-      <p class="hint">Selecione os ingredientes para esta camada (Massa, Recheio, Cobertura):</p>
-      <div class="chipList">
-        ${products.map(p => `<label class="chip"><input type="checkbox" ${L.selected.has(p.id)?'checked':''} onchange="toggleCakeIng(${i}, '${p.id}', this.checked)"> ${esc(p.name)}</label>`).join('')}
-      </div>
-    </div>
-  `).join('');
-}
-window.removeCakeLayer = i => { cakeLayers.splice(i,1); renderCakeLayers(); };
-window.toggleCakeIng = (i, id, checked) => { checked ? cakeLayers[i].selected.add(id) : cakeLayers[i].selected.delete(id); };
-$('btnCakeAddLayer').onclick = () => { cakeLayers.push({ id: uid(), name: 'Nova Camada', weight: 50, selected: new Set() }); renderCakeLayers(); };
-
-$('btnCalcCake').onclick = () => {
-  try {
-    let dOrig = v('cakeOrig'), dDest = v('cakeDest'), hRel = v('cakeHeight') || 1;
-    // Escala baseada na área do círculo e na altura relativa
-    let areaOrig = Math.PI * Math.pow(dOrig/2, 2);
-    let areaDest = Math.PI * Math.pow(dDest/2, 2);
-    let scale = (areaDest / areaOrig) * hRel;
-    
-    let outputHTML = `<h3>Produção do Bolo: ${esc($('cakeName').value)}</h3>
-    <div class="note">A receita foi ajustada com base no diâmetro e altura (Fator de escala: x${fmt(scale, 2)}).</div>`;
-    let totalCost = 0;
-
-    cakeLayers.forEach((L, idx) => {
-      if(L.selected.size === 0) return;
-      
-      // Para bolos, a soma base (se for uma receita de 1kg) multiplica pelo fator de escala
-      let baseWeight = 1000; // Assumimos uma receita base de 1kg para efeitos de escala
-      let targetG = baseWeight * scale; 
-      
-      let res = formulate([...L.selected], targetG, 'milk', { solids: 50, fat: 20, sugar: 20, pac: null, pod: null }, false);
-      let aud = ingredientsAudit(res.lines, targetG);
-      totalCost += aud.cost;
-
-      outputHTML += `
-        <div class="layer" style="border-left: 4px solid #cfaa72;">
-          <div class="layerHeader"><h4>Camada ${idx+1}: ${esc(L.name)} (${fmt(targetG,0)}g)</h4></div>
-          <table><tr><th>Ingrediente</th><th class="num">Gramas</th></tr>
-          ${res.lines.map(x => `<tr><td>${esc(byId(x.id).name)}</td><td class="num">${fmt(x.g,0)} g</td></tr>`).join('')}
-          </table>
-        </div>
-      `;
-    });
-
-    outputHTML = `<div class="note ok"><b>Bolo Calculado com Sucesso!</b> Custo total estimado: ${eur(totalCost)}</div>` + outputHTML;
-    outputHTML += `<div class="buttons"><button class="btn" onclick="window.print()">Imprimir Receita</button></div>`;
-    $('cakeOutput').innerHTML = outputHTML;
-  } catch(e) { alert('Erro no cálculo: ' + e.message); }
-};
-
-// GESTÃO DE PRODUTOS E RECEITAS
-function updatePriceView() {
-  let pk = priceKg({ packSize: v('prodPackSize'), packPrice: v('prodPackPrice'), packUnit: $('prodPackUnit').value, density: v('prodDensity') });
-  $('priceView').textContent = `Custo por kg: ${pk === null ? '---' : fmt(pk,2) + ' €/kg'}`;
-}
 function blankEditor() {
-  ['prodId','prodName','prodFat','prodProtein','prodCarb','prodSugar','prodWater','prodPac','prodPod','prodSalt','prodDE','prodPackPrice','prodPackSize','prodDensity'].forEach(id => $(id).value = '');
-  $('prodCategory').value = 'other'; $('prodRole').value = 'auto'; $('prodSugarModel').value = 'auto'; $('prodVerified').checked = false;
-  $('autoPacStatus').textContent = 'Preencha os dados e clique em calcular.'; updatePriceView();
-  $('productEditor').classList.remove('hide'); $('editorTitle').textContent = 'Novo Ingrediente';
+  for (const id of Object.values(mapNum)) $(id).value = '';
+  for (const id of ['prodId', 'prodName', 'prodAllergens', 'prodTraces', 'prodNotes']) $(id).value = '';
+  $('prodCategory').value = 'other';
+  $('prodRole').value = 'auto';
+  $('prodPackUnit').value = 'kg';
+  $('prodDoseBasis').value = 'final';
+  $('prodVerified').checked = false;
+  $('prodSugarModel').value = 'auto';
+  $('prodSugarEvidence').value = 'unconfirmed';
+  $('prodDE').value = '';
+  $('autoPacStatus').textContent = 'Seleciona um modelo e calcula.';
+  updatePriceView();
+  $('editorTitle').textContent = 'Adicionar produto';
+  $('productEditor').classList.remove('hide');
+  $('productEditor').scrollIntoView({ behavior: 'smooth' });
 }
+
 function editProduct(id) {
-  let p = byId(id); if(!p) return; blankEditor();
-  $('prodId').value = p.id; $('prodName').value = p.name; $('prodCategory').value = inferCategory(p); $('prodRole').value = p.role || 'auto';
-  ['fat','protein','carb','sugar','water','pac','pod','salt','de','packPrice','packSize','density'].forEach(k => $('prod' + k[0].toUpperCase() + k.slice(1)).value = p[k] ?? '');
-  $('prodPackUnit').value = p.packUnit || 'kg'; $('prodSugarModel').value = p.sugarModel || 'auto'; $('prodVerified').checked = p.verified;
-  $('editorTitle').textContent = 'Editar: ' + p.name; updatePriceView(); $('productEditor').classList.remove('hide');
+  const p = byId(id); if (!p) return;
+  blankEditor();
+  $('editorTitle').textContent = 'Editar: ' + p.name;
+  $('prodId').value = p.id;
+  $('prodName').value = p.name;
+  $('prodCategory').value = inferCategory(p);
+  $('prodRole').value = p.role || 'auto';
+  $('prodPackUnit').value = p.packUnit || 'kg';
+  $('prodDoseBasis').value = p.doseBasis || 'final';
+  $('prodAllergens').value = p.allergens || '';
+  $('prodTraces').value = p.traces || '';
+  $('prodNotes').value = p.notes || '';
+  $('prodVerified').checked = !!p.verified;
+  $('prodSugarModel').value = (p.sugarModel === 'manual' && (p.pac == null || p.pod == null)) ? 'auto' : (p.sugarModel || 'auto');
+  $('prodSugarEvidence').value = p.sugarEvidence || 'unconfirmed';
+  $('prodDE').value = p.de ?? '';
+  $('autoPacStatus').textContent = p.pacMethod || 'Ainda não calculado.';
+  for (const [key, id2] of Object.entries(mapNum)) $(id2).value = p[key] ?? '';
+  updatePriceView();
 }
+
+function updatePriceView() {
+  const p = { packSize: v('prodPackSize'), packPrice: v('prodPackPrice'), packUnit: $('prodPackUnit').value, density: v('prodDensity') };
+  const pk = priceKg(p);
+  $('priceView').textContent = 'Custo por kg: ' + (pk === null ? 'Incompleto' : fmt(pk, pk < .01 ? 5 : 2) + ' €/kg');
+}
+
+function autoPacPod() {
+  try {
+    const model = $('prodSugarModel').value;
+    const data = { name: $('prodName').value, category: $('prodCategory').value, sugar: v('prodSugar'), carb: v('prodCarb'), de: v('prodDE'), sucrose: v('prodSucrose'), glucose: v('prodGlucose'), fructose: v('prodFructose'), lactose: v('prodLactose'), maltose: v('prodMaltose') };
+    const result = model === 'auto' ? calculateAuto(data) : calculatePacPod(model, data);
+    if (!result || result.pac === null) throw Error('Não calculável. Verifica a composição ou introduz PAC/POD manualmente.');
+    $('prodPac').value = result.pac;
+    $('prodPod').value = result.pod;
+    $('prodVerified').checked = false;
+    $('autoPacStatus').textContent = 'PAC ' + fmt(result.pac, 3) + ' / POD ' + fmt(result.pod, 3) + '. ' + result.method;
+    toast('PAC/POD calculados.');
+  } catch (e) {
+    $('prodPac').value = ''; $('prodPod').value = ''; $('prodVerified').checked = false;
+    $('autoPacStatus').textContent = 'Não calculável: ' + e.message;
+  }
+}
+
+function saveProduct() {
+  try {
+    const name = $('prodName').value.trim();
+    if (!name) throw Error('Indica o nome.');
+    const p = {
+      id: $('prodId').value || uid(), name,
+      category: $('prodCategory').value, role: $('prodRole').value,
+      packUnit: $('prodPackUnit').value, doseBasis: $('prodDoseBasis').value,
+      allergens: $('prodAllergens').value.trim(), traces: $('prodTraces').value.trim(),
+      notes: $('prodNotes').value.trim(), verified: $('prodVerified').checked,
+      sugarModel: $('prodSugarModel').value, sugarEvidence: $('prodSugarEvidence').value,
+      de: v('prodDE'), pacMethod: $('autoPacStatus').textContent
+    };
+    for (const [key, id] of Object.entries(mapNum)) p[key] = fieldNum(id);
+    if (p.sugarModel !== 'manual' && p.pac === null && p.pod === null) {
+      const recalculated = p.sugarModel === 'auto' ? calculateAuto(p) : calculatePacPod(p.sugarModel, p);
+      if (recalculated) { p.pac = recalculated.pac; p.pod = recalculated.pod; p.pacMethod = recalculated.method; }
+    }
+    for (const key of ['fat', 'protein', 'carb', 'sugar', 'water']) {
+      if (p[key] !== null && !valid(p[key], 0, 100)) throw Error(key + ': 0–100%.');
+    }
+    if (['fat', 'protein', 'carb', 'sugar'].some(k => p[k] === null)) throw Error('Preenche gordura, proteínas, hidratos e açúcares.');
+    if (p.sugar !== null && p.carb !== null && p.sugar > p.carb + .001) throw Error('Açúcares > hidratos.');
+    if (p.fat !== null && p.protein !== null && p.carb !== null && p.fat + p.protein + p.carb > 100.5) throw Error('Macros > 100%.');
+    for (const key of ['kcal', 'kj', 'salt', 'pac', 'pod', 'min', 'max']) if (p[key] !== null && p[key] < 0) throw Error(key + ' não pode ser negativo.');
+    if (p.min !== null && p.max !== null && p.min > p.max) throw Error('Mínimo > máximo.');
+    if ((p.packSize === null) !== (p.packPrice === null)) throw Error('Preço e quantidade juntos ou vazios.');
+    if (['L', 'ml'].includes(p.packUnit) && p.packPrice !== null && !(p.density > 0)) throw Error('Litros/ml precisam de densidade.');
+    if (p.verified && (p.water === null || p.pac === null || p.pod === null || p.sugarEvidence === 'unconfirmed')) throw Error('Não certificar ficha com dados incompletos.');
+    const old = byId(p.id);
+    if (old) Object.assign(old, p); else products.push(p);
+    audit(old ? 'update' : 'create', 'product', p.id, { name: p.name });
+    persist();
+    $('productEditor').classList.add('hide');
+    renderProducts();
+    toast('Produto guardado: ' + p.name);
+  } catch (e) { alert(e.message); }
+}
+
+function fieldNum(id) {
+  const a = v(id);
+  if ($(id).value.trim() !== '' && a === null) throw Error('Número inválido: ' + id);
+  return a;
+}
+
 function renderProducts() {
-  const q = ($('productSearch').value || '').toLowerCase();
-  $('productList').innerHTML = products.filter(p=>p.name.toLowerCase().includes(q)).map(p => `
-    <div class="entry">
-      <div class="entryHeader" style="display:flex; justify-content:space-between; align-items:center;">
-        <div><strong>${esc(p.name)}</strong> <span class="pill ${p.verified?'ok':'warn'}">${p.verified ? 'Verificado' : 'Incompleto'}</span><br>
-        <small>${priceKg(p) !== null ? fmt(priceKg(p),2)+' €/kg' : 'Preço n/d'} · PAC: ${p.pac ?? '-'} | POD: ${p.pod ?? '-'}</small></div>
-        <div class="buttons" style="margin:0;"><button class="btn" onclick="editProduct('${p.id}')">Editar</button><button class="btn danger" onclick="deleteProduct('${p.id}')">X</button></div>
-      </div>
-    </div>
-  `).join('');
+  const q = $('productSearch').value.toLowerCase();
+  const list = products.filter(p => p.name.toLowerCase().includes(q));
+  $('productList').innerHTML = list.length
+    ? list.map(p => `<div class="entry"><div class="entryHead"><div><strong>${esc(p.name)}</strong> <span class="pill">${esc(inferCategory(p))}</span><br><small>${p.verified ? '<span class="pill ok">Verificada</span>' : '<span class="pill warn">Incompleta</span>'} · ${priceKg(p) === null ? 'Preço desconhecido' : fmt(priceKg(p), 2) + ' €/kg'} · ${p.pac === null || p.pod === null ? 'PAC/POD desconhecido' : 'PAC/POD: ' + fmt(p.pac, 2) + '/' + fmt(p.pod, 2)}</small></div><div class="buttons"><button class="btn" data-edit="${esc(p.id)}">Editar</button><button class="btn danger" data-del="${esc(p.id)}">Eliminar</button></div></div></div>`).join('')
+    : '<div class="note">Nenhum produto.</div>';
+  document.querySelectorAll('[data-edit]').forEach(b => b.onclick = () => editProduct(b.dataset.edit));
+  document.querySelectorAll('[data-del]').forEach(b => b.onclick = () => {
+    const id = b.dataset.del;
+    if (recipes.some(r => r.lines?.some(x => x.id === id))) return alert('Produto está numa receita guardada.');
+    if (!confirm('Eliminar?')) return;
+    products = products.filter(p => p.id !== id);
+    audit('delete', 'product', id, {});
+    persist();
+    renderProducts();
+  });
 }
-window.deleteProduct = id => { if(confirm('Eliminar ingrediente?')) { products = products.filter(p => p.id !== id); persist(); renderProducts(); } };
 
-$('newProduct').onclick = blankEditor;
-$('cancelProduct').onclick = () => $('productEditor').classList.add('hide');
-['prodPackSize','prodPackPrice','prodPackUnit','prodDensity'].forEach(id => $(id).oninput = updatePriceView);
+function auditLibrary() {
+  const problems = [];
+  const rows = products.map(p => {
+    const absent = [];
+    for (const k of ['fat', 'protein', 'carb', 'sugar', 'water', 'pac', 'pod']) if (p[k] === null || p[k] === undefined || !Number.isFinite(Number(p[k]))) absent.push(k.toUpperCase());
+    if (absent.length) problems.push(p.name + ': ' + absent.join(', '));
+    return `<tr><td>${esc(p.name)}</td><td>${absent.length ? 'INCOMPLETO' : 'COMPLETO'}</td><td>${esc(absent.join(', ') || '—')}</td><td>${p.verified ? 'Verificada' : 'Não verificada'}</td></tr>`;
+  }).join('');
+  $('libraryAudit').innerHTML = '<div class="note warn"><b>Diagnóstico:</b> ' + products.length + ' produtos, ' + problems.length + ' com dados ausentes.</div><div class="tableWrap"><table><tr><th>Produto</th><th>Estado</th><th>Faltam</th><th>Origem</th></tr>' + rows + '</table></div>';
+}
 
-$('btnAutoPacPod').onclick = () => {
-  try {
-    let data = { name: $('prodName').value, category: $('prodCategory').value, sugar: v('prodSugar'), carb: v('prodCarb'), de: v('prodDE') };
-    let res = $('prodSugarModel').value === 'auto' ? calculateAuto(data) : calculatePacPod($('prodSugarModel').value, data);
-    if(!res || res.pac===null) throw Error(res.method);
-    $('prodPac').value = res.pac; $('prodPod').value = res.pod;
-    $('autoPacStatus').textContent = `PAC: ${res.pac} / POD: ${res.pod} (${res.method})`; toast('PAC/POD Calculados!');
-  } catch(e) { alert(e.message); }
-};
+function renderManual() {
+  const el = $('manRows'); if (!el) return;
+  if (!draft.length) { el.innerHTML = '<div class="note">Sem ingredientes. Adiciona abaixo.</div>'; return; }
+  el.innerHTML = draft.map((d, i) => {
+    const p = byId(d.id);
+    return `<div class="entry"><div class="entryHead"><div><strong>${esc(p?.name || d.id)}</strong><br><small>${fmt(d.g, 0)} g</small></div><input type="number" data-edit="${i}" value="${d.g}" style="max-width:120px"><button class="btn danger" data-rm="${i}">×</button></div></div>`;
+  }).join('');
+  document.querySelectorAll('[data-edit]').forEach(inp => inp.onchange = () => { draft[+inp.dataset.edit].g = +inp.value; renderManual(); });
+  document.querySelectorAll('[data-rm]').forEach(b => b.onclick = () => { draft.splice(+b.dataset.rm, 1); renderManual(); });
+}
+function renderManualProductSelect() {
+  $('manAddProduct').innerHTML = products.map(p => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('');
+}
 
-$('saveProduct').onclick = () => {
-  try {
-    let name = $('prodName').value.trim(); if(!name) throw Error('Nome é obrigatório.');
-    let p = { id: $('prodId').value || uid(), name, category: $('prodCategory').value, role: $('prodRole').value, verified: $('prodVerified').checked, sugarModel: $('prodSugarModel').value, packUnit: $('prodPackUnit').value };
-    ['fat','protein','carb','sugar','water','pac','pod','salt','de','packPrice','packSize','density'].forEach(k => p[k] = v('prod'+k[0].toUpperCase()+k.slice(1)));
-    if (p.verified && (p.pac===null || p.pod===null || p.water===null)) throw Error('Para verificar, preencha Água, PAC e POD.');
-    let old = byId(p.id); if(old) Object.assign(old, p); else products.push(p);
-    persist(); $('productEditor').classList.add('hide'); renderProducts(); toast('Ingrediente guardado!');
-  } catch(e) { alert(e.message); }
-};
+function saveRecipe(recipe) {
+  if (!recipe || !recipe.lines || !recipe.lines.length) { alert('Receita vazia.'); return; }
+  const check = canExport(recipe);
+  const data = { ...clone(recipe), id: uid(), status: 'draft', savedAt: new Date().toISOString(), canApprove: check.ok, blockReason: check.reason || null };
+  recipes.push(data);
+  audit('create', 'recipe', data.id, { name: data.name, canApprove: check.ok });
+  persist();
+  toast('Receita guardada como rascunho.' + (check.ok ? '' : ' Bloqueada para aprovação: ' + check.reason));
+  renderRecipes();
+}
+
+function canExport(recipe) {
+  if (!recipe || !Array.isArray(recipe.lines) || !recipe.lines.length) return { ok: false, reason: 'Receita vazia.' };
+  for (const line of recipe.lines) {
+    const p = byId(line.id);
+    if (!p) return { ok: false, reason: 'Ingrediente não encontrado: ' + line.id };
+    if (!p.verified) return { ok: false, reason: 'Ingrediente não verificado: ' + p.name };
+    if (/estimativa|presumid|não certificado/i.test(p.pacMethod || '')) return { ok: false, reason: 'PAC/POD estimado em: ' + p.name };
+    if (p.water === null || p.water === undefined) return { ok: false, reason: 'Água desconhecida em: ' + p.name };
+  }
+  return { ok: true };
+}
+
+function approveRecipe(id) {
+  const r = recipes.find(x => x.id === id);
+  if (!r) return;
+  const check = canExport(r);
+  if (!check.ok) { alert('Não é possível aprovar: ' + check.reason); return; }
+  r.status = 'approved';
+  r.approvedAt = new Date().toISOString();
+  audit('approve', 'recipe', id, { name: r.name });
+  persist();
+  renderRecipes();
+  toast('Receita aprovada.');
+}
+function rejectRecipe(id) {
+  const r = recipes.find(x => x.id === id);
+  if (!r) return;
+  r.status = 'rejected';
+  audit('reject', 'recipe', id, { name: r.name });
+  persist();
+  renderRecipes();
+  toast('Receita rejeitada.');
+}
 
 function renderRecipes() {
-  $('recipeDetail').innerHTML = '';
-  $('savedRecipes').innerHTML = recipes.length ? recipes.map(r => `
-    <div class="entry" style="display:flex; justify-content:space-between; align-items:center;">
-      <div><strong>${esc(r.name)}</strong><br><small>${r.lines.length} ing. | ${fmt(r.temp,1)}°C | ${new Date(r.date).toLocaleDateString()}</small></div>
-      <div class="buttons" style="margin:0;">
-        <button class="btn" onclick="openRecipe('${r.id}')">Ver Receita</button>
-        <button class="btn danger" onclick="deleteRecipe('${r.id}')">X</button>
-      </div>
-    </div>
-  `).join('') : 'Sem receitas guardadas.';
+  const el = $('savedRecipes');
+  if (!recipes.length) { el.innerHTML = '<div class="note">Sem receitas guardadas.</div>'; return; }
+  el.innerHTML = recipes.map(r => {
+    const statusPill = r.status === 'approved' ? '<span class="pill ok">Aprovada</span>' : r.status === 'rejected' ? '<span class="pill bad">Rejeitada</span>' : '<span class="pill warn">Rascunho</span>';
+    const check = canExport(r);
+    return `<div class="entry"><div class="entryHead"><div><strong>${esc(r.name)}</strong> ${statusPill}<br><small>${r.savedAt ? new Date(r.savedAt).toLocaleString('pt-PT') : ''} · ${r.lines?.length || 0} ingredientes · ${r.type}</small>${check.ok ? '' : '<br><small class="note bad" style="display:inline-block;padding:4px 8px;margin-top:6px">Bloqueada: ' + esc(check.reason) + '</small>'}</div><div class="buttons">${r.status === 'draft' && check.ok ? `<button class="btn primary" data-approve="${esc(r.id)}">Aprovar</button>` : ''}${r.status === 'draft' ? `<button class="btn" data-reject="${esc(r.id)}">Rejeitar</button>` : ''}<button class="btn" data-open="${esc(r.id)}">Abrir</button><button class="btn danger" data-del="${esc(r.id)}">Eliminar</button></div></div></div>`;
+  }).join('');
+  document.querySelectorAll('[data-approve]').forEach(b => b.onclick = () => approveRecipe(b.dataset.approve));
+  document.querySelectorAll('[data-reject]').forEach(b => b.onclick = () => rejectRecipe(b.dataset.reject));
+  document.querySelectorAll('[data-open]').forEach(b => b.onclick = () => {
+    const r = recipes.find(x => x.id === b.dataset.open);
+    if (!r) return;
+    draft = clone(r.lines);
+    $('manName').value = r.name;
+    $('manKg').value = (r.lines.reduce((s, x) => s + x.g, 0) / 1000).toFixed(2);
+    $('manTemp').value = r.temp || -13;
+    renderManual();
+    view('manual');
+  });
+  document.querySelectorAll('[data-del]').forEach(b => b.onclick = () => {
+    if (!confirm('Eliminar?')) return;
+    recipes = recipes.filter(x => x.id !== b.dataset.del);
+    audit('delete', 'recipe', b.dataset.del, {});
+    persist();
+    renderRecipes();
+  });
 }
-window.openRecipe = id => {
-  let r = recipes.find(x=>x.id===id); if(!r) return;
-  $('recipeDetail').innerHTML = `<div class="result"><h3>${esc(r.name)} (${fmt(r.temp,1)}°C)</h3>
-    <div class="tableWrap"><table><tr><th>Ingrediente</th><th class="num">Gramas</th></tr>
-    ${r.lines.map(x => `<tr><td>${esc(byId(x.id)?.name || 'Apagado')}</td><td class="num">${fmt(x.g,0)} g</td></tr>`).join('')}
-    </table></div>
-    <div class="buttons"><button class="btn primary" onclick="window.print()">Imprimir para Produção</button></div>
-  </div>`;
-};
-window.deleteRecipe = id => { if(confirm('Apagar receita?')) { recipes = recipes.filter(r=>r.id!==id); persist(); renderRecipes(); } };
 
+function renderAudit() {
+  const el = $('auditLog'); if (!el) return;
+  if (!auditLog.length) { el.innerHTML = '<div class="note">Sem eventos.</div>'; return; }
+  el.innerHTML = '<div class="tableWrap"><table><tr><th>Data</th><th>Ação</th><th>Entidade</th><th>ID</th><th>Detalhes</th></tr>' + auditLog.slice(0, 300).map(e => `<tr><td>${new Date(e.ts).toLocaleString('pt-PT')}</td><td>${esc(e.action)}</td><td>${esc(e.entity)}</td><td>${esc(e.entityId || '')}</td><td>${esc(e.details ? JSON.stringify(e.details) : '')}</td></tr>`).join('') + '</table></div>';
+}
+
+function validateBackup(data) {
+  const errors = [];
+  if (!data || typeof data !== 'object') return { ok: false, errors: ['Backup não é objeto.'] };
+  if (!Array.isArray(data.products)) errors.push('products ausente.');
+  else data.products.forEach((p, i) => {
+    if (!p || typeof p !== 'object') { errors.push('products[' + i + '] inválido.'); return; }
+    if (typeof p.id !== 'string' || !p.id) errors.push('products[' + i + '].id inválido.');
+    if (typeof p.name !== 'string' || !p.name) errors.push('products[' + i + '].name inválido.');
+  });
+  return { ok: errors.length === 0, errors };
+}
+
+function runTests() {
+  const results = [];
+  const check = (label, fn) => { try { results.push({ label, ok: !!fn() }); } catch (e) { results.push({ label, ok: false, error: e.message }); } };
+  const d = (model, sugar, carb, category = 'sugar') => calculatePacPod(model, { sugar, carb, category });
+  check('Sacarose 100/100 → 100/100', () => d('sucrose', 100, 100).pac === 100 && d('sucrose', 100, 100).pod === 100);
+  check('Leite 4,8% → POD 0.768', () => Math.abs(d('dairy', 4.8, 4.8, 'milk').pod - 0.768) < 1e-6);
+  check('Natas 3,4% → PAC 3.4', () => Math.abs(d('dairy', 3.4, 3.4, 'cream').pac - 3.4) < 1e-6);
+  check('Água pura → 0/0', () => d('water', 0, 0).pac === 0 && d('water', 0, 0).pod === 0);
+  check('Dextrose mono 90.9% → PAC > 170', () => d('dextrose_mono', 90.9, 91).pac > 170);
+  check('Breakdown incoerente lança erro', () => { try { calculatePacPod('breakdown', { sugar: 10, carb: 20, sucrose: 5, glucose: 3, fructose: 0, lactose: 0, maltose: 0 }); return false; } catch { return true; } });
+  check('Maltodextrina DE18 → PAC 35', () => Math.abs(deEstimate({ name: 'MALTODEXTRIN DE18', carb: 95, sugar: 8 }).pac - 35) < 0.01);
+  check('Glucose DE31 → PAC ≈ 59.73', () => Math.abs(deEstimate({ name: 'Trockenglucose DE 29-33', carb: 97.5, sugar: 15 }).pac - 59.73) < 0.5);
+  check('Glukosepulver sem DE → null', () => calculateAuto({ name: 'GLUKOSEPULVER', category: 'sugar', carb: 97.5, sugar: 15 }).pac === null);
+  check('Maltodextrina sem DE → null', () => calculateAuto({ name: 'MALTODEXTRIN', category: 'sugar', carb: 95, sugar: 8 }).pac === null);
+  check('Dextrose sem identidade → null', () => automaticPacPodModel({ name: 'DEXTROSE', category: 'sugar', carb: 50, sugar: 45 }).model === null);
+  check('tempProfile milk -20 → 325', () => tempProfile('milk', -20).pac === 325);
+  check('tempProfile milk -13 → 260', () => tempProfile('milk', -13).pac === 260);
+  check('tempProfile sorbet -20 → 345', () => tempProfile('sorbet', -20).pac === 345);
+  check('Sólidos com água → exato', () => { const r = dryMatterProfile({ name: 'MILCH', fat: 3.5, protein: 3.3, carb: 4.8, water: 88.4 }); return r.exact && Math.abs(r.mid - 11.6) < 0.01; });
+  check('Sólidos sem água → null', () => dryMatterProfile({ name: 'MILCH', fat: 3.5, protein: 3.3, carb: 4.8, water: null }).mid === null);
+  check('Lactose em leite simples → 4.8', () => lactoseEstimate({ name: 'MILCH', sugar: 4.8 }) === 4.8);
+  check('Lactose em leite com fruta → null', () => lactoseEstimate({ name: 'MILCH ERDBEER', sugar: 8 }) === null);
+  check('canExport bloqueia não-verificado', () => { products.push({ id: '__t__', name: 'T', verified: false, pacMethod: 'manual' }); const r = canExport({ lines: [{ id: '__t__', g: 100 }] }); products.pop(); return r.ok === false; });
+  check('validateBackup aceita estrutura válida', () => validateBackup({ products: [], recipes: [] }).ok === true);
+  const pass = results.filter(r => r.ok).length;
+  $('testResults').innerHTML = '<div class="note ' + (pass === results.length ? 'ok' : 'bad') + '"><b>' + pass + '/' + results.length + ' testes passaram.</b></div><div class="tableWrap"><table>' + results.map(r => `<tr><td>${esc(r.label)}</td><td>${r.ok ? '<span class="pill ok">PASSOU</span>' : '<span class="pill bad">FALHOU: ' + esc(r.error || 'resultado inesperado') + '</span>'}</td></tr>`).join('') + '</table></div>';
+}
+
+refreshDashboard();
+renderGenChoices();
+renderGenDataPreview();
+renderTempStatus();
+renderManualProductSelect();
+renderAudit();
+$('genType').onchange = () => fillDefaults($('genType').value);
+$('genTemp').onchange = renderTempStatus;
+$('genSearch').oninput = renderGenChoices;
+$('genSelectAll').onclick = () => { document.querySelectorAll('[data-pick]').forEach(x => { x.checked = true; genSelected.add(x.dataset.pick); }); renderGenDataPreview(); };
+$('genSelectNone').onclick = () => { genSelected.clear(); renderGenChoices(); };
+$('btnBalance').onclick = balanceGenerated;
+$('btnGenDefaults').onclick = () => fillDefaults($('genType').value);
+$('newProduct').onclick = blankEditor;
+$('cancelProduct').onclick = () => $('productEditor').classList.add('hide');
+$('saveProduct').onclick = saveProduct;
+$('auditLibrary').onclick = auditLibrary;
+$('productSearch').oninput = renderProducts;
+$('btnAutoPacPod').onclick = autoPacPod;
+['prodPackSize', 'prodPackPrice', 'prodPackUnit', 'prodDensity'].forEach(id => $(id).oninput = updatePriceView);
+$('prodPackUnit').onchange = updatePriceView;
+$('manAdd').onclick = () => { const id = $('manAddProduct').value; if (id) { draft.push({ id, g: 100 }); renderManual(); } };
+$('manAnalyze').onclick = () => {
+  try {
+    if (!draft.length) throw Error('Sem ingredientes.');
+    const total = kgValue('manKg');
+    const a = ingredientsAudit(draft, total);
+    $('manOutput').innerHTML = '<div class="result"><h3>Análise</h3><div class="cards">'
+      + '<div class="stat"><small>PESO</small><strong>' + fmt(a.total, 0) + ' g</strong></div>'
+      + '<div class="stat"><small>GORDURA</small><strong>' + (a.met.fat === null ? '—' : fmt(a.met.fat, 2) + '%') + '</strong></div>'
+      + '<div class="stat"><small>AÇÚCARES</small><strong>' + (a.met.sugar === null ? '—' : fmt(a.met.sugar, 2) + '%') + '</strong></div>'
+      + '<div class="stat"><small>PAC/1000g</small><strong>' + (a.met.pac === null ? '—' : fmt(a.met.pac, 1)) + '</strong></div>'
+      + '</div>'
+      + (a.errors.length ? '<div class="note bad"><b>Erros:</b> ' + esc(a.errors.join(' | ')) + '</div>' : '')
+      + (a.warnings.length ? '<div class="note warn"><b>Avisos:</b> ' + esc(a.warnings.join(' | ')) + '</div>' : '')
+      + '</div>';
+  } catch (e) { alert(e.message); }
+};
+$('manSave').onclick = () => {
+  try {
+    if (!draft.length) throw Error('Sem ingredientes.');
+    saveRecipe({ name: $('manName').value || 'Receita', temp: v('manTemp') ?? -13, type: $('genType').value, lines: clone(draft) });
+  } catch (e) { alert(e.message); }
+};
+$('runTests').onclick = runTests;
+$('exportAudit').onclick = () => {
+  const csv = 'data,acao,entidade,id,detalhes\n' + auditLog.map(e => [e.ts, e.action, e.entity, e.entityId || '', e.details ? JSON.stringify(e.details).replace(/,/g, ';') : ''].join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'auditoria-' + new Date().toISOString().slice(0, 10) + '.csv'; a.click();
+};
 $('exportBackup').onclick = () => {
-  let a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(store)], {type:'application/json'})); a.download = 'sanremo_backup.json'; a.click();
+  const data = { schemaVersion: SCHEMA_VERSION, products, recipes, audit: auditLog, exportedAt: new Date().toISOString() };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'sanremo-backup-' + new Date().toISOString().slice(0, 10) + '.json'; a.click();
 };
-$('importBackup').onchange = e => {
-  let reader = new FileReader(); reader.onload = ev => { try{ let d = JSON.parse(ev.target.result); if(d.products) { products = d.products; recipes = d.recipes||[]; persist(); renderProducts(); toast('Backup importado!'); } }catch(err){alert('Erro no ficheiro.')} }; reader.readAsText(e.target.files[0]);
+$('importBackup').onchange = async (e) => {
+  const file = e.target.files[0]; if (!file) return;
+  try {
+    const data = JSON.parse(await file.text());
+    const check = validateBackup(data);
+    if (!check.ok) { alert('Backup inválido:\n' + check.errors.join('\n')); return; }
+    if (!confirm('Substituir dados atuais?')) return;
+    products = data.products;
+    recipes = data.recipes || [];
+    auditLog = data.audit || [];
+    audit('import', 'backup', 'all', { count: products.length });
+    persist();
+    refreshDashboard();
+    renderProducts();
+    renderRecipes();
+    toast('Backup importado.');
+  } catch (err) { alert('Erro: ' + err.message); }
 };
-
-refreshDash(); renderGenChoices(); renderProducts();
+$('importV8').onclick = () => {
+  for (const lk of LEGACY_KEYS) {
+    try {
+      const legacy = JSON.parse(localStorage.getItem(lk));
+      if (legacy && Array.isArray(legacy.products) && legacy.products.length) {
+        if (!confirm('Importar ' + legacy.products.length + ' produtos de ' + lk + '?')) return;
+        for (const p of legacy.products) {
+          if (!products.find(x => x.id === p.id)) products.push({ ...p, _importedFrom: lk });
+        }
+        audit('import', 'legacy', lk, { count: legacy.products.length });
+        persist();
+        renderProducts();
+        toast('Importados ' + legacy.products.length + ' produtos.');
+        return;
+      }
+    } catch {}
+  }
+  alert('Nenhum dado antigo encontrado.');
+};
+$('eraseAll').onclick = () => {
+  if (!confirm('Apagar TODOS os dados? Exporta backup primeiro.')) return;
+  if (!confirm('Confirmação final: irreversível.')) return;
+  localStorage.removeItem(KEY);
+  products = []; recipes = []; auditLog = [];
+  persist();
+  refreshDashboard();
+  renderProducts();
+  renderRecipes();
+  renderAudit();
+  toast('Dados apagados.');
+};
 </script>
 </body>
 </html>
