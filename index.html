@@ -1,1134 +1,1039 @@
 
-<!doctype html>
-<html lang="pt-PT">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sanremo Gelato Lab V9.4</title>
-<style>
-:root{--ink:#183b32;--green:#146b54;--gold:#cfaa72;--bg:#f3f5f1;--muted:#6c8277;--edge:#e0e8df;--danger:#a64238}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:#263e33;font:14px/1.5 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
-header{background:#102f29;color:#fff;padding:16px 28px;border-bottom:3px solid var(--gold)}
-.brand{display:flex;justify-content:space-between;align-items:center;gap:16px;max-width:1500px;margin:auto}
-.brand h1{font-size:22px;margin:0;letter-spacing:-.5px}.brand h1 span{color:#e4c492;font-weight:450}
-.brand p{margin:2px 0 0;color:#bcd4ca;font-size:12px}
-.tag{border:1px solid #729384;color:#d7e8df;border-radius:30px;padding:6px 12px;font-size:11px}
-.layout{max-width:1500px;margin:auto;display:grid;grid-template-columns:220px minmax(0,1fr);gap:20px;padding:20px}
-.nav{background:#123b33;padding:12px;border-radius:14px;align-self:start;position:sticky;top:12px}
-.nav small{display:block;margin:12px 8px 6px;color:#9fbdb0;letter-spacing:1px;font-size:10px;font-weight:800}
-.nav button{display:block;width:100%;text-align:left;margin:3px 0;background:transparent;color:#d4e0d8;border:0;border-radius:9px;padding:10px 12px;font:inherit;cursor:pointer}
-.nav button.current{background:#e3c28d;color:#183b31;font-weight:800}
-.nav button:hover:not(.current){background:#ffffff14}
-.main{min-width:0}
-.page{display:none}.page.active{display:block}
-.panel{background:#fff;border:1px solid var(--edge);border-radius:14px;padding:20px;margin-bottom:14px}
-h2{font-size:23px;color:#153e31;margin:0 0 12px}
-h3{font-size:16px;color:#1a4b3b;margin:18px 0 10px}
-p{margin:6px 0 10px}
-.muted,.hint{color:var(--muted);font-size:12px}
-.grid3,.grid4{display:grid;gap:12px}
-.grid3{grid-template-columns:repeat(3,minmax(0,1fr))}
-.grid4{grid-template-columns:repeat(4,minmax(0,1fr))}
-label{display:block;font-size:12px;font-weight:700;color:#3c584a;margin:0 0 5px}
-input,select,textarea{width:100%;border:1px solid #cbdacf;border-radius:8px;background:#fcfdfb;padding:9px 10px;font:inherit;color:#244735}
-textarea{min-height:60px;resize:vertical}
-input[type=checkbox]{width:auto}
-.check{display:flex;align-items:center;gap:8px;font-weight:500;margin:10px 0}
-.btn{background:#e9f1e9;color:#216348;border:1px solid #cde1d2;border-radius:8px;padding:8px 13px;font:inherit;font-weight:700;cursor:pointer}
-.btn:hover{filter:brightness(.96)}
-.btn.primary{background:var(--green);border-color:var(--green);color:#fff}
-.btn.gold{background:#e3c187;border-color:#e3c187;color:#284135}
-.btn.danger{background:#fff0ed;border-color:#f0d8d3;color:#973d36}
-.btn.small{padding:5px 9px;font-size:12px}
-.buttons{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;align-items:center}
-.row{display:flex;gap:8px}.row select{flex:1}
-.note{padding:11px 13px;border-radius:9px;background:#ebf4ee;color:#315b45;border:1px solid #d6e8dc;margin:10px 0}
-.note.warn{background:#fff7e7;color:#805b23;border-color:#f1dfb7}
-.note.bad{background:#fff0ed;color:#934139;border-color:#f4d6d0}
-.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:12px 0}
-.stat{border:1px solid var(--edge);background:#fbfdfb;padding:14px;border-radius:12px}
-.stat small{font-size:10px;color:#658176;font-weight:800;letter-spacing:.5px;display:block}
-.stat strong{font-size:24px;color:#18513c}
-.tableWrap{overflow-x:auto;border:1px solid var(--edge);border-radius:10px;margin:10px 0}
-table{border-collapse:collapse;width:100%;font-size:13px}
-td,th{padding:9px 10px;border-bottom:1px solid #e6eee7;text-align:left;vertical-align:middle}
-th{background:#f0f5f0;font-size:12px;color:#385a49}
-tr:last-child td{border-bottom:0}
-td.num,th.num{text-align:right;white-space:nowrap}
-td input{width:110px;text-align:right}
-td input.txt{width:100%;text-align:left}
-.entry{border:1px solid var(--edge);border-radius:10px;padding:11px;margin:8px 0;background:#fff}
-.entryHead{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
-.entry small{color:var(--muted);font-size:12px}
-.pill{font-size:11px;padding:2px 7px;border-radius:20px;background:#eef3ec;color:#577561;margin-left:4px}
-.pill.ok{background:#e2f2e8;color:#1d6a45}
-.pill.warnP{background:#fff1d6;color:#8a6120}
-.okTxt{color:#1d6a45;font-weight:700}.badTxt{color:var(--danger);font-weight:700}.warnTxt{color:#8a6120;font-weight:700}
-.hide{display:none!important}
-#toasts{position:fixed;right:18px;bottom:16px;z-index:20;max-width:400px}
-#toasts div{background:#183f34;color:#fff;padding:12px 16px;margin:6px;border-radius:9px;box-shadow:0 8px 22px #0004}
-.foot{color:#789085;font-size:12px;text-align:center;padding:14px}
-@media(max-width:900px){
- .layout{grid-template-columns:1fr;padding:10px}
- .nav{position:static;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
- .nav small{display:none}
- .grid3,.grid4,.cards{grid-template-columns:1fr 1fr}
-}
-@media print{header,.nav,.buttons,.btn{display:none!important}.layout{display:block}.panel{box-shadow:none}.page:not(.active){display:none}}
-</style>
-</head>
-<body>
-<header>
-  <div class="brand">
-    <div>
-      <h1>◈ SANREMO <span>GELATO LAB</span></h1>
-      <p>Receitas · Cremino · Bolos de creme frios · Custos · Auditoria</p>
-    </div>
-    <span class="tag">V9.4 · dados locais</span>
-  </div>
-</header>
+    <div class="content">
+        <!-- PAINEL ESQUERDO: ENTRADA -->
+        <div class="panel">
+            <h2>Configuração da Receita</h2>
+            <form id="formReceita">
+                <!-- Tipo de Gelado -->
+                <div class="form-group">
+                    <label>Tipo de Gelado</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="tipo-leite" name="tipo" value="leite" checked required>
+                            <label for="tipo-leite">Gelado de Leite</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="tipo-sorbet" name="tipo" value="sorbet" required>
+                            <label for="tipo-sorbet">Sorbet</label>
+                        </div>
+                    </div>
+                </div>
 
-<div class="layout">
-<aside class="nav">
-  <small>LABORATÓRIO</small>
-  <button data-view="home" class="current">⌂ Painel</button>
-  <button data-view="products">▦ Produtos</button>
-  <button data-view="recipes">✦ Receitas</button>
-  <button data-view="layered">◈ Cremino / bolos frios</button>
-  <button data-view="costs">€ Custos e preço</button>
-  <small>CONTROLO</small>
-  <button data-view="audit">◎ Auditoria</button>
-  <button data-view="tests">✓ Autotestes</button>
-  <button data-view="backup">⇩ Backups</button>
-</aside>
+                <!-- Quantidade -->
+                <div class="form-group">
+                    <label for="quantidade">Quantidade (kg)</label>
+                    <input type="number" id="quantidade" name="quantidade" min="0.5" max="100" step="0.1" value="6" required>
+                </div>
 
-<main class="main">
+                <!-- Temperatura -->
+                <div class="form-group">
+                    <label for="temperatura">Temperatura de Consumo (°C)</label>
+                    <select id="temperatura" name="temperatura" required>
+                        <option value="">Selecione...</option>
+                        <option value="-12">-12°C (soft serve)</option>
+                        <option value="-13" selected>-13°C (padrão)</option>
+                        <option value="-14">-14°C (firme)</option>
+                        <option value="-20">-20°C (conservação)</option>
+                    </select>
+                </div>
 
-<!-- PAINEL -->
-<section id="home" class="page active">
-  <div class="panel">
-    <h2>Painel</h2>
-    <div class="cards">
-      <div class="stat"><small>PRODUTOS</small><strong id="dashProducts">0</strong></div>
-      <div class="stat"><small>RECEITAS GUARDADAS</small><strong id="dashRecipes">0</strong></div>
-      <div class="stat"><small>FICHAS VERIFICADAS</small><strong id="dashVerified">0</strong></div>
-      <div class="stat"><small>FICHAS INCOMPLETAS</small><strong id="dashIncomplete">0</strong></div>
-    </div>
-    <div class="note warn">
-      Um valor em branco significa <b>desconhecido</b>, nunca zero. O programa não certifica receitas para venda, não prevê a textura a partir da temperatura e não substitui ensaios de validação (sólidos, lactose, textura, processo, higiene e rotulagem).
-    </div>
-    <h3>Fluxo de trabalho</h3>
-    <div class="entry">1. Registar os produtos com as respetivas fichas técnicas.</div>
-    <div class="entry">2. Criar uma receita em <b>Receitas</b> (gramas por ingrediente) e verificar a análise.</div>
-    <div class="entry">3. Montar Cremino ou bolo de creme frio por camadas, usando receitas guardadas.</div>
-    <div class="entry">4. Calcular custos e preço por porção em <b>Custos e preço</b>.</div>
-  </div>
-</section>
+                <!-- Ingredientes -->
+                <div class="form-group">
+                    <label>Ingredientes</label>
+                    <div class="ingredients-list" id="ingredientesContainer">
+                        <!-- Preenchido dinamicamente -->
+                    </div>
+                    <div class="error-box" id="errorIngredientes"></div>
+                </div>
 
-<!-- PRODUTOS -->
-<section id="products" class="page">
-  <div class="panel">
-    <h2>Biblioteca de produtos</h2>
-    <div class="note warn">
-      Só fica <b>verificado</b> se PAC, POD e água estiverem preenchidos e a ficha estiver confirmada pelo fabricante.
-      PAC e POD são índices por 100 g de produto, com sacarose = 100.
-    </div>
-    <input type="hidden" id="pId">
-    <div class="grid3">
-      <div><label>Nome</label><input id="pName" placeholder="Ex.: Açúcar"></div>
-      <div><label>Categoria</label>
-        <select id="pCat">
-          <option value="milk">Leite / iogurte</option>
-          <option value="cream">Natas / gorduras</option>
-          <option value="water">Água</option>
-          <option value="sugar">Açúcar / adoçante</option>
-          <option value="fruit">Fruta</option>
-          <option value="paste">Pasta / fruto seco / sabor</option>
-          <option value="base">Base composta / pó</option>
-          <option value="additive">Estabilizante / emulsificante</option>
-          <option value="other">Outro</option>
-        </select>
-      </div>
-      <div><label>Alergénios</label><input id="pAll" placeholder="Ex.: LEITE, FRUTOS SECOS"></div>
-    </div>
-    <h3>Composição por 100 g (vazio = desconhecido)</h3>
-    <div class="grid4">
-      <div><label>Gordura %</label><input type="text" inputmode="decimal" id="pFat"></div>
-      <div><label>Proteínas %</label><input type="text" inputmode="decimal" id="pProt"></div>
-      <div><label>Hidratos %</label><input type="text" inputmode="decimal" id="pCarb"></div>
-      <div><label>Açúcares %</label><input type="text" inputmode="decimal" id="pSugar"></div>
-      <div><label>Água %</label><input type="text" inputmode="decimal" id="pWater"></div>
-      <div><label>PAC por 100 g de produto</label><input type="text" inputmode="decimal" id="pPac"></div>
-      <div><label>POD por 100 g de produto</label><input type="text" inputmode="decimal" id="pPod"></div>
-    </div>
-    <h3>Compra</h3>
-    <div class="grid3">
-      <div><label>Preço da embalagem (€)</label><input type="text" inputmode="decimal" id="pPrice"></div>
-      <div><label>Tamanho da embalagem</label><input type="text" inputmode="decimal" id="pSize"></div>
-      <div><label>Unidade</label>
-        <select id="pUnit"><option value="kg">kg</option><option value="g">g</option></select>
-      </div>
-    </div>
-    <label style="margin-top:12px">Notas</label>
-    <textarea id="pNotes"></textarea>
-    <label class="check"><input type="checkbox" id="pVerified"> Ficha completa e confirmada pelo fabricante</label>
-    <div class="buttons">
-      <button class="btn primary" id="pSave">Guardar produto</button>
-      <button class="btn" id="pClear">Limpar formulário</button>
-    </div>
-    <input id="pSearch" placeholder="Pesquisar produtos">
-    <div id="pList"></div>
-  </div>
-</section>
+                <!-- Botões -->
+                <div class="button-group">
+                    <button type="submit" class="btn-calcular" id="btnCalcular">Calcular Receita</button>
+                    <button type="reset" class="btn-limpar">Limpar</button>
+                </div>
+            </form>
+        </div>
 
-<!-- RECEITAS -->
-<section id="recipes" class="page">
-  <div class="panel">
-    <h2>Receitas</h2>
-    <p class="hint">Escreve as gramas de cada ingrediente. A análise atualiza-se automaticamente. Não há otimização automática: as proporções são tuas e o programa mostra o resultado.</p>
-    <div class="grid3">
-      <div><label>Nome da receita</label><input id="rName" value="Gelado"></div>
-      <div><label>Peso pedido (kg)</label><input type="text" inputmode="decimal" id="rKg" value="6"></div>
-      <div><label>Adicionar produto</label>
-        <div class="row"><select id="rAdd"></select><button class="btn" id="rAddBtn">+</button></div>
-      </div>
-    </div>
-    <div class="tableWrap">
-      <table>
-        <thead><tr><th>Produto</th><th class="num">Gramas</th><th></th></tr></thead>
-        <tbody id="rBody"></tbody>
-      </table>
-    </div>
-    <div class="buttons">
-      <button class="btn" id="rFit">Ajustar gramas ao peso pedido</button>
-      <button class="btn" id="rNew">Nova receita</button>
-      <button class="btn primary" id="rSave">Guardar receita</button>
-    </div>
-    <h3>Objetivos opcionais (tolerância ±0,5 pontos percentuais)</h3>
-    <div class="grid3">
-      <div><label>Gordura %</label><input type="text" inputmode="decimal" id="rFatT"></div>
-      <div><label>Açúcares %</label><input type="text" inputmode="decimal" id="rSugT"></div>
-      <div><label>Sólidos %</label><input type="text" inputmode="decimal" id="rSolT"></div>
-    </div>
-    <div id="rOut"></div>
-    <h3>Receitas guardadas</h3>
-    <div id="rSaved"></div>
-  </div>
-</section>
+        <!-- PAINEL DIREITO: RESULTADO -->
+        <div class="panel resultado-panel" id="resultadoPanel">
+            <div id="loadingContainer" class="loading">
+                <div class="spinner"></div>
+                <p style="margin-top: 16px; color: #666; font-size: 14px;">Calculando formulação...</p>
+            </div>
 
-<!-- CREMINO / BOLOS FRIOS -->
-<section id="layered" class="page">
-  <div class="panel">
-    <h2>Cremino e bolos de creme frios por camadas</h2>
-    <p class="hint">Cada camada usa uma receita guardada. As percentagens têm de somar 100. Os gramas são repartidos sem perder nem criar gramas.</p>
-    <div class="grid3">
-      <div><label>Tipo</label>
-        <select id="lMode">
-          <option value="cremino">Cremino Italiano (peso total)</option>
-          <option value="cold">Bolo de creme frio (escalado por diâmetro)</option>
-        </select>
-      </div>
-      <div><label>Nome</label><input id="lName" value="Cremino Sanremo"></div>
-      <div id="lCremino"><label>Peso total (kg)</label><input type="text" inputmode="decimal" id="lKg" value="6"></div>
-    </div>
-    <div id="lCold" class="hide grid4">
-      <div><label>Peso da receita de origem (g)</label><input type="text" inputmode="decimal" id="lOrigG" value="2000"></div>
-      <div><label>Diâmetro de origem (cm)</label><input type="text" inputmode="decimal" id="lOrigD" value="18"></div>
-      <div><label>Diâmetro pretendido (cm)</label><input type="text" inputmode="decimal" id="lDestD" value="24"></div>
-      <div><label>Altura relativa (nova/original)</label><input type="text" inputmode="decimal" id="lH" value="1"></div>
-    </div>
-    <div class="note warn" id="lNote"></div>
-    <h3>Camadas</h3>
-    <div class="tableWrap">
-      <table>
-        <thead><tr><th>Camada</th><th class="num">%</th><th>Receita guardada</th><th></th></tr></thead>
-        <tbody id="lBody"></tbody>
-      </table>
-    </div>
-    <div class="buttons">
-      <button class="btn" id="lAdd">+ Adicionar camada</button>
-      <span id="lSum" class="muted"></span>
-    </div>
-    <div class="buttons">
-      <button class="btn primary" id="lGen">Gerar</button>
-      <button class="btn" id="lSave">Guardar</button>
-      <button class="btn" id="lNew">Novo</button>
-    </div>
-    <div id="lOut"></div>
-    <h3>Guardados</h3>
-    <div id="lSaved"></div>
-  </div>
-</section>
+            <div id="resultadoContainer" style="display: none;">
+                <h2>Receita Calculada</h2>
 
-<!-- CUSTOS -->
-<section id="costs" class="page">
-  <div class="panel">
-    <h2>Custos e preço</h2>
-    <div class="grid3">
-      <div><label>Receita</label><select id="cRecipe"></select></div>
-      <div><label>Mão de obra por lote (€)</label><input type="text" inputmode="decimal" id="cLabor" value="0"></div>
-      <div><label>Energia por lote (€)</label><input type="text" inputmode="decimal" id="cEnergy" value="0"></div>
-      <div><label>Outros custos por lote (€)</label><input type="text" inputmode="decimal" id="cOther" value="0"></div>
-      <div><label>Perdas de produção (%)</label><input type="text" inputmode="decimal" id="cLoss" value="0"></div>
-      <div><label>Tamanho da porção (g)</label><input type="text" inputmode="decimal" id="cPortion" value="100"></div>
-      <div><label>Preço de venda por porção (€)</label><input type="text" inputmode="decimal" id="cSell"></div>
-      <div><label>IVA (%)</label><input type="text" inputmode="decimal" id="cVat" placeholder="Ex.: a taxa aplicável"></div>
-      <div><label>O preço de venda inclui IVA?</label>
-        <select id="cGross"><option value="1">Sim</option><option value="0">Não</option></select>
-      </div>
+                <!-- TABS -->
+                <div class="tabs">
+                    <button class="tab-btn ativo" data-tab="receita">Formulação</button>
+                    <button class="tab-btn" data-tab="indicadores">Indicadores</button>
+                    <button class="tab-btn" data-tab="custos">Custos</button>
+                </div>
+
+                <!-- TAB: FORMULAÇÃO -->
+                <div class="tab-content ativo" id="tab-receita">
+                    <table class="resultado-tabela">
+                        <thead>
+                            <tr>
+                                <th>Ingrediente</th>
+                                <th class="numero">Gramas</th>
+                                <th class="numero">%</th>
+                                <th class="numero">€/un</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaReceita">
+                            <!-- Preenchido dinamicamente -->
+                        </tbody>
+                    </table>
+                    <div class="info-nota">
+                        <strong>Nota:</strong> Todos os valores são calculados automaticamente. PAC/POD identificados conforme composição dos ingredientes.
+                    </div>
+                </div>
+
+                <!-- TAB: INDICADORES -->
+                <div class="tab-content" id="tab-indicadores">
+                    <div class="indicadores-grid" id="indicadoresGrid">
+                        <!-- Preenchido dinamicamente -->
+                    </div>
+                    <div class="info-nota">
+                        <strong>Legenda:</strong> OK = dentro dos limites; AVISO = limite inferior/superior próximo; ERRO = fora dos limites recomendados.
+                    </div>
+                </div>
+
+                <!-- TAB: CUSTOS -->
+                <div class="tab-content" id="tab-custos">
+                    <div class="indicadores-grid" id="custosGrid">
+                        <!-- Preenchido dinamicamente -->
+                    </div>
+                </div>
+
+                <!-- DIAGNÓSTICO -->
+                <div id="diagnosticoContainer">
+                    <!-- Preenchido dinamicamente -->
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="buttons"><button class="btn primary" id="cCalc">Calcular</button></div>
-    <div id="cOut"></div>
-  </div>
-</section>
-
-<!-- AUDITORIA -->
-<section id="audit" class="page">
-  <div class="panel">
-    <h2>Auditoria local</h2>
-    <p class="hint">Regista as operações feitas neste navegador. Não substitui um sistema de rastreabilidade.</p>
-    <div class="buttons"><button class="btn" id="auditExport">Exportar CSV</button><button class="btn danger" id="auditClear">Limpar histórico</button></div>
-    <div id="auditList"></div>
-  </div>
-</section>
-
-<!-- TESTES -->
-<section id="tests" class="page">
-  <div class="panel">
-    <h2>Autotestes</h2>
-    <p class="hint">Verificam funções de cálculo. Não certificam produção.</p>
-    <button class="btn primary" id="runTests">Executar testes</button>
-    <div id="testResult"></div>
-  </div>
-</section>
-
-<!-- BACKUPS -->
-<section id="backup" class="page">
-  <div class="panel">
-    <h2>Backups</h2>
-    <p class="hint">A exportação gera um ficheiro JSON com produtos, receitas, camadas e histórico. A importação funde os dados pelo identificador: itens iguais são substituídos e os restantes são acrescentados.</p>
-    <div class="buttons">
-      <button class="btn primary" id="exportBtn">Exportar backup (.json)</button>
-    </div>
-    <label>Importar backup</label>
-    <input type="file" id="importFile" accept="application/json">
-  </div>
-</section>
-
-<div class="foot">Sanremo Gelato Lab V9.4 · dados guardados apenas neste navegador</div>
-</main>
 </div>
 
-<div id="toasts"></div>
-
 <script>
-/* ============ ESTADO E ARMAZENAMENTO ============ */
-const KEY = 'sanremo-gelato-lab-v94';
-const CATS = {milk:'Leite / iogurte',cream:'Natas / gorduras',water:'Água',sugar:'Açúcar / adoçante',fruit:'Fruta',paste:'Pasta / fruto seco / sabor',base:'Base composta / pó',additive:'Estabilizante / emulsificante',other:'Outro'};
-const FIELDS = [['pFat','fat'],['pProt','protein'],['pCarb','carb'],['pSugar','sugar'],['pWater','water'],['pPac','pac'],['pPod','pod']];
+    // ============================================================
+    // DATABASE DE INGREDIENTES COMPLETO
+    // ============================================================
+    const ingredientesDB = [
+        // BASES LÁCTEAS
+        {
+            id: 'leite-integral',
+            nome: 'Leite Integral (3,6% G)',
+            tipo: 'base-lactea',
+            categoria: 'Leites',
+            gordura: 3.6,
+            proteina: 3.2,
+            lactose: 4.8,
+            solidos_nao_gordurosos: 8.6,
+            solidos_totais: 12.2,
+            acucares: { lactose: 4.8 },
+            pac: 4.8,
+            pod: 0,
+            custoPorKg: 0.45,
+            dosagem_max: 100,
+            temperaura_min: -12
+        },
+        {
+            id: 'leite-desnatado',
+            nome: 'Leite Desnatado (<0,5% G)',
+            tipo: 'base-lactea',
+            categoria: 'Leites',
+            gordura: 0.3,
+            proteina: 3.6,
+            lactose: 5.0,
+            solidos_nao_gordurosos: 8.5,
+            solidos_totais: 8.8,
+            acucares: { lactose: 5.0 },
+            pac: 5.0,
+            pod: 0,
+            custoPorKg: 0.35,
+            dosagem_max: 100,
+            temperatura_min: -12
+        },
+        {
+            id: 'leite-semi-desnatado',
+            nome: 'Leite Semi-Desnatado (1,5% G)',
+            tipo: 'base-lactea',
+            categoria: 'Leites',
+            gordura: 1.5,
+            proteina: 3.5,
+            lactose: 4.9,
+            solidos_nao_gordurosos: 8.5,
+            solidos_totais: 10.0,
+            acucares: { lactose: 4.9 },
+            pac: 4.9,
+            pod: 0,
+            custoPorKg: 0.38,
+            dosagem_max: 100,
+            temperatura_min: -12
+        },
+        {
+            id: 'leite-em-po-integral',
+            nome: 'Leite em Pó Integral',
+            tipo: 'base-lactea',
+            categoria: 'Leites em Pó',
+            gordura: 26.0,
+            proteina: 25.0,
+            lactose: 38.0,
+            solidos_nao_gordurosos: 63.0,
+            solidos_totais: 97.0,
+            acucares: { lactose: 38.0 },
+            pac: 38.0,
+            pod: 0,
+            custoPorKg: 7.50,
+            dosagem_max: 15,
+            temperatura_min: -12
+        },
+        {
+            id: 'leite-em-po-desnatado',
+            nome: 'Leite em Pó Desnatado',
+            tipo: 'base-lactea',
+            categoria: 'Leites em Pó',
+            gordura: 1.0,
+            proteina: 36.0,
+            lactose: 51.0,
+            solidos_nao_gordurosos: 95.0,
+            solidos_totais: 97.0,
+            acucares: { lactose: 51.0 },
+            pac: 51.0,
+            pod: 0,
+            custoPorKg: 6.80,
+            dosagem_max: 12,
+            temperatura_min: -12
+        },
 
-let S = loadData();
-let RB = newBuilder();
-let LY = newLayered('cremino');
+        // GORDURAS
+        {
+            id: 'nata-35',
+            nome: 'Nata 35% Gordura',
+            tipo: 'gordura',
+            categoria: 'Natas',
+            gordura: 35.0,
+            proteina: 2.5,
+            lactose: 3.8,
+            solidos_nao_gordurosos: 6.3,
+            solidos_totais: 41.3,
+            acucares: { lactose: 3.8 },
+            pac: 3.8,
+            pod: 0,
+            custoPorKg: 2.40,
+            dosagem_max: 100,
+            temperatura_min: -12
+        },
+        {
+            id: 'nata-40',
+            nome: 'Nata 40% Gordura',
+            tipo: 'gordura',
+            categoria: 'Natas',
+            gordura: 40.0,
+            proteina: 2.2,
+            lactose: 3.5,
+            solidos_nao_gordurosos: 5.5,
+            solidos_totais: 45.5,
+            acucares: { lactose: 3.5 },
+            pac: 3.5,
+            pod: 0,
+            custoPorKg: 2.80,
+            dosagem_max: 100,
+            temperatura_min: -12
+        },
+        {
+            id: 'nata-45',
+            nome: 'Nata 45% Gordura',
+            tipo: 'gordura',
+            categoria: 'Natas',
+            gordura: 45.0,
+            proteina: 2.0,
+            lactose: 3.2,
+            solidos_nao_gordurosos: 5.2,
+            solidos_totais: 50.2,
+            acucares: { lactose: 3.2 },
+            pac: 3.2,
+            pod: 0,
+            custoPorKg: 3.20,
+            dosagem_max: 100,
+            temperatura_min: -12
+        },
+        {
+            id: 'manteiga',
+            nome: 'Manteiga 82% Gordura',
+            tipo: 'gordura',
+            categoria: 'Gorduras Sólidas',
+            gordura: 82.0,
+            proteina: 0.5,
+            lactose: 0.5,
+            solidos_nao_gordurosos: 1.0,
+            solidos_totais: 83.0,
+            acucares: { lactose: 0.5 },
+            pac: 0.5,
+            pod: 0,
+            custoPorKg: 8.50,
+            dosagem_max: 20,
+            temperatura_min: -13
+        },
+        {
+            id: 'oleo-coco',
+            nome: 'Óleo de Coco (refinado)',
+            tipo: 'gordura',
+            categoria: 'Óleos Vegetais',
+            gordura: 99.0,
+            proteina: 0,
+            lactose: 0,
+            solidos_nao_gordurosos: 0,
+            solidos_totais: 99.0,
+            acucares: {},
+            pac: 0,
+            pod: 0,
+            custoPorKg: 4.50,
+            dosagem_max: 30,
+            temperatura_min: -13
+        },
 
-function normalize(d){
-  return {
-    products: Array.isArray(d.products) ? d.products : [],
-    recipes: Array.isArray(d.recipes) ? d.recipes : [],
-    layered: Array.isArray(d.layered) ? d.layered : [],
-    audit: Array.isArray(d.audit) ? d.audit : []
-  };
-}
-function loadData(){
-  try{
-    const d = JSON.parse(localStorage.getItem(KEY) || 'null');
-    if(d && typeof d === 'object') return normalize(d);
-  }catch(e){ toast('Dados guardados ilegíveis; a biblioteca foi iniciada vazia.'); }
-  return normalize({});
-}
-function persist(){
-  try{ localStorage.setItem(KEY, JSON.stringify(S)); return true; }
-  catch(e){ toast('Não foi possível gravar os dados (armazenamento cheio ou bloqueado).'); return false; }
-}
-function log(action, detail){
-  S.audit.unshift({date:new Date().toLocaleString('pt-PT'), action, detail});
-  if(S.audit.length > 500) S.audit.length = 500;
-  persist();
-}
+        // AÇÚCARES E DOÇANTES
+        {
+            id: 'acucar-branco',
+            nome: 'Açúcar Branco (Sacarose)',
+            tipo: 'acucar',
+            categoria: 'Açúcares',
+            gordura: 0,
+            proteina: 0,
+            lactose: 0,
+            solidos_nao_gordurosos: 100,
+            solidos_totais: 100,
+            acucares: { sacarose: 99.8 },
+            pac: 99.8,
+            pod: 0,
+            custoPorKg: 0.80,
+            dosagem_max: 100,
+            temperatura_min: -12
+        },
+        {
+            id: 'glucose-de42',
+            nome: 'Glucose (DE 42)',
+            tipo: 'acucar',
+            categoria: 'Xaropes',
+            gordura: 0,
+            proteina: 0,
+            lactose: 0,
+            solidos_nao_gordurosos: 81,
+            solidos_totais: 81,
+            acucares: { glucose: 65, maltose: 16 },
+            pac: 81,
+            pod: 0,
+            custoPorKg: 1.20,
+            dosagem_max: 50,
+            de: 42,
+            temperatura_min: -13
+        },
+        {
+            id: 'glucose-de38',
+            nome: 'Glucose (DE 38)',
+            tipo: 'acucar',
+            categoria: 'Xaropes',
+            gordura: 0,
+            proteina: 0,
+            lactose: 0,
+            solidos_nao_gordurosos: 80,
+            solidos_totais: 80,
+            acucares: { glucose: 62, maltose: 18 },
+            pac: 80,
+            pod: 0,
+            custoPorKg: 1.15,
+            dosagem_max: 50,
+            de: 38,
+            temperatura_min: -13
+        },
+        {
+            id: 'maltodextrina-de20',
+            nome: 'Maltodextrina (DE 20)',
+            tipo: 'acucar',
+            categoria: 'Xaropes',
+            gordura: 0,
+            proteina: 0,
+            lactose: 0,
+            solidos_nao_gordurosos: 95,
+            solidos_totais: 95,
+            acucares: { maltodextrina: 95 },
+            pac: 0,
+            pod: 95,
+            custoPorKg: 1.80,
+            dosagem_max: 30,
+            de: 20,
+            temperatura_min: -13
+        },
+        {
+            id: 'xarope-milho-alto-frutose',
+            nome: 'Xarope de Milho (HFCS 55)',
+            tipo: 'acucar',
+            categoria: 'Xaropes',
+            gordura: 0,
+            proteina: 0,
+            lactose: 0,
+            solidos_nao_gordurosos: 77,
+            solidos_totais: 77,
+            acucares: { glucose: 24, frutose: 42, sacarose: 11 },
+            pac: 35,
+            pod: 42,
+            custoPorKg: 1.10,
+            dosagem_max: 50,
+            temperatura_min: -13
+        },
+        {
+            id: 'mel',
+            nome: 'Mel Natural',
+            tipo: 'acucar',
+            categoria: 'Naturais',
+            gordura: 0,
+            proteina: 0.3,
+            lactose: 0,
+            solidos_nao_gordurosos: 82,
+            solidos_totais: 82,
+            acucares: { glucose: 35, frutose: 40, sacarose: 7 },
+            pac: 42,
+            pod: 40,
+            custoPorKg: 6.50,
+            dosagem_max: 20,
+            temperatura_min: -13
+        },
 
-/* ============ UTILITÁRIOS ============ */
-const $ = id => document.getElementById(id);
-function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
-function esc(s){ return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function numOrNull(v){
-  const t = String(v ?? '').trim().replace(',', '.');
-  if(t === '') return null;
-  const n = Number(t);
-  return Number.isFinite(n) ? n : null;
-}
-function fmt(n, d = 1){
-  if(n == null || !Number.isFinite(n)) return '—';
-  return n.toLocaleString('pt-PT', {maximumFractionDigits:d, minimumFractionDigits:0});
-}
-function toStr(n){ return n == null ? '' : String(n).replace('.', ','); }
-function toast(msg){
-  const d = document.createElement('div');
-  d.textContent = msg;
-  $('toasts').appendChild(d);
-  setTimeout(() => d.remove(), 4200);
-}
-// Reparte um total inteiro proporcionalmente aos pesos, sem perder nem criar unidades.
-function apportion(total, weights){
-  const W = weights.reduce((a,b) => a + b, 0);
-  if(!W || total <= 0) return weights.map(() => 0);
-  const raw = weights.map(w => total * w / W);
-  const out = raw.map(Math.floor);
-  let rem = total - out.reduce((a,b) => a + b, 0);
-  raw.map((r,i) => [r - Math.floor(r), i])
-     .sort((a,b) => b[0] - a[0])
-     .slice(0, rem)
-     .forEach(([,i]) => out[i]++);
-  return out;
-}
-function pricePerKg(p){
-  if(p.packPrice == null || !p.packSize) return null;
-  const kg = p.packUnit === 'g' ? p.packSize / 1000 : p.packSize;
-  return p.packPrice / kg;
-}
-function missingProductFields(p){
-  const m = [];
-  if(p.water == null) m.push('água');
-  if(p.pac == null) m.push('PAC');
-  if(p.pod == null) m.push('POD');
-  return m;
-}
+        // SÓLIDOS (Cacau, Leite em Pó, etc.)
+        {
+            id: 'leite-em-po-cacau',
+            nome: 'Leite em Pó com Cacau',
+            tipo: 'solido',
+            categoria: 'Sólidos de Cacau',
+            gordura: 7.0,
+            proteina: 8.0,
+            lactose: 25.0,
+            solidos_nao_gordurosos: 50.0,
+            solidos_totais: 97.0,
+            acucares: { lactose: 25.0 },
+            pac: 25.0,
+            pod: 0,
+            custoPorKg: 12.00,
+            dosagem_max: 20,
+            temperatura_min: -12
+        },
+        {
+            id: 'cacau-em-po-10',
+            nome: 'Cacau em Pó 10% Gordura',
+            tipo: 'solido',
+            categoria: 'Sólidos de Cacau',
+            gordura: 10.0,
+            proteina: 12.0,
+            lactose: 1.0,
+            solidos_nao_gordurosos: 23.0,
+            solidos_totais: 97.0,
+            acucares: {},
+            pac: 1.0,
+            pod: 0,
+            custoPorKg: 15.00,
+            dosagem_max: 15,
+            temperatura_min: -12
+        },
+        {
+            id: 'fruta-em-po',
+            nome: 'Fruta em Pó (Morango)',
+            tipo: 'solido',
+            categoria: 'Frutas em Pó',
+            gordura: 1.5,
+            proteina: 2.0,
+            lactose: 0,
+            solidos_nao_gordurosos: 95.0,
+            solidos_totais: 97.0,
+            acucares: { glucose: 30, frutose: 35, sacarose: 10 },
+            pac: 40,
+            pod: 25,
+            custoPorKg: 18.00,
+            dosagem_max: 15,
+            temperatura_min: -12
+        },
 
-/* ============ MOTOR DE ANÁLISE ============ */
-// rows: [{productId, grams}] -> médias ponderadas por massa; PAC/POD por 1.000 g de mistura.
-function analyze(rows){
-  const items = [], miss = [];
-  for(const r of rows){
-    const g = Number(r.grams) || 0;
-    if(g <= 0) continue;
-    const p = S.products.find(x => x.id === r.productId);
-    if(!p){ miss.push('produto removido da biblioteca'); continue; }
-    items.push({g, p});
-  }
-  const total = items.reduce((a,x) => a + x.g, 0);
-  if(!total) return null;
+        // ADITIVOS
+        {
+            id: 'estabilizador-padrao',
+            nome: 'Estabilizador Padrão',
+            tipo: 'aditivo',
+            categoria: 'Estabilizadores',
+            gordura: 0,
+            proteina: 2.0,
+            lactose: 0,
+            solidos_nao_gordurosos: 95.0,
+            solidos_totais: 95.0,
+            acucares: {},
+            pac: 0,
+            pod: 0,
+            custoPorKg: 15.00,
+            dosagem_max: 0.5,
+            temperatura_min: -12,
+            notas: 'Goma de guar, alginato, CMC'
+        },
+        {
+            id: 'estabilizador-premium',
+            nome: 'Estabilizador Premium',
+            tipo: 'aditivo',
+            categoria: 'Estabilizadores',
+            gordura: 0,
+            proteina: 1.0,
+            lactose: 0,
+            solidos_nao_gordurosos: 98.0,
+            solidos_totais: 98.0,
+            acucares: {},
+            pac: 0,
+            pod: 0,
+            custoPorKg: 22.00,
+            dosagem_max: 0.4,
+            temperatura_min: -12,
+            notas: 'Estabilizador profissional'
+        },
+        {
+            id: 'emulgente',
+            nome: 'Emulgente (Mono/Diglicéridos)',
+            tipo: 'aditivo',
+            categoria: 'Emulgentes',
+            gordura: 0,
+            proteina: 0,
+            lactose: 0,
+            solidos_nao_gordurosos: 95.0,
+            solidos_totais: 95.0,
+            acucares: {},
+            pac: 0,
+            pod: 0,
+            custoPorKg: 20.00,
+            dosagem_max: 0.3,
+            temperatura_min: -12
+        },
+        {
+            id: 'aromatizante-baunilha',
+            nome: 'Aroma de Baunilha',
+            tipo: 'aditivo',
+            categoria: 'Aromatizantes',
+            gordura: 0,
+            proteina: 0,
+            lactose: 0,
+            solidos_nao_gordurosos: 10.0,
+            solidos_totais: 10.0,
+            acucares: {},
+            pac: 0,
+            pod: 0,
+            custoPorKg: 35.00,
+            dosagem_max: 1.0,
+            temperatura_min: -12
+        },
+        {
+            id: 'aromatizante-morango',
+            nome: 'Aroma de Morango',
+            tipo: 'aditivo',
+            categoria: 'Aromatizantes',
+            gordura: 0,
+            proteina: 0,
+            lactose: 0,
+            solidos_nao_gordurosos: 15.0,
+            solidos_totais: 15.0,
+            acucares: {},
+            pac: 0,
+            pod: 0,
+            custoPorKg: 40.00,
+            dosagem_max: 1.0,
+            temperatura_min: -12
+        }
+    ];
 
-  const wavg = (key, label) => {
-    const bad = items.filter(x => x.p[key] == null);
-    if(bad.length){
-      miss.push(label + ' em falta: ' + bad.map(x => x.p.name).join(', '));
-      return null;
+    // ============================================================
+    // LIMITES E CRITÉRIOS DE BALANCEAMENTO
+    // ============================================================
+    const limites = {
+        leite: {
+            gordura: { min: 6, max: 14, ideal: 10 },
+            acucares: { min: 14, max: 25, ideal: 18 },
+            solidos: { min: 28, max: 42, ideal: 35 },
+            pac: { min: 10, max: 30, ideal: 18 },
+            pod: { min: 0, max: 15, ideal: 5 },
+            lactose: { min: 3, max: 8, ideal: 5.5 },
+            proteina: { min: 2.5, max: 5, ideal: 3.8 }
+        },
+        sorbet: {
+            gordura: { min: 0, max: 1, ideal: 0.5 },
+            acucares: { min: 20, max: 32, ideal: 26 },
+            solidos: { min: 20, max: 32, ideal: 26 },
+            pac: { min: 20, max: 32, ideal: 26 },
+            pod: { min: 2, max: 15, ideal: 8 },
+            lactose: { min: 0, max: 1, ideal: 0.1 },
+            proteina: { min: 0, max: 1, ideal: 0.3 }
+        }
+    };
+
+    // ============================================================
+    // RENDERIZAR INGREDIENTES
+    // ============================================================
+    function renderizarIngredientes() {
+        const container = document.getElementById('ingredientesContainer');
+        const grupos = {};
+
+        ingredientesDB.forEach(ing => {
+            if (!grupos[ing.categoria]) grupos[ing.categoria] = [];
+            grupos[ing.categoria].push(ing);
+        });
+
+        let html = '';
+        Object.keys(grupos).sort().forEach(categoria => {
+            html += `<div style="margin-bottom: 12px; padding-top: 8px; border-top: 1px solid #ddd;">`;
+            html += `<div style="font-weight: 600; font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">${categoria}</div>`;
+            grupos[categoria].forEach(ing => {
+                html += `
+                    <div class="ingredient-item" onclick="document.getElementById('ing-${ing.id}').click()">
+                        <input type="checkbox" id="ing-${ing.id}" name="ingredientes" value="${ing.id}">
+                        <div class="ingredient-info">
+                            <div class="ingredient-name">${ing.nome}</div>
+                            <div class="ingredient-type">${ing.custoPorKg.toFixed(2)}€/kg • Max: ${ing.dosagem_max}%</div>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+        });
+        container.innerHTML = html;
     }
-    return items.reduce((a,x) => a + x.g * x.p[key], 0) / total;
-  };
 
-  const fat = wavg('fat','gordura');
-  const protein = wavg('protein','proteínas');
-  const carb = wavg('carb','hidratos');
-  const sugar = wavg('sugar','açúcares');
-  const water = wavg('water','água');
-  const pacRaw = wavg('pac','PAC');
-  const podRaw = wavg('pod','POD');
+    // ============================================================
+    // CÁLCULO DO MOTOR DE BALANCEAMENTO (NÚCLEO)
+    // ============================================================
+    function calcularReceita(tipo, quantidade, temperatura, ingredientesSelecionados) {
+        const ingredientes = ingredientesDB.filter(ing => ingredientesSelecionados.includes(ing.id));
+        const quantidadeGramas = quantidade * 1000;
+        const limitesTipo = limites[tipo];
 
-  let cost = null;
-  const noPrice = items.filter(x => pricePerKg(x.p) == null);
-  if(noPrice.length) miss.push('preço em falta: ' + noPrice.map(x => x.p.name).join(', '));
-  else cost = items.reduce((a,x) => a + x.g / 1000 * pricePerKg(x.p), 0);
+        // Validação inicial
+        if (ingredientes.length === 0) {
+            return {
+                sucesso: false,
+                erro: 'Selecione pelo menos um ingrediente'
+            };
+        }
 
-  return {
-    total, fat, protein, carb, sugar, water,
-    solids: water == null ? null : 100 - water,
-    pac: pacRaw == null ? null : pacRaw * 10,
-    pod: podRaw == null ? null : podRaw * 10,
-    cost,
-    missing: [...new Set(miss)]
-  };
-}
+        // Separar por categoria
+        const categorias = {
+            bases: ingredientes.filter(i => i.tipo === 'base-lactea' || (tipo === 'sorbet' && i.tipo === 'base-lactea')),
+            gorduras: ingredientes.filter(i => i.tipo === 'gordura'),
+            acucares: ingredientes.filter(i => i.tipo === 'acucar'),
+            solidos: ingredientes.filter(i => i.tipo === 'solido'),
+            aditivos: ingredientes.filter(i => i.tipo === 'aditivo')
+        };
 
-/* ============ NAVEGAÇÃO ============ */
-function show(view){
-  document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.id === view));
-  document.querySelectorAll('.nav button').forEach(b => b.classList.toggle('current', b.dataset.view === view));
-  renderAll();
-  window.scrollTo(0,0);
-}
-function renderAll(){
-  renderHome();
-  renderProducts();
-  renderRecipeUI();
-  renderLayered();
-  renderCostSelect();
-  renderAudit();
-}
+        // Validação de ingredientes
+        if (tipo === 'leite' && categorias.bases.length === 0) {
+            return {
+                sucesso: false,
+                erro: 'Selecione pelo menos uma base láctea para gelado de leite'
+            };
+        }
 
-/* ============ PAINEL ============ */
-function renderHome(){
-  const verified = S.products.filter(p => p.verified).length;
-  $('dashProducts').textContent = S.products.length;
-  $('dashRecipes').textContent = S.recipes.length;
-  $('dashVerified').textContent = verified;
-  $('dashIncomplete').textContent = S.products.length - verified;
-}
+        if (tipo === 'sorbet' && categorias.bases.length === 0) {
+            return {
+                sucesso: false,
+                erro: 'Selecione água ou base de sorbet'
+            };
+        }
 
-/* ============ PRODUTOS ============ */
-function readProductForm(){
-  const name = $('pName').value.trim();
-  if(!name) throw new Error('Indica o nome do produto.');
-  const p = {id: $('pId').value || uid(), name, category: $('pCat').value, allergens: $('pAll').value.trim(), notes: $('pNotes').value.trim()};
-  for(const [elId, key] of FIELDS){
-    const v = numOrNull($(elId).value);
-    if(v !== null && v < 0) throw new Error('Os valores não podem ser negativos (' + key + ').');
-    if(v !== null && ['fat','protein','carb','sugar','water'].includes(key) && v > 100)
-      throw new Error('Percentagem acima de 100 em: ' + key + '.');
-    p[key] = v;
-  }
-  const sum = (p.fat||0) + (p.protein||0) + (p.carb||0) + (p.water||0);
-  if(sum > 102) toast('Atenção: gordura + proteínas + hidratos + água dá ' + fmt(sum) + '%. Confirma a ficha.');
-  const price = numOrNull($('pPrice').value);
-  const size = numOrNull($('pSize').value);
-  if(price !== null && price < 0) throw new Error('Preço inválido.');
-  if(size !== null && size <= 0) throw new Error('Tamanho da embalagem inválido.');
-  p.packPrice = price;
-  p.packSize = size;
-  p.packUnit = $('pUnit').value;
-  p.verified = $('pVerified').checked;
-  if(p.verified){
-    const miss = missingProductFields(p);
-    if(miss.length) throw new Error('Para marcar como verificado faltam: ' + miss.join(', ') + '.');
-  }
-  return p;
-}
-function saveProduct(){
-  try{
-    const p = readProductForm();
-    const i = S.products.findIndex(x => x.id === p.id);
-    if(i >= 0) S.products[i] = p; else S.products.push(p);
-    persist();
-    log('Produto guardado', p.name);
-    clearProductForm();
-    renderAll();
-    toast('Produto guardado.');
-  }catch(e){ toast(e.message); }
-}
-function clearProductForm(){
-  $('pId').value = '';
-  ['pName','pAll','pNotes','pPrice','pSize'].forEach(id => $(id).value = '');
-  FIELDS.forEach(([id]) => $(id).value = '');
-  $('pCat').value = 'other';
-  $('pUnit').value = 'kg';
-  $('pVerified').checked = false;
-}
-function editProduct(id){
-  const p = S.products.find(x => x.id === id);
-  if(!p) return;
-  $('pId').value = p.id;
-  $('pName').value = p.name;
-  $('pCat').value = p.category || 'other';
-  $('pAll').value = p.allergens || '';
-  $('pNotes').value = p.notes || '';
-  FIELDS.forEach(([elId, key]) => $(elId).value = toStr(p[key]));
-  $('pPrice').value = toStr(p.packPrice);
-  $('pSize').value = toStr(p.packSize);
-  $('pUnit').value = p.packUnit || 'kg';
-  $('pVerified').checked = !!p.verified;
-  window.scrollTo({top:0, behavior:'smooth'});
-}
-function deleteProduct(id){
-  const p = S.products.find(x => x.id === id);
-  if(!p) return;
-  if(!confirm('Apagar o produto "' + p.name + '"? As receitas que o usam ficam com o ingrediente em falta.')) return;
-  S.products = S.products.filter(x => x.id !== id);
-  persist();
-  log('Produto apagado', p.name);
-  renderAll();
-}
-function renderProducts(){
-  const q = $('pSearch').value.trim().toLowerCase();
-  const list = S.products
-    .filter(p => !q || p.name.toLowerCase().includes(q))
-    .sort((a,b) => a.name.localeCompare(b.name, 'pt-PT'));
-  if(!list.length){
-    $('pList').innerHTML = '<p class="muted">Sem produtos. Adiciona o primeiro acima.</p>';
-    return;
-  }
-  const f = v => v == null ? '—' : fmt(v, 2);
-  $('pList').innerHTML = list.map(p => {
-    const miss = missingProductFields(p);
-    const status = p.verified
-      ? '<span class="pill ok">verificado</span>'
-      : '<span class="pill warnP">incompleto' + (miss.length ? ': ' + miss.join(', ') : '') + '</span>';
-    return `<div class="entry">
-      <div class="entryHead">
-        <div><strong>${esc(p.name)}</strong><span class="pill">${esc(CATS[p.category] || '')}</span>${status}</div>
-        <div class="buttons" style="margin:0">
-          <button class="btn small" data-edit="${esc(p.id)}">Editar</button>
-          <button class="btn danger small" data-del="${esc(p.id)}">Apagar</button>
-        </div>
-      </div>
-      <small>Gordura ${f(p.fat)} · Prot. ${f(p.protein)} · Hidratos ${f(p.carb)} · Açúcares ${f(p.sugar)} · Água ${f(p.water)} · PAC ${f(p.pac)} · POD ${f(p.pod)}${pricePerKg(p) != null ? ' · ' + fmt(pricePerKg(p), 2) + ' €/kg' : ''}</small>
-    </div>`;
-  }).join('');
-}
+        // ============================================================
+        // OTIMIZADOR MATEMÁTICO COM RESTRIÇÕES
+        // ============================================================
+        const receita = otimizarReceita(
+            ingredientes,
+            categorias,
+            quantidadeGramas,
+            tipo,
+            limitesTipo,
+            temperatura
+        );
 
-/* ============ RECEITAS ============ */
-function newBuilder(){ return {id:null, name:'Gelado', kg:6, rows:[]}; }
+        if (!receita) {
+            return {
+                sucesso: false,
+                erro: 'Não foi possível encontrar uma formulação balanceada com estes ingredientes'
+            };
+        }
 
-function renderRecipeUI(){
-  const opts = S.products.slice().sort((a,b) => a.name.localeCompare(b.name,'pt-PT'))
-    .map(p => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('');
-  const cur = $('rAdd').value;
-  $('rAdd').innerHTML = opts || '<option value="">Sem produtos</option>';
-  if(cur) $('rAdd').value = cur;
-  renderBuilder();
-  renderSavedRecipes();
-}
-function renderBuilder(){
-  $('rBody').innerHTML = RB.rows.length
-    ? RB.rows.map((r,i) => {
-        const p = S.products.find(x => x.id === r.productId);
-        return `<tr>
-          <td>${p ? esc(p.name) : '<span class="badTxt">produto removido</span>'}</td>
-          <td class="num"><input type="text" inputmode="decimal" value="${toStr(r.grams)}" data-i="${i}" class="g"></td>
-          <td class="num"><button class="btn danger small" data-rdel="${i}">Remover</button></td>
-        </tr>`;
-      }).join('')
-    : '<tr><td colspan="3" class="muted">Sem ingredientes. Escolhe um produto acima e clica em +.</td></tr>';
-  renderAnalysis();
-}
-function statusCell(val, target){
-  if(target == null) return '';
-  if(val == null) return '<span class="warnTxt">sem dados</span>';
-  const d = val - target;
-  return Math.abs(d) <= 0.5
-    ? '<span class="okTxt">dentro</span>'
-    : '<span class="badTxt">fora (' + (d > 0 ? '+' : '') + fmt(d, 2) + ')</span>';
-}
-function renderAnalysis(){
-  const a = analyze(RB.rows);
-  if(!a){
-    $('rOut').innerHTML = '<div class="note">Adiciona ingredientes com gramas maiores que zero.</div>';
-    return;
-  }
-  const t = {fat: numOrNull($('rFatT').value), sugar: numOrNull($('rSugT').value), solids: numOrNull($('rSolT').value)};
-  const line = (label, val, unit, target) =>
-    `<tr><td>${label}</td><td class="num">${val == null ? '<span class="warnTxt">incompleto</span>' : fmt(val, 2) + (unit ? ' ' + unit : '')}</td><td>${statusCell(val, target)}</td></tr>`;
-  const kgPedido = numOrNull($('rKg').value);
-  const diffKg = kgPedido ? (a.total - kgPedido * 1000) : null;
-  $('rOut').innerHTML = `
-    <h3>Análise</h3>
-    <div class="tableWrap"><table>
-      <thead><tr><th>Indicador</th><th class="num">Valor</th><th>Objetivo</th></tr></thead>
-      <tbody>
-        <tr><td>Peso total</td><td class="num">${fmt(a.total, 0)} g</td><td>${diffKg == null ? '' : (Math.abs(diffKg) < 0.5 ? '<span class="okTxt">igual ao pedido</span>' : '<span class="warnTxt">difere do pedido em ' + fmt(diffKg, 0) + ' g</span>')}</td></tr>
-        ${line('Gordura', a.fat, '%', t.fat)}
-        ${line('Proteínas', a.protein, '%', null)}
-        ${line('Hidratos', a.carb, '%', null)}
-        ${line('Açúcares', a.sugar, '%', t.sugar)}
-        ${line('Água', a.water, '%', null)}
-        ${line('Sólidos totais', a.solids, '%', t.solids)}
-        ${line('PAC por 1.000 g', a.pac, '', null)}
-        ${line('POD por 1.000 g', a.pod, '', null)}
-        <tr><td>Custo total dos ingredientes</td><td class="num">${a.cost == null ? '<span class="warnTxt">incompleto</span>' : fmt(a.cost, 2) + ' €'}</td><td></td></tr>
-      </tbody>
-    </table></div>
-    ${a.missing.length ? '<div class="note warn"><b>Dados em falta:</b><br>' + a.missing.map(esc).join('<br>') + '</div>' : ''}
-    <p class="hint">Os valores de PAC/POD só aparecem completos quando todos os ingredientes têm esses dados. Um valor desconhecido nunca é tratado como zero.</p>`;
-}
-function fitToWeight(){
-  const target = numOrNull($('rKg').value);
-  if(!target || target <= 0){ toast('Indica um peso pedido válido.'); return; }
-  if(!RB.rows.length){ toast('Adiciona ingredientes primeiro.'); return; }
-  const grams = RB.rows.map(r => Number(r.grams) || 0);
-  if(!grams.some(g => g > 0)){ toast('Indica pelo menos uma quantidade.'); return; }
-  const newG = apportion(Math.round(target * 1000), grams);
-  RB.rows.forEach((r,i) => r.grams = newG[i]);
-  renderBuilder();
-  toast('Gramas ajustadas ao peso pedido.');
-}
-function saveRecipe(){
-  const name = $('rName').value.trim();
-  if(!name){ toast('Indica o nome da receita.'); return; }
-  const rows = RB.rows.filter(r => S.products.some(p => p.id === r.productId) && Number(r.grams) > 0)
-    .map(r => ({productId: r.productId, grams: Number(r.grams)}));
-  if(!rows.length){ toast('A receita precisa de pelo menos um ingrediente com gramas.'); return; }
-  const id = RB.id || uid();
-  const rec = {id, name, totalKg: numOrNull($('rKg').value) || 0, rows, updated: new Date().toISOString()};
-  const i = S.recipes.findIndex(r => r.id === id);
-  if(i >= 0) S.recipes[i] = rec; else S.recipes.push(rec);
-  RB.id = id;
-  persist();
-  log('Receita guardada', name);
-  renderAll();
-  toast('Receita guardada.');
-}
-function openRecipe(id){
-  const r = S.recipes.find(x => x.id === id);
-  if(!r) return;
-  RB = {id: r.id, name: r.name, kg: r.totalKg, rows: r.rows.map(x => ({...x}))};
-  $('rName').value = r.name;
-  $('rKg').value = toStr(r.totalKg);
-  renderBuilder();
-  toast('Receita aberta.');
-}
-function deleteRecipe(id){
-  const r = S.recipes.find(x => x.id === id);
-  if(!r || !confirm('Apagar a receita "' + r.name + '"?')) return;
-  S.recipes = S.recipes.filter(x => x.id !== id);
-  if(RB.id === id) RB = newBuilder();
-  persist();
-  log('Receita apagada', r.name);
-  renderAll();
-}
-function newRecipe(){
-  RB = newBuilder();
-  $('rName').value = 'Gelado';
-  $('rKg').value = '6';
-  $('rFatT').value = ''; $('rSugT').value = ''; $('rSolT').value = '';
-  renderBuilder();
-}
-function renderSavedRecipes(){
-  if(!S.recipes.length){ $('rSaved').innerHTML = '<p class="muted">Ainda não há receitas guardadas.</p>'; return; }
-  $('rSaved').innerHTML = S.recipes.slice().reverse().map(r => `
-    <div class="entry"><div class="entryHead">
-      <div><strong>${esc(r.name)}</strong><br><small>${r.rows.length} ingrediente(s)</small></div>
-      <div class="buttons" style="margin:0">
-        <button class="btn small" data-ropen="${esc(r.id)}">Abrir</button>
-        <button class="btn danger small" data-rdelr="${esc(r.id)}">Apagar</button>
-      </div></div></div>`).join('');
-}
+        // Calcular composição final
+        const composicao = calcularComposicao(receita);
+        const diagnostico = gerarDiagnostico(composicao, limitesTipo, tipo);
 
-/* ============ CREMINO / BOLOS POR CAMADAS ============ */
-function newLayered(mode){
-  return {
-    id: null, mode, name: mode === 'cold' ? 'Bolo de creme' : 'Cremino Sanremo',
-    kg: '6', origG: '2000', origD: '18', destD: '24', h: '1',
-    layers: defaultLayers(mode)
-  };
-}
-function defaultLayers(mode){
-  return mode === 'cold'
-    ? [{name:'Base', share:18, recipeId:''}, {name:'Creme', share:67, recipeId:''}, {name:'Cobertura', share:15, recipeId:''}]
-    : [{name:'Camada 1', share:50, recipeId:''}, {name:'Camada 2', share:50, recipeId:''}];
-}
-function readLayeredForm(){
-  LY.mode = $('lMode').value;
-  LY.name = $('lName').value.trim();
-  LY.kg = $('lKg').value;
-  LY.origG = $('lOrigG').value;
-  LY.origD = $('lOrigD').value;
-  LY.destD = $('lDestD').value;
-  LY.h = $('lH').value;
-}
-function renderLayered(){
-  $('lMode').value = LY.mode;
-  $('lName').value = LY.name;
-  $('lKg').value = LY.kg;
-  $('lOrigG').value = LY.origG;
-  $('lOrigD').value = LY.origD;
-  $('lDestD').value = LY.destD;
-  $('lH').value = LY.h;
-  $('lCremino').classList.toggle('hide', LY.mode === 'cold');
-  $('lCold').classList.toggle('hide', LY.mode !== 'cold');
-  $('lNote').innerHTML = LY.mode === 'cold'
-    ? 'Peso do bolo = peso de origem × (diâmetro novo / diâmetro original)² × altura relativa. Bolo frio: sem perda por cozedura. A conservação, a estabilidade e a validade exigem validação própria e cadeia de frio.'
-    : 'Cremino: o peso total é repartido pelas camadas. Cada camada usa uma receita guardada.';
-  const opts = '<option value="">— escolher —</option>' + S.recipes.map(r => `<option value="${esc(r.id)}">${esc(r.name)}</option>`).join('');
-  $('lBody').innerHTML = LY.layers.map((l,i) => `
-    <tr>
-      <td><input class="txt" data-li="${i}" data-lk="name" value="${esc(l.name)}"></td>
-      <td class="num"><input data-li="${i}" data-lk="share" type="text" inputmode="decimal" value="${toStr(l.share)}"></td>
-      <td><select data-li="${i}" data-lk="recipeId">${opts.replace(`value="${esc(l.recipeId)}"`, `value="${esc(l.recipeId)}" selected`)}</select></td>
-      <td><button class="btn danger small" data-ldel="${i}">Remover</button></td>
-    </tr>`).join('') || '<tr><td colspan="4" class="muted">Sem camadas.</td></tr>';
-  const sum = LY.layers.reduce((a,l) => a + (Number(l.share) || 0), 0);
-  $('lSum').innerHTML = 'Soma das percentagens: ' + (Math.abs(sum - 100) < 0.01
-    ? '<span class="okTxt">100%</span>'
-    : '<span class="badTxt">' + fmt(sum, 2) + '% (tem de ser 100)</span>');
-  renderLayeredSaved();
-}
-function layeredTotalGrams(){
-  if(LY.mode === 'cold'){
-    const og = numOrNull(LY.origG), od = numOrNull(LY.origD), dd = numOrNull(LY.destD), h = numOrNull(LY.h);
-    if(!og || !od || !dd || !h || og <= 0 || od <= 0 || dd <= 0 || h <= 0) return {error:'Preenche peso de origem, diâmetros e altura com valores positivos.'};
-    return {grams: Math.round(og * Math.pow(dd / od, 2) * h)};
-  }
-  const kg = numOrNull(LY.kg);
-  if(!kg || kg <= 0) return {error:'Indica um peso total válido.'};
-  return {grams: Math.round(kg * 1000)};
-}
-function computeLayered(){
-  readLayeredForm();
-  const t = layeredTotalGrams();
-  if(t.error) return {error: t.error};
-  if(!LY.layers.length) return {error:'Adiciona pelo menos uma camada.'};
-  const shares = LY.layers.map(l => Number(l.share) || 0);
-  const sum = shares.reduce((a,b) => a + b, 0);
-  if(Math.abs(sum - 100) > 0.01) return {error:'As percentagens das camadas têm de somar 100 (agora: ' + fmt(sum, 2) + ').'};
-  for(const l of LY.layers){
-    if(!S.recipes.find(r => r.id === l.recipeId)) return {error:'A camada "' + l.name + '" não tem receita guardada associada.'};
-  }
-  const grams = apportion(t.grams, shares);
-  const layers = LY.layers.map((l,i) => {
-    const rec = S.recipes.find(r => r.id === l.recipeId);
-    const scaled = apportion(grams[i], rec.rows.map(r => r.grams));
-    const rows = rec.rows.map((r,j) => ({productId: r.productId, grams: scaled[j]}));
-    return {name: l.name || ('Camada ' + (i+1)), share: Number(l.share) || 0, grams: grams[i], recipe: rec.name, rows, analysis: analyze(rows)};
-  });
-  const totalGrams = layers.reduce((a,l) => a + l.grams, 0);
-  const costs = layers.map(l => l.analysis && l.analysis.cost);
-  const cost = costs.every(c => c != null) ? costs.reduce((a,c) => a + c, 0) : null;
-  return {total: t.grams, check: totalGrams === t.grams, layers, cost};
-}
-function generateLayered(){
-  const r = computeLayered();
-  if(r.error){ $('lOut').innerHTML = '<div class="note bad">' + esc(r.error) + '</div>'; return; }
-  const names = {};
-  const detail = r.layers.map(l => `
-    <div class="entry"><strong>${esc(l.name)}</strong> <span class="pill">${fmt(l.share,1)}% · ${fmt(l.grams,0)} g · receita: ${esc(l.recipe)}</span>
-      <div class="tableWrap"><table><thead><tr><th>Ingrediente</th><th class="num">g</th></tr></thead><tbody>
-      ${l.rows.map(row => {
-        const p = S.products.find(x => x.id === row.productId);
-        return `<tr><td>${p ? esc(p.name) : '<span class="badTxt">produto removido</span>'}</td><td class="num">${fmt(row.grams,0)}</td></tr>`;
-      }).join('')}
-      </tbody></table></div>
-      ${l.analysis && l.analysis.missing.length ? '<div class="note warn">' + l.analysis.missing.map(esc).join('<br>') + '</div>' : ''}
-    </div>`).join('');
-  const allMissing = [...new Set(r.layers.flatMap(l => l.analysis ? l.analysis.missing : []))];
-  $('lOut').innerHTML = `
-    <h3>Resultado</h3>
-    <div class="cards">
-      <div class="stat"><small>PESO TOTAL</small><strong>${fmt(r.total,0)} g</strong></div>
-      <div class="stat"><small>SOMA DAS CAMADAS</small><strong>${r.check ? '<span class="okTxt">correta</span>' : '<span class="badTxt">erro</span>'}</strong></div>
-      <div class="stat"><small>CUSTO INGREDIENTES</small><strong>${r.cost == null ? '—' : fmt(r.cost,2) + ' €'}</strong></div>
-      <div class="stat"><small>CUSTO/KG</small><strong>${r.cost == null ? '—' : fmt(r.cost / (r.total/1000), 2) + ' €'}</strong></div>
-    </div>
-    ${allMissing.length ? '<div class="note warn"><b>Dados em falta:</b><br>' + allMissing.map(esc).join('<br>') + '</div>' : ''}
-    ${detail}
-    <p class="hint">Proposta de ensaio. Não substitui validação do produto final.</p>`;
-}
-function saveLayered(){
-  readLayeredForm();
-  if(!LY.name){ toast('Indica o nome.'); return; }
-  LY.id = LY.id || uid();
-  const snap = JSON.parse(JSON.stringify(LY));
-  const i = S.layered.findIndex(x => x.id === LY.id);
-  if(i >= 0) S.layered[i] = snap; else S.layered.push(snap);
-  persist();
-  log('Projeto por camadas guardado', LY.name);
-  renderLayered();
-  toast('Guardado.');
-}
-function openLayered(id){
-  const x = S.layered.find(y => y.id === id);
-  if(!x) return;
-  LY = JSON.parse(JSON.stringify(x));
-  renderLayered();
-  $('lOut').innerHTML = '';
-}
-function deleteLayered(id){
-  const x = S.layered.find(y => y.id === id);
-  if(!x || !confirm('Apagar "' + x.name + '"?')) return;
-  S.layered = S.layered.filter(y => y.id !== id);
-  if(LY.id === id) LY.id = null;
-  persist();
-  log('Projeto por camadas apagado', x.name);
-  renderLayered();
-}
-function renderLayeredSaved(){
-  if(!S.layered.length){ $('lSaved').innerHTML = '<p class="muted">Sem projetos guardados.</p>'; return; }
-  $('lSaved').innerHTML = S.layered.slice().reverse().map(x => `
-    <div class="entry"><div class="entryHead">
-      <div><strong>${esc(x.name)}</strong> <span class="pill">${x.mode === 'cold' ? 'Bolo frio' : 'Cremino'}</span></div>
-      <div class="buttons" style="margin:0">
-        <button class="btn small" data-lopen="${esc(x.id)}">Abrir</button>
-        <button class="btn danger small" data-ldelp="${esc(x.id)}">Apagar</button>
-      </div></div></div>`).join('');
-}
-
-/* ============ CUSTOS ============ */
-function renderCostSelect(){
-  const cur = $('cRecipe').value;
-  $('cRecipe').innerHTML = S.recipes.length
-    ? S.recipes.map(r => `<option value="${esc(r.id)}">${esc(r.name)}</option>`).join('')
-    : '<option value="">Sem receitas guardadas</option>';
-  if(cur) $('cRecipe').value = cur;
-}
-function calculateCosts(){
-  const rec = S.recipes.find(r => r.id === $('cRecipe').value);
-  if(!rec){ $('cOut').innerHTML = '<div class="note bad">Guarda primeiro uma receita.</div>'; return; }
-  const a = analyze(rec.rows);
-  if(!a){ $('cOut').innerHTML = '<div class="note bad">A receita não tem gramas válidas.</div>'; return; }
-  const labor = numOrNull($('cLabor').value) || 0;
-  const energy = numOrNull($('cEnergy').value) || 0;
-  const other = numOrNull($('cOther').value) || 0;
-  const loss = numOrNull($('cLoss').value) || 0;
-  const portion = numOrNull($('cPortion').value);
-  const sell = numOrNull($('cSell').value);
-  const vat = numOrNull($('cVat').value);
-  const gross = $('cGross').value === '1';
-  if(loss < 0 || loss >= 100){ $('cOut').innerHTML = '<div class="note bad">A perda tem de estar entre 0 e 100%.</div>'; return; }
-  if(!portion || portion <= 0){ $('cOut').innerHTML = '<div class="note bad">Indica o tamanho da porção.</div>'; return; }
-
-  const extras = labor + energy + other;
-  const batchCost = a.cost == null ? null : a.cost + extras;
-  const yieldG = a.total * (1 - loss / 100);
-  const portions = Math.floor(yieldG / portion);
-  const costKg = batchCost == null ? null : batchCost / (yieldG / 1000);
-  const costPortion = (batchCost == null || portions <= 0) ? null : batchCost / portions;
-
-  let net = null, notes = [];
-  if(sell != null){
-    if(gross){
-      if(vat == null) notes.push('Indica o IVA para calcular o preço sem IVA.');
-      else net = sell / (1 + vat / 100);
-    } else net = sell;
-  }
-  const margin = (net != null && costPortion != null && net > 0) ? (net - costPortion) / net * 100 : null;
-
-  $('cOut').innerHTML = `
-    <h3>Resultado · ${esc(rec.name)}</h3>
-    <div class="cards">
-      <div class="stat"><small>CUSTO DO LOTE</small><strong>${batchCost == null ? '—' : fmt(batchCost,2) + ' €'}</strong></div>
-      <div class="stat"><small>CUSTO/KG PRODUZIDO</small><strong>${costKg == null ? '—' : fmt(costKg,2) + ' €'}</strong></div>
-      <div class="stat"><small>PORÇÕES</small><strong>${portions}</strong></div>
-      <div class="stat"><small>CUSTO/PORÇÃO</small><strong>${costPortion == null ? '—' : fmt(costPortion,2) + ' €'}</strong></div>
-    </div>
-    <div class="tableWrap"><table><tbody>
-      <tr><td>Custo dos ingredientes</td><td class="num">${a.cost == null ? '<span class="warnTxt">incompleto</span>' : fmt(a.cost,2) + ' €'}</td></tr>
-      <tr><td>Mão de obra + energia + outros</td><td class="num">${fmt(extras,2)} €</td></tr>
-      <tr><td>Peso após perdas</td><td class="num">${fmt(yieldG,0)} g</td></tr>
-      <tr><td>Preço de venda sem IVA por porção</td><td class="num">${net == null ? '—' : fmt(net,2) + ' €'}</td></tr>
-      <tr><td>Margem bruta por porção</td><td class="num">${margin == null ? '—' : fmt(margin,1) + ' %'}</td></tr>
-    </tbody></table></div>
-    ${a.missing.length ? '<div class="note warn"><b>Dados em falta:</b><br>' + a.missing.map(esc).join('<br>') + '</div>' : ''}
-    ${notes.length ? '<div class="note warn">' + notes.map(esc).join('<br>') + '</div>' : ''}
-    <p class="hint">Cálculo indicativo. Não inclui embalagens, transporte, desperdício excecional nem impostos além do IVA indicado.</p>`;
-}
-
-/* ============ AUDITORIA ============ */
-function renderAudit(){
-  if(!S.audit.length){ $('auditList').innerHTML = '<p class="muted">Sem registos.</p>'; return; }
-  $('auditList').innerHTML = '<div class="tableWrap"><table><thead><tr><th>Data</th><th>Ação</th><th>Detalhe</th></tr></thead><tbody>' +
-    S.audit.slice(0,200).map(a => `<tr><td>${esc(a.date)}</td><td>${esc(a.action)}</td><td>${esc(a.detail)}</td></tr>`).join('') +
-    '</tbody></table></div>';
-}
-function exportAuditCsv(){
-  const rows = [['Data','Ação','Detalhe'], ...S.audit.map(a => [a.date, a.action, a.detail])];
-  const csv = rows.map(r => r.map(v => '"' + String(v).replace(/"/g,'""') + '"').join(';')).join('\r\n');
-  download('sanremo-auditoria.csv', '\uFEFF' + csv, 'text/csv;charset=utf-8');
-}
-function download(name, content, type){
-  const url = URL.createObjectURL(new Blob([content], {type}));
-  const a = document.createElement('a');
-  a.href = url; a.download = name;
-  document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
-
-/* ============ BACKUP ============ */
-function exportBackup(){
-  const data = {app:'sanremo-gelato-lab', version:'V9.4', exported:new Date().toISOString(), ...S};
-  download('sanremo-backup-' + new Date().toISOString().slice(0,10) + '.json', JSON.stringify(data, null, 2), 'application/json');
-  log('Backup exportado', S.products.length + ' produtos, ' + S.recipes.length + ' receitas');
-}
-function mergeById(current, incoming){
-  const map = new Map(current.map(x => [x.id, x]));
-  incoming.forEach(x => { if(x && x.id) map.set(x.id, x); });
-  return [...map.values()];
-}
-function importBackup(file){
-  const reader = new FileReader();
-  reader.onload = () => {
-    try{
-      const d = JSON.parse(reader.result);
-      if(!d || !Array.isArray(d.products)) throw new Error('Ficheiro sem lista de produtos.');
-      S.products = mergeById(S.products, d.products);
-      S.recipes = mergeById(S.recipes, Array.isArray(d.recipes) ? d.recipes : []);
-      S.layered = mergeById(S.layered, Array.isArray(d.layered) ? d.layered : []);
-      persist();
-      log('Backup importado', d.products.length + ' produtos');
-      renderAll();
-      toast('Backup importado.');
-    }catch(e){ toast('Erro ao importar: ' + e.message); }
-  };
-  reader.readAsText(file);
-}
-
-/* ============ AUTOTESTES ============ */
-function runTests(){
-  const results = [];
-  const check = (name, fn) => {
-    try{ const r = fn(); results.push({name, ok: !!r.ok, msg: r.msg || ''}); }
-    catch(e){ results.push({name, ok:false, msg:e.message}); }
-  };
-  const saved = S;
-  S = normalize({products:[
-    {id:'s', name:'Açúcar', fat:0, protein:0, carb:100, sugar:100, water:0, pac:100, pod:100, packPrice:2, packSize:1, packUnit:'kg'},
-    {id:'m', name:'Leite', fat:3.5, protein:3.4, carb:4.8, sugar:4.8, water:87.5, pac:null, pod:null, packPrice:null, packSize:null, packUnit:'kg'}
-  ]});
-  try{
-    check('apportion soma exata', () => {
-      const r = apportion(1000, [1,1,1]);
-      const s = r.reduce((a,b)=>a+b,0);
-      return {ok: s === 1000, msg: 'soma ' + s};
-    });
-    check('apportion pesos zero', () => ({ok: apportion(100,[0,0]).every(x=>x===0)}));
-    check('número com vírgula', () => ({ok: numOrNull('3,5') === 3.5 && numOrNull('') === null && numOrNull('abc') === null}));
-    check('açúcar puro PAC = 1.000', () => {
-      const a = analyze([{productId:'s', grams:200}]);
-      return {ok: a && Math.abs(a.pac - 1000) < 1e-9, msg: a ? 'PAC ' + a.pac : 'null'};
-    });
-    check('PAC desconhecido não vira zero', () => {
-      const a = analyze([{productId:'s', grams:500}, {productId:'m', grams:500}]);
-      return {ok: a && a.pac === null && a.missing.some(x => x.includes('PAC')), msg: 'pac=' + (a && a.pac)};
-    });
-    check('gordura ponderada', () => {
-      const a = analyze([{productId:'s', grams:500}, {productId:'m', grams:500}]);
-      return {ok: Math.abs(a.fat - 1.75) < 1e-9};
-    });
-    check('sólidos = 100 − água', () => {
-      const a = analyze([{productId:'s', grams:500}, {productId:'m', grams:500}]);
-      return {ok: Math.abs(a.solids - 56.25) < 1e-9, msg: 'sólidos ' + a.solids};
-    });
-    check('custo com preço conhecido', () => {
-      const a = analyze([{productId:'s', grams:200}]);
-      return {ok: Math.abs(a.cost - 0.4) < 1e-9};
-    });
-    check('custo incompleto sem preço', () => {
-      const a = analyze([{productId:'s', grams:200}, {productId:'m', grams:100}]);
-      return {ok: a.cost === null};
-    });
-    check('receita vazia devolve null', () => ({ok: analyze([{productId:'s', grams:0}]) === null}));
-    check('escape HTML', () => ({ok: esc('<a>&') === '&lt;a&gt;&amp;'}));
-    check('escalão de bolo por diâmetro', () => {
-      const w = Math.round(2000 * Math.pow(24/18, 2) * 1);
-      return {ok: w === 3556, msg: 'peso ' + w};
-    });
-  } finally {
-    S = saved;
-  }
-  $('testResult').innerHTML = results.map(r =>
-    `<div class="entry">${r.ok ? '<span class="okTxt">✓ OK</span>' : '<span class="badTxt">✗ Falha</span>'} · ${esc(r.name)} ${r.msg ? '<small>(' + esc(r.msg) + ')</small>' : ''}</div>`
-  ).join('') + `<p><b>${results.filter(r=>r.ok).length}/${results.length}</b> testes passaram.</p>`;
-}
-
-/* ============ LIGAÇÕES ============ */
-function bind(){
-  document.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => show(b.dataset.view)));
-
-  // Produtos
-  $('pSave').onclick = saveProduct;
-  $('pClear').onclick = clearProductForm;
-  $('pSearch').oninput = renderProducts;
-  $('pList').addEventListener('click', e => {
-    const ed = e.target.dataset.edit, de = e.target.dataset.del;
-    if(ed) editProduct(ed);
-    if(de) deleteProduct(de);
-  });
-
-  // Receitas
-  $('rAddBtn').onclick = () => {
-    const id = $('rAdd').value;
-    if(!id){ toast('Não há produtos para adicionar.'); return; }
-    RB.rows.push({productId:id, grams:100});
-    renderBuilder();
-  };
-  $('rBody').addEventListener('input', e => {
-    if(!e.target.classList.contains('g')) return;
-    const i = Number(e.target.dataset.i);
-    const v = numOrNull(e.target.value);
-    RB.rows[i].grams = v == null || v < 0 ? 0 : v;
-    renderAnalysis();
-  });
-  $('rBody').addEventListener('click', e => {
-    if(e.target.dataset.rdel !== undefined){
-      RB.rows.splice(Number(e.target.dataset.rdel), 1);
-      renderBuilder();
+        return {
+            sucesso: true,
+            receita,
+            composicao,
+            diagnostico
+        };
     }
-  });
-  ['rKg','rFatT','rSugT','rSolT'].forEach(id => $(id).addEventListener('input', renderAnalysis));
-  $('rFit').onclick = fitToWeight;
-  $('rNew').onclick = newRecipe;
-  $('rSave').onclick = saveRecipe;
-  $('rSaved').addEventListener('click', e => {
-    if(e.target.dataset.ropen) openRecipe(e.target.dataset.ropen);
-    if(e.target.dataset.rdelr) deleteRecipe(e.target.dataset.rdelr);
-  });
 
-  // Camadas
-  $('lMode').onchange = () => {
-    readLayeredForm();
-    const old = LY.mode;
-    LY.mode = $('lMode').value;
-    if(old !== LY.mode){
-      LY.layers = defaultLayers(LY.mode);
-      LY.name = LY.mode === 'cold' ? 'Bolo de creme' : 'Cremino Sanremo';
-      LY.id = null;
+    // OTIMIZADOR (algoritmo iterativo com restrições)
+    function otimizarReceita(ingredientes, categorias, quantidadeGramas, tipo, limites, temperatura) {
+        let receita = {};
+        let iteracoes = 0;
+        const maxIteracoes = 1000;
+
+        // Inicializar com distribuição proporcional
+        ingredientes.forEach(ing => {
+            receita[ing.id] = (quantidadeGramas / ingredientes.length) * 0.8; // começa com 80%
+        });
+
+        // Iterar até convergência
+        while (iteracoes < maxIteracoes) {
+            iteracoes++;
+            const composicao = calcularComposicao(receita);
+
+            // Verificar se atende limites
+            if (verificarLimites(composicao, limites)) {
+                return receita;
+            }
+
+            // Ajustar ingredientes que estão fora dos limites
+            let ajustado = false;
+
+            // Se gordura baixa, aumentar gorduras
+            if (composicao.gordura < limites.gordura.min) {
+                const gorduras = ingredientes.filter(i => i.tipo === 'gordura');
+                if (gorduras.length > 0) {
+                    gorduras.forEach(g => {
+                        receita[g.id] = Math.min(receita[g.id] + 5, (quantidadeGramas * g.dosagem_max) / 100);
+                    });
+                    ajustado = true;
+                }
+            }
+
+            // Se açúcares baixos, aumentar açúcares
+            if (composicao.acucares < limites.acucares.min) {
+                const acucares = ingredientes.filter(i => i.tipo === 'acucar');
+                if (acucares.length > 0) {
+                    acucares.forEach(a => {
+                        receita[a.id] = Math.min(receita[a.id] + 10, (quantidadeGramas * a.dosagem_max) / 100);
+                    });
+                    ajustado = true;
+                }
+            }
+
+            // Se sólidos baixos, aumentar bases
+            if (composicao.solidos < limites.solidos.min) {
+                const bases = ingredientes.filter(i => i.tipo === 'base-lactea' || i.tipo === 'solido');
+                if (bases.length > 0) {
+                    bases.forEach(b => {
+                        receita[b.id] = Math.min(receita[b.id] + 5, (quantidadeGramas * b.dosagem_max) / 100);
+                    });
+                    ajustado = true;
+                }
+            }
+
+            // Se nenhum ajuste feito, usar distribuição manual
+            if (!ajustado) {
+                if (iteracoes === 1) {
+                    receita = distribuicaoManual(ingredientes, quantidadeGramas, categorias, limites);
+                } else {
+                    break;
+                }
+            }
+
+            // Normalizar para total correto
+            const total = Object.values(receita).reduce((a, b) => a + b, 0);
+            if (total > 0) {
+                Object.keys(receita).forEach(id => {
+                    receita[id] = (receita[id] / total) * quantidadeGramas;
+                });
+            }
+        }
+
+        return receita;
     }
-    renderLayered();
-  };
-  $('lAdd').onclick = () => {
-    readLayeredForm();
-    LY.layers.push({name:'Camada ' + (LY.layers.length + 1), share:0, recipeId:''});
-    renderLayered();
-  };
-  $('lBody').addEventListener('input', e => {
-    const i = Number(e.target.dataset.li), k = e.target.dataset.lk;
-    if(isNaN(i) || !k) return;
-    LY.layers[i][k] = k === 'share' ? (numOrNull(e.target.value) ?? 0) : e.target.value;
-    const sum = LY.layers.reduce((a,l) => a + (Number(l.share) || 0), 0);
-    $('lSum').innerHTML = 'Soma das percentagens: ' + (Math.abs(sum - 100) < 0.01 ? '<span class="okTxt">100%</span>' : '<span class="badTxt">' + fmt(sum,2) + '% (tem de ser 100)</span>');
-  });
-  $('lBody').addEventListener('change', e => {
-    const i = Number(e.target.dataset.li), k = e.target.dataset.lk;
-    if(isNaN(i) || !k) return;
-    LY.layers[i][k] = k === 'share' ? (numOrNull(e.target.value) ?? 0) : e.target.value;
-    renderLayered();
-  });
-  $('lBody').addEventListener('click', e => {
-    if(e.target.dataset.ldel !== undefined){
-      readLayeredForm();
-      LY.layers.splice(Number(e.target.dataset.ldel), 1);
-      renderLayered();
+
+    // Distribuição manual inteligente
+    function distribuicaoManual(ingredientes, quantidadeGramas, categorias, limites) {
+        const receita = {};
+        let totalGramas = 0;
+
+        // 1. Bases lácteas (60-70%)
+        if (categorias.bases.length > 0) {
+            const baseGramas = (quantidadeGramas * 0.65) / categorias.bases.length;
+            categorias.bases.forEach(b => {
+                receita[b.id] = Math.min(baseGramas, (quantidadeGramas * b.dosagem_max) / 100);
+                totalGramas += receita[b.id];
+            });
+        }
+
+        // 2. Açúcares (15-25%)
+        if (categorias.acucares.length > 0) {
+            const acucarGramas = (quantidadeGramas * 0.20) / categorias.acucares.length;
+            categorias.acucares.forEach(a => {
+                receita[a.id] = Math.min(acucarGramas, (quantidadeGramas * a.dosagem_max) / 100);
+                totalGramas += receita[a.id];
+            });
+        }
+
+        // 3. Gorduras (5-10%)
+        if (categorias.gorduras.length > 0) {
+            const gorduraGramas = (quantidadeGramas * 0.08) / categorias.gorduras.length;
+            categorias.gorduras.forEach(g => {
+                receita[g.id] = Math.min(gorduraGramas, (quantidadeGramas * g.dosagem_max) / 100);
+                totalGramas += receita[g.id];
+            });
+        }
+
+        // 4. Sólidos especiais (5-10%)
+        if (categorias.solidos.length > 0) {
+            const solidoGramas = (quantidadeGramas * 0.07) / categorias.solidos.length;
+            categorias.solidos.forEach(s => {
+                receita[s.id] = Math.min(solidoGramas, (quantidadeGramas * s.dosagem_max) / 100);
+                totalGramas += receita[s.id];
+            });
+        }
+
+        // 5. Aditivos (máximos permitidos)
+        categorias.aditivos.forEach(ad => {
+            receita[ad.id] = (quantidadeGramas * ad.dosagem_max) / 100;
+            totalGramas += receita[ad.id];
+        });
+
+        // Normalizar se necessário
+        if (totalGramas > quantidadeGramas) {
+            const factor = quantidadeGramas / totalGramas;
+            Object.keys(receita).forEach(id => {
+                receita[id] *= factor;
+            });
+        }
+
+        return receita;
     }
-  });
-  $('lGen').onclick = generateLayered;
-  $('lSave').onclick = saveLayered;
-  $('lNew').onclick = () => { LY = newLayered($('lMode').value); renderLayered(); $('lOut').innerHTML = ''; };
-  $('lSaved').addEventListener('click', e => {
-    if(e.target.dataset.lopen) openLayered(e.target.dataset.lopen);
-    if(e.target.dataset.ldelp) deleteLayered(e.target.dataset.ldelp);
-  });
 
-  // Custos
-  $('cCalc').onclick = calculateCosts;
+    // Calcular composição final
+    function calcularComposicao(receita) {
+        let composicao = {
+            gordura: 0,
+            proteina: 0,
+            lactose: 0,
+            solidos_nao_gordurosos: 0,
+            solidos_totais: 0,
+            acucares: 0,
+            pac: 0,
+            pod: 0,
+            totalGramas: 0
+        };
 
-  // Auditoria
-  $('auditExport').onclick = exportAuditCsv;
-  $('auditClear').onclick = () => {
-    if(!confirm('Limpar todo o histórico de auditoria?')) return;
-    S.audit = []; persist(); renderAudit();
-  };
+        Object.keys(receita).forEach(id => {
+            const ing = ingredientesDB.find(i => i.id === id);
+            if (!ing) return;
 
-  // Testes
-  $('runTests').onclick = runTests;
+            const gramas = receita[id];
+            const percentual = gramas / 10; // converter para percentual (gramas / 1000 * 100)
 
-  // Backups
-  $('exportBtn').onclick = exportBackup;
-  $('importFile').onchange = e => { if(e.target.files[0]) importBackup(e.target.files[0]); e.target.value = ''; };
-}
+            composicao.gordura += (ing.gordura * percentual) / 100;
+            composicao.proteina += (ing.proteina * percentual) / 100;
+            composicao.lactose += (ing.lactose * percentual) / 100;
+            composicao.solidos_totais += (ing.solidos_totais * percentual) / 100;
+            composicao.solidos_nao_gordurosos += (ing.solidos_nao_gordurosos * percentual) / 100;
+            composicao.acucares += (ing.pac * percentual) / 100;
+            composicao.pac += (ing.pac * percentual) / 100;
+            composicao.pod += (ing.pod * percentual) / 100;
+            composicao.totalGramas += gramas;
+        });
 
-function init(){
-  bind();
-  if(!S.products.length && !localStorage.getItem(KEY)) persist();
-  renderAll();
-}
-init();
+        // Ajustar sólidos
+        composicao.solidos = (composicao.solidos_totais * composicao.totalGramas) / 100;
+
+        return composicao;
+    }
+
+    // Verificar se atende limites
+    function verificarLimites(composicao, limites) {
+        const verificacoes = [
+            composicao.gordura >= limites.gordura.min && composicao.gordura <= limites.gordura.max,
+            composicao.acucares >= limites.acucares.min && composicao.acucares <= limites.acucares.max,
+            composicao.solidos_totais >= limites.solidos.min && composicao.solidos_totais <= limites.solidos.max,
+            composicao.pac >= limites.pac.min && composicao.pac <= limites.pac.max,
+            composicao.lactose >= limites.lactose.min && composicao.lactose <= limites.lactose.max
+        ];
+
+        return verificacoes.every(v => v);
+    }
+
+    // Gerar diagnóstico
+    function gerarDiagnostico(composicao, limites, tipo) {
+        let status = 'ok';
+        let avisos = [];
+
+        // Verificar cada parâmetro
+        if (composicao.gordura < limites.gordura.min) {
+            avisos.push(`Gordura baixa (${composicao.gordura.toFixed(1)}% < ${limites.gordura.min}%)`);
+            status = 'aviso';
+        }
+        if (composicao.gordura > limites.gordura.max) {
+            avisos.push(`Gordura elevada (${composicao.gordura.toFixed(1)}% > ${limites.gordura.max}%)`);
+            status = 'aviso';
+        }
+
+        if (composicao.acucares < limites.acucares.min) {
+            avisos.push(`Açúcares insuficientes (${composicao.acucares.toFixed(1)}% < ${limites.acucares.min}%)`);
+            status = 'aviso';
+        }
+
+        if (composicao.pac < limites.pac.min) {
+            avisos.push(`PAC baixo (${composicao.pac.toFixed(1)}g/kg < ${limites.pac.min}g/kg)`);
+            status = 'aviso';
+        }
+
+        const mensagem = avisos.length === 0
+            ? `✓ Receita balanceada. Todos os parâmetros dentro dos limites recomendados.`
+            : `⚠ Formulação com desvios: ${avisos.join('; ')}`;
+
+        return { status, mensagem, avisos };
+    }
+
+    // ============================================================
+    // INTERFACE E EVENTOS
+    // ============================================================
+    document.getElementById('formReceita').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const tipo = document.querySelector('input[name="tipo"]:checked').value;
+        const quantidade = parseFloat(document.getElementById('quantidade').value);
+        const temperatura = document.getElementById('temperatura').value;
+        const ingredientesSelecionados = Array.from(
+            document.querySelectorAll('input[name="ingredientes"]:checked')
+        ).map(el => el.value);
+
+        // Validações
+        if (ingredientesSelecionados.length === 0) {
+            document.getElementById('errorIngredientes').textContent = 'Selecione pelo menos um ingrediente';
+            document.getElementById('errorIngredientes').classList.add('ativo');
+            return;
+        }
+        document.getElementById('errorIngredientes').classList.remove('ativo');
+
+        // Mostrar panel de resultado e loading
+        document.getElementById('resultadoPanel').classList.add('ativo');
+        document.getElementById('loadingContainer').classList.add('ativo');
+        document.getElementById('resultadoContainer').style.display = 'none';
+
+        // Executar cálculo
+        setTimeout(() => {
+            const resultado = calcularReceita(tipo, quantidade, temperatura, ingredientesSelecionados);
+
+            if (!resultado.sucesso) {
+                mostrarErro(resultado.erro);
+            } else {
+                mostrarResultado(resultado, tipo);
+            }
+
+            document.getElementById('loadingContainer').classList.remove('ativo');
+            document.getElementById('resultadoContainer').style.display = 'block';
+        }, 500);
+    });
+
+    // Mostrar resultado
+    function mostrarResultado(resultado, tipo) {
+        const { receita, composicao, diagnostico } = resultado;
+        const ing = ingredientesDB;
+
+        // Tabela de receita
+        let totalGramas = 0;
+        let html = '';
+        Object.keys(receita).forEach(id => {
+            const gramas = Math.round(receita[id] * 10) / 10;
+            const ingrediente = ing.find(i => i.id === id);
+            const percentual = (gramas / (composicao.totalGramas || 1) * 100).toFixed(1);
+            const custoUnitario = (gramas * ingrediente.custoPorKg / 1000).toFixed(3);
+
+            html += `
+                <tr>
+                    <td>${ingrediente.nome}</td>
+                    <td class="numero">${gramas.toFixed(1)}g</td>
+                    <td class="numero">${percentual}%</td>
+                    <td class="numero">€${custoUnitario}</td>
+                </tr>
+            `;
+            totalGramas += gramas;
+        });
+
+        document.getElementById('tabelaReceita').innerHTML = html;
+
+        // Indicadores
+        const indicadores = [
+            { label: 'Gordura', valor: composicao.gordura.toFixed(1), unidade: '%', min: limites[tipo].gordura.min, max: limites[tipo].gordura.max },
+            { label: 'Açúcares', valor: composicao.acucares.toFixed(1), unidade: '%', min: limites[tipo].acucares.min, max: limites[tipo].acucares.max },
+            { label: 'Sólidos Totais', valor: composicao.solidos_totais.toFixed(1), unidade: '%', min: limites[tipo].solidos.min, max: limites[tipo].solidos.max },
+            { label: 'Proteínas', valor: composicao.proteina.toFixed(1), unidade: '%', min: limites[tipo].proteina.min, max: limites[tipo].proteina.max },
+            { label: 'PAC', valor: composicao.pac.toFixed(1), unidade: 'g/kg', min: limites[tipo].pac.min, max: limites[tipo].pac.max },
+            { label: 'POD', valor: composicao.pod.toFixed(1), unidade: 'g/kg', min: limites[tipo].pod.min, max: limites[tipo].pod.max }
+        ];
+
+        let indicadoresHtml = '';
+        indicadores.forEach(ind => {
+            const valor = parseFloat(ind.valor);
+            let status = 'ok';
+            if (valor < ind.min || valor > ind.max) status = 'erro';
+            else if (valor < ind.min + 2 || valor > ind.max - 2) status = 'aviso';
+
+            indicadoresHtml += `
+                <div class="indicador-box">
+                    <div class="indicador-label">${ind.label}</div>
+                    <div class="indicador-valor">${ind.valor}<small style="font-size: 0.6em; margin-left: 4px;">${ind.unidade}</small></div>
+                    <div class="indicador-status ${status}">${status === 'ok' ? '✓' : status === 'aviso' ? '⚠' : '✗'} ${ind.min.toFixed(0)}-${ind.max.toFixed(0)} ${ind.unidade}</div>
+                </div>
+            `;
+        });
+
+        document.getElementById('indicadoresGrid').innerHTML = indicadoresHtml;
+
+        // Custos
+        let totalCusto = 0;
+        Object.keys(receita).forEach(id => {
+            const ing = ingredientesDB.find(i => i.id === id);
+            totalCusto += (receita[id] * ing.custoPorKg) / 1000;
+        });
+
+        const custosHtml = `
+            <div class="indicador-box">
+                <div class="indicador-label">Custo por kg</div>
+                <div class="indicador-valor">€${(totalCusto / (composicao.totalGramas / 1000)).toFixed(2)}</div>
+            </div>
+            <div class="indicador-box">
+                <div class="indicador-label">Custo por 170g</div>
+                <div class="indicador-valor">€${(totalCusto * 0.17).toFixed(2)}</div>
+            </div>
+            <div class="indicador-box">
+                <div class="indicador-label">Custo por 750g</div>
+                <div class="indicador-valor">€${(totalCusto * 0.75).toFixed(2)}</div>
+            </div>
+        `;
+
+        document.getElementById('custosGrid').innerHTML = custosHtml;
+
+        // Diagnóstico
+        const diagnosticoClass = diagnostico.status === 'ok' ? 'ok' : diagnostico.status === 'aviso' ? 'aviso' : 'erro';
+        const diagnosticoHtml = `<div class="diagnostico ${diagnosticoClass}">${diagnostico.mensagem}</div>`;
+        document.getElementById('diagnosticoContainer').innerHTML = diagnosticoHtml;
+
+        // Ativar tabs
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('ativo'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('ativo'));
+                btn.classList.add('ativo');
+                document.getElementById('tab-' + btn.dataset.tab).classList.add('ativo');
+            });
+        });
+    }
+
+    function mostrarErro(erro) {
+        const diagnosticoHtml = `<div class="diagnostico erro">${erro}</div>`;
+        document.getElementById('diagnosticoContainer').innerHTML = diagnosticoHtml;
+        document.getElementById('resultadoPanel').classList.add('ativo');
+    }
+
+    // Inicializar
+    renderizarIngredientes();
 </script>
-</body>
-</html>
